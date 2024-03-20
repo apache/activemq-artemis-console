@@ -1,0 +1,73 @@
+{
+  "name": "artemis-console",
+  "version": "1.0.0-SNAPSHOT",
+  "description": "Artemis Console",
+  "main": "./src/main/webapp/app/artemis-console.js",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build && yarn replace-version",
+    "test": "craco test",
+    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\""
+  },
+  "dependencies": {
+    "@hawtio/react": "^1.2.2",
+    "@patternfly/react-charts": "^7.1.1",
+    "@patternfly/react-core": "^4.278.0",
+    "@patternfly/react-icons": "^4.93.5",
+    "@patternfly/react-table": "^4.113.6",
+    "@patternfly/react-topology": "^4.93.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.2.0",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0",
+    "@hawtio/backend-middleware": "^1.0.4",
+    "craco-esbuild": "^0.5.2",
+    "monaco-editor-webpack-plugin": "^7.1.0",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "replace": "^1.2.2"
+  },
+  "resolutions": {
+    "@typescript-eslint/eslint-plugin": "6.9.0",
+    "@typescript-eslint/parser": "6.9.0",
+    "victory-area": "36.8.6",
+    "victory-bar": "36.8.6",
+    "victory-brush-container": "36.8.6",
+    "victory-core": "36.8.6",
+    "victory-cursor-container": "36.8.6",
+    "victory-create-container": "36.8.6",
+    "victory-legend": "36.8.6",
+    "victory-line": "36.8.6",
+    "victory-pie": "36.8.6",
+    "victory-scatter": "36.8.6",
+    "victory-selection-container": "36.8.6",
+    "victory-shared-events": "36.8.6",
+    "victory-voronoi-container": "36.8.6",
+    "victory-zoom-container": "36.8.6",
+    "fork-ts-checker-webpack-plugin": "6.5.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "packageManager": "yarn@3.5.0"
+}

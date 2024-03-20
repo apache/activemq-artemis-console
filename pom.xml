@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>31</version>
+        <relativePath>org.apache:apache</relativePath>
+    </parent>
+
+    <groupId>org.apache.activemq</groupId>
+    <artifactId>artemis-console-project</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+
+
+    <modules>
+        <module>artemis-console-extension</module>
+        <module>artemis-console-war</module>
+        <module>artemis-console-distribution</module>
+    </modules>
+
+    <name>ActiveMQ Artemis Console Project</name>
+    <url>https://activemq.apache.org/components/artemis/</url>
+
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.release>11</maven.compiler.release>
+        <hawtio.version>4.0.0</hawtio.version>
+        <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
+        <slf4j.version>2.0.12</slf4j.version>
+        <log4j.version>2.22.1</log4j.version>
+        <jetty-version>11.0.20</jetty-version>
+        <node-version>v20.9.0</node-version>
+        <yarn-version>v1.22.21</yarn-version>
+        <frontend-maven-plugin-version>1.15.0</frontend-maven-plugin-version>
+        <!-- Path to the Hawtio TypeScript plugin -->
+        <plugin.path>artemis-extension</plugin.path>
+        <project.build.outputTimestamp>2024-03-27T00:00:01Z</project.build.outputTimestamp>
+    </properties>
+
+    <scm>
+      <connection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</connection>
+      <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</developerConnection>
+      <url>https://github.com/apache/activemq-artemis-console</url>
+      <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+      <system>JIRA</system>
+      <url>https://issues.apache.org/jira/browse/ARTEMIS</url>
+    </issueManagement>
+
+    <developers>
+      <developer>
+         <name>The Apache ActiveMQ Team</name>
+         <email>dev@activemq.apache.org</email>
+         <url>http://activemq.apache.org</url>
+         <organization>Apache Software Foundation</organization>
+         <organizationUrl>http://apache.org/</organizationUrl>
+      </developer>
+   </developers>
+   <mailingLists>
+      <mailingList>
+         <name>User List</name>
+         <subscribe>users-subscribe@activemq.apache.org</subscribe>
+         <unsubscribe>users-unsubscribe@activemq.apache.org</unsubscribe>
+         <post>users@activemq.apache.org</post>
+      </mailingList>
+      <mailingList>
+         <name>Development List</name>
+         <subscribe>dev-subscribe@activemq.apache.org</subscribe>
+         <unsubscribe>dev-unsubscribe@activemq.apache.org</unsubscribe>
+         <post>dev@activemq.apache.org</post>
+      </mailingList>
+   </mailingLists>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.rat</groupId>
+                        <artifactId>apache-rat-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- Override the apache-release profile from the parent to skip creating
+           a source-release archive here, it is done in artemis-console-distribution. -->
+        <profile>
+            <id>apache-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>source-release-assembly</id>
+                                <configuration>
+                                    <skipAssembly>true</skipAssembly>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- mandatory core hawtio modules -->
+            <dependency>
+                <groupId>io.hawt</groupId>
+                <artifactId>hawtio-system</artifactId>
+                <version>${hawtio.version}</version>
+            </dependency>
+
+            <!-- Servlet API is provided by the container -->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>${jakarta.servlet-api.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j2-impl</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.rat</groupId>
+                    <artifactId>apache-rat-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <excludes>
+                                    <exclude>**/artemis-extension/src/artemis-extension/artemis/help.md</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/package.json</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
+                                    <exclude>README.md</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
+                                    <exclude>.github/**</exclude>
+
+                                    <!-- NPM files -->
+                                    <exclude>**/node/**</exclude>
+                                    <exclude>**/node_modules/**</exclude>
+                                    <exclude>**/package.json</exclude>
+                                    <exclude>**/package-lock.json</exclude>
+
+                                    <!-- Yarn -->
+                                    <exclude>**/.yarn/**</exclude>
+                                    <exclude>**/yarn.lock</exclude>
+                                    <exclude>**/artemis-extension/build/**</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
+                                </excludes>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <tagNameFormat>@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>
