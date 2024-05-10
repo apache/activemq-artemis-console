@@ -59,7 +59,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
     { id: 'maxConsumers', name: 'Max Consumers', visible: true, sortable: true, filterable: true },
     { id: 'purgeOnNoConsumers', name: 'Purge On No Consumers', visible: true, sortable: true, filterable: true },
     { id: 'consumerCount', name: 'Consumer Count', visible: true, sortable: true, filterable: true, filter: getConsumersFilter, filterTab: 4},
-    { id: 'messageCount', name: 'Message Count', visible: false, sortable: true, filterable: true, link: messageView},
+    { id: 'messageCount', name: 'Message Count', visible: true, sortable: true, filterable: true, link: messageView},
     { id: 'paused', name: 'Paused', visible: false, sortable: true, filterable: true },
     { id: 'temporary', name: 'Temporary', visible: false, sortable: true, filterable: true },
     { id: 'autoCreated', name: 'Auto Created', visible: false, sortable: true, filterable: true },

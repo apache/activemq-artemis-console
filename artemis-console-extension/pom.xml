@@ -31,6 +31,11 @@
 
     <name>ActiveMQ Artemis Console Extension</name>
 
+    <properties>
+        <!-- Path to the Hawtio TypeScript plugin -->
+        <extension.path>artemis-extension</extension.path>
+        <extension.install.dir>artemis-extension</extension.install.dir>
+    </properties>
     <build>
         <finalName>${project.artifactId}</finalName>
 
@@ -41,7 +46,8 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${frontend-maven-plugin-version}</version>
                 <configuration>
-                    <workingDirectory>${plugin.path}</workingDirectory>
+                    <workingDirectory>${extension.path}</workingDirectory>
+                    <installDirectory>${extension.install.dir}</installDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -81,7 +87,7 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${basedir}/${plugin.path}/build</directory>
+                            <directory>${basedir}/${extension.path}/build</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>

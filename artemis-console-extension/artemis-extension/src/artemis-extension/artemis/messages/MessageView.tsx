@@ -225,8 +225,8 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
       </Tbody>
       </TableComposable>
     {props.back &&
-        <><Button onClick={() => { if (props.back) { props.back(0); } } }>Queues</Button>
-        <Button onClick={() => { if (props.back) { props.back(1); } }}>Browse</Button></>
+        <><Button id='message-view-queues-button' onClick={() => { if (props.back) { props.back(0); } } }>Queues</Button>
+        <Button id='message-view-browse-button'  onClick={() => { if (props.back) { props.back(1); } }}>Browse</Button></>
     }
     </>
   )

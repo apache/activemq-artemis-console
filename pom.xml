@@ -52,8 +52,6 @@
         <node-version>v20.9.0</node-version>
         <yarn-version>v1.22.21</yarn-version>
         <frontend-maven-plugin-version>1.15.0</frontend-maven-plugin-version>
-        <!-- Path to the Hawtio TypeScript plugin -->
-        <plugin.path>artemis-extension</plugin.path>
         <project.build.outputTimestamp>2024-03-27T00:00:01Z</project.build.outputTimestamp>
     </properties>
 
