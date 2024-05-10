@@ -265,7 +265,7 @@ const operationOptions = [
         }
         onClose={handleModalToggle}
         actions={[
-          <Button key="save" variant="primary" onClick={onSave}>
+          <Button id='columns-save-button' key="save" variant="primary" onClick={onSave}>
             Save
           </Button>,
           <Button key="close" variant="secondary" onClick={handleModalToggle}>
@@ -393,7 +393,7 @@ const operationOptions = [
             />
           </ToolbarItem>
           <ToolbarItem key="search-button">
-            <Button onClick={applyFilter}>Search</Button>
+            <Button onClick={applyFilter} id="table-search-button">Search</Button>
           </ToolbarItem>
           <ToolbarItem key="column-select">
             <Button variant='link' onClick={handleModalToggle}>Manage Columns</Button>
@@ -412,7 +412,7 @@ const operationOptions = [
   return (
     <React.Fragment>
       {toolbarItems}
-      <TableComposable variant="compact" aria-label="Column Management Table">
+      <TableComposable variant="compact" aria-label="Data Table" id='data-table'>
         <Thead>
           <Tr >
             {columns.map((column, id) => {

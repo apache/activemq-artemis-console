@@ -413,7 +413,7 @@ class ArtemisService {
             return this.formatPersistentSize(size);
         }
         if (columnID === "originalQueue" && message["StringProperties"]) {
-            const originalQueue = message["StringProperties"]._AMQ_ORIG_QUEUE;
+            var originalQueue = message["StringProperties"]._AMQ_ORIG_QUEUE != null ? message["StringProperties"]._AMQ_ORIG_QUEUE : message["StringProperties"]["extraProperties._AMQ_ORIG_QUEUE"]
             return originalQueue ? originalQueue : "";
         }
         return message[columnID] ? "" + message[columnID] : "";

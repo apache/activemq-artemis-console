@@ -97,7 +97,7 @@ export const ArtemisTabs: React.FunctionComponent = () => {
                   <AddressesTable search={handleSearch} filter={searchFilter}/>
                 }
               </Tab>
-              <Tab eventKey={6} title={<TabTitleText>Queues</TabTitleText>} aria-label="consumers">
+              <Tab eventKey={6} title={<TabTitleText>Queues</TabTitleText>} aria-label="queues">
                 {activeTabKey === 6 &&
                   <QueuesView search={handleSearch} filter={searchFilter}/>
                 }

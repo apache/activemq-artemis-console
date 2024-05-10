@@ -113,6 +113,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     return [
       {
         title: 'Delete',
+        id: 'message-dropdown-delete',
         onClick: () => {
           setSelectedMessages([row.messageID]);
           setShowDeleteMessagesModal(true);
@@ -120,12 +121,14 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       },
       {
         title: 'View',
+        id: 'message-dropdown-view',
         onClick: () => {
           if (props.selectMessage) { props.selectMessage(row); }
         }
       },
       {
         title: 'Resend',
+        id: 'message-dropdown-resend',
         onClick: () => {
           if (props.selectMessage) { 
             setResendMessage(row);
@@ -260,7 +263,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      <TableComposable variant="compact" aria-label="Column Management Table">
+      <TableComposable id='message-table' variant="compact" aria-label="Column Management Table">
         <Thead>
           <Tr >
             <Th></Th>
@@ -316,7 +319,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
         }}
       />
       {props.back &&
-        <Button onClick={() => { if (props.back) { props.back(0) } }}>Queues</Button>
+        <Button id='message-table-queues-button' onClick={() => { if (props.back) { props.back(0) } }}>Queues</Button>
       }
       <Modal
         aria-label='delete-message-modal'
