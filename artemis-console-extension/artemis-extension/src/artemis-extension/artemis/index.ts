@@ -18,8 +18,9 @@ import { HawtioPlugin, hawtio, helpRegistry, workspace, preferencesRegistry} fro
 import { Artemis } from './Artemis'
 import { ArtemisJMX } from './ArtemisJMX'
 import { ArtemisPreferences } from './ArtemisPreferences'
-import { log, artemisPluginName, artemisPluginTitle, artemisPluginPath, artemisJMXPluginName, artemisJMXPluginPath, artemisJMXPluginTitle, jmxDomain,  } from './globals'
+import { log, artemisPluginName, artemisPluginTitle, artemisPluginPath, artemisJMXPluginName, artemisJMXPluginPath, artemisJMXPluginTitle } from './globals'
 import help from './help.md'
+import { artemisService } from './artemis-service'
 
 export const artemis: HawtioPlugin = () => {
 
@@ -33,7 +34,7 @@ export const artemis: HawtioPlugin = () => {
     path: artemisPluginPath,
     component: Artemis,
     order: -2,
-    isActive:  async () => workspace.treeContainsDomainAndProperties(jmxDomain),
+    isActive:  async () => workspace.treeContainsDomainAndProperties(await artemisService.getArtemisJMXDomain()),
   })
 
   hawtio.addPlugin({
@@ -42,7 +43,7 @@ export const artemis: HawtioPlugin = () => {
     path: artemisJMXPluginPath,
     component: ArtemisJMX,
     order: -1,
-    isActive:  async () => workspace.treeContainsDomainAndProperties(jmxDomain),
+    isActive:  async () => workspace.treeContainsDomainAndProperties(await artemisService.getArtemisJMXDomain()),
   })
 
   helpRegistry.add(artemisPluginName, artemisPluginTitle, help, 1)

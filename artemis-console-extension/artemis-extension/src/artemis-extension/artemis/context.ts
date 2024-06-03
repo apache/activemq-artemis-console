@@ -18,7 +18,8 @@ import { eventService, EVENT_REFRESH,MBeanNode, MBeanTree, PluginNodeSelectionCo
 import { TreeViewDataItem } from "@patternfly/react-core";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
-import { artemisPluginName, jmxDomain } from "./globals";
+import { artemisPluginName } from "./globals";
+import { artemisService } from "./artemis-service";
   
 /**
  * Custom React hook for using the Artemis MBean tree.
@@ -34,6 +35,7 @@ export function useArtemisTree() {
 
     const populateTree = async () => {
         const wkspTree: MBeanTree = await workspace.getTree();
+        const jmxDomain: string = await artemisService.getArtemisJMXDomain();
         const rootNode = wkspTree.find(node => node.name === jmxDomain)
         if (rootNode && rootNode.children && rootNode.children.length > 0) {
             if (rootNode.children[0].objectName) {
