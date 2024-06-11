@@ -15,11 +15,11 @@
  * limitations under the License.
  */
 import React from 'react'
-import { BrokerTopology } from './brokers/BrokerTopology';
+import { BrokerDiagram } from './brokers/BrokerDiagram';
 
 export const ArtemisNetwork: React.FunctionComponent = () => {
   
   return (
-    <BrokerTopology/>
+    <BrokerDiagram/>
   )
 }
