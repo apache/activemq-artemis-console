@@ -25,7 +25,7 @@ import { ArtemisContext, useArtemisTree } from '../context';
 import { Status } from '../status/Status';
 import { Filter } from '../table/ArtemisTable';
 import { QueuesView } from '../queues/QueuesView';
-import { BrokerTopology } from '../brokers/BrokerTopology';
+import { BrokerDiagram } from '../brokers/BrokerDiagram';
 
 
 export type Broker = {
@@ -109,7 +109,7 @@ export const ArtemisTabs: React.FunctionComponent = () => {
         <PageSection padding={{ default: 'noPadding' }}>
             <TabContent key={7} eventKey={7} id={`tabContent${7}`} activeKey={activeTabKey} hidden={7 !== activeTabKey}  style={{height: "100%"}}>
             {activeTabKey === 7 && 
-              <BrokerTopology />   
+              <BrokerDiagram />   
             }
             </TabContent>
         </PageSection>
