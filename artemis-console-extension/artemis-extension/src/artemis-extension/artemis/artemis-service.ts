@@ -95,6 +95,20 @@ export type ClusterConnection = {
 export type ClusterConnections = {
     clusterConnections: ClusterConnection[]
 }
+export type Queue = {
+    name: string
+    address: string
+    routingType: string
+}
+export type Address = {
+    name: string
+    queues: Queue[]
+}
+export type BrokerTopology = {
+    broker: BrokerInfo
+    addresses: Address[]
+
+}
 
 const BROKER_SEARCH_PATTERN = jmxDomain + ":broker=*";
 const LIST_NETWORK_TOPOLOGY_SIG = "listNetworkTopology";
@@ -177,6 +191,32 @@ class ArtemisService {
                 resolve(brokerInfo);
             }
             reject("invalid response:" + response);
+        });
+    }
+
+    async createBrokerTopology(): Promise<BrokerTopology> {
+        return new Promise<BrokerTopology>(async (resolve, reject) => {
+            try {
+                var brokerInfo = await this.createBrokerInfo();
+                var brokerTopology: BrokerTopology = {
+                    broker: brokerInfo,
+                    addresses: []
+                }
+                var addresses: string[] = await this.getAllAddresses();
+                for (const address of addresses) {
+                    var queuesJson: string = await this.getQueuesForAddress(address);
+                    var queues: Queue[] = JSON.parse(queuesJson).data;
+                    brokerTopology.addresses.push({
+                        name: address,
+                        queues: queues
+                    })
+                }
+                resolve(brokerTopology);
+                
+            } catch (error) {
+                reject("invalid response:");
+            }
+        
         });
     }
 

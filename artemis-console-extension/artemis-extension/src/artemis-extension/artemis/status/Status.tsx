@@ -33,8 +33,7 @@ import { Card,
     DropdownItem, 
     Button, 
     Modal, 
-    ModalVariant,
-    Tooltip} from "@patternfly/react-core"
+    ModalVariant} from "@patternfly/react-core"
 import { ExclamationCircleIcon, OkIcon } from '@patternfly/react-icons'
 import { Attributes, eventService, Operations } from '@hawtio/react';
 import { useContext, useEffect, useState } from "react";
@@ -197,7 +196,7 @@ export const Status: React.FunctionComponent = () => {
                             <GridItem key={index}>
                                 <Card isFullHeight={true} isFlat={true}>
 
-                                    <CardTitle>{acceptor.Name} ({acceptor.FactoryClassName.indexOf("Netty") === -1?"VM":"TCP"}): {acceptor.Started && <Tooltip content={"Acceptor is Started"}><OkIcon color="green" /></Tooltip>}{!acceptor.Started && <Tooltip content={"Acceptor is Stopped"}><ExclamationCircleIcon color="red"/></Tooltip>}</CardTitle>
+                                    <CardTitle>{acceptor.Name} ({acceptor.FactoryClassName.indexOf("Netty") === -1?"VM":"TCP"}): {acceptor.Started && <OkIcon color="green" />}{!acceptor.Started && <ExclamationCircleIcon color="red"/>}</CardTitle>
                                     <CardBody>
                                         <Divider />
                                         <TableComposable variant="compact" aria-label="Column Management Table">

@@ -58,9 +58,11 @@ import {
   TopologySideBar
 } from '@patternfly/react-topology';
 import { useEffect, useState } from 'react';
-import { artemisService, BrokerInfo } from '../artemis-service';
-import { eventService } from '@hawtio/react';
-import { ToolbarItem, Select, SelectVariant, SelectOption } from '@patternfly/react-core';
+import { artemisService, BrokerInfo, BrokerTopology } from '../artemis-service';
+import { Attributes } from '@hawtio/react';
+import { ToolbarItem, Select, SelectVariant, SelectOption, Button } from '@patternfly/react-core';
+import { createAddressObjectName, createQueueObjectName } from '../util/jmx';
+import { ArtemisContext } from '../context';
 
 
 const BadgeColors = [
@@ -118,8 +120,10 @@ type CustomNodeProps = {
 } & WithDragNodeProps;
 
 
+
 const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNodeProps & WithDndDropProps> = ({ element, onSelect, selected, ...rest }) => {
   const data = element.getData();
+  const selectNode = data.selectNode;
   const Icon = ClusterIcon;
   const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
   const { viewOptions } = element.getController().getState<ControllerState>();
@@ -134,7 +138,7 @@ const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDrag
       badgeBorderColor={badgeColors?.badgeBorderColor}
       showLabel={viewOptions.showLabels}
       className="artemisBroker"
-      onSelect={onSelect}
+      onSelect={() => selectNode(data)}
       selected={selected}
       {...rest}
     >
@@ -147,6 +151,7 @@ const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDrag
 
 const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNodeProps & WithDndDropProps> = ({ element, onSelect, selected, ...rest  }) => {
   const data = element.getData();
+  const selectNode = data.selectNode;
   const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
   const { viewOptions } = element.getController().getState<ControllerState>();
 
@@ -160,25 +165,13 @@ const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNode
       badgeBorderColor={badgeColors?.badgeBorderColor} 
       showLabel={viewOptions.showLabels}
       className={data.className}
-      onSelect={onSelect}
+      onSelect={() => selectNode(data)}
       selected={selected}
       {...rest}
     >
     </DefaultNode>
   );
 };
-
-const customLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout | undefined => {
-  switch (type) {
-    case 'Cola':
-      return new ColaLayout(graph);
-    default:
-      return new ColaLayout(graph, { layoutOnDrag: true });
-  }
-};
-
-const CONNECTOR_TARGET_DROP = 'connector-target-drop';
-
 const customComponentFactory: ComponentFactory = (kind: ModelKind, type: string): any => {
   switch (type) {
     case 'group':
@@ -233,6 +226,22 @@ const customComponentFactory: ComponentFactory = (kind: ModelKind, type: string)
   }
 };
 
+
+
+
+const customLayoutFactory: LayoutFactory = (type: string, graph: Graph): Layout | undefined => {
+  switch (type) {
+    case 'Cola':
+      return new ColaLayout(graph);
+    default:
+      return new ColaLayout(graph, { layoutOnDrag: true });
+  }
+};
+
+const CONNECTOR_TARGET_DROP = 'connector-target-drop';
+
+
+
 const BROKER_NODE_DIAMETER = 75;
 const ADDRESS_NODE_DIAMETER = 50;
 const QUEUE_NODE_DIAMETER = 50;
@@ -263,10 +272,49 @@ function isInternalName(name: string, start=0) {
   return name.startsWith("$", start) || name.startsWith("notif", start);
 }
 
-export const BrokerTopology: React.FunctionComponent = () => {
-  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
-  const [viewOptionsOpen, setViewOptionsOpen] = useState<boolean>(false);
-  const [viewOptions, setViewOptions] = React.useState<ViewOptions>(DefaultViewOptions);
+export const BrokerDiagram: React.FunctionComponent = () => {
+  const [ selectedIds, setSelectedIds ] = React.useState<string[]>([]);
+  const [ viewOptionsOpen, setViewOptionsOpen ] = useState<boolean>(false);
+  const [ viewOptions, setViewOptions] = React.useState<ViewOptions>(DefaultViewOptions);
+  const [ showSidebar, setShowSidebar ] = React.useState(false);
+  const [ sidebarTitle, setSidebarTitle ] = React.useState("");
+  const [ brokerTopology, setBrokerTopology ] = React.useState<BrokerTopology>();
+  const[ topologyLoaded, setTopologyLoaded ] = React.useState(false);
+
+ 
+
+  const { findAndSelectNode } = React.useContext(ArtemisContext);
+  
+
+  const selectNode = React.useCallback((data: any) => {
+    if (data.queue != null) {
+      artemisService.getBrokerObjectName().then((brokerObjectName) => {
+        const queueObjectName = createQueueObjectName(brokerObjectName, data.address, data.routingType, data.queue);
+        setSidebarTitle(queueObjectName);
+        findAndSelectNode(queueObjectName, "");
+        setShowSidebar(true)
+      });
+    } else if(data.address != null ) {
+        artemisService.getBrokerObjectName().then((brokerObjectName) => {
+        const addressObjectName = createAddressObjectName(brokerObjectName, data.address);
+        setSidebarTitle(addressObjectName);
+        findAndSelectNode(addressObjectName, "");
+        setShowSidebar(true)
+      });
+    } else {
+      artemisService.getBrokerObjectName().then((brokerObjectName) => {
+        if (data.type === "local") {
+          setSidebarTitle(brokerObjectName);
+          findAndSelectNode(brokerObjectName, "");
+          setShowSidebar(true)
+        } else {
+          setShowSidebar(false)
+        }
+      })
+    }
+  }, [findAndSelectNode])
+
+ 
 
   const controller = React.useMemo(() => {
     const model: Model = {
@@ -295,171 +343,163 @@ export const BrokerTopology: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const getBrokerTopology = async () => {
-        artemisService.createBrokerInfo()
-            .then((brokerInfo) => {
-                var brokerNode: NodeModel = {
-                  id: brokerInfo.nodeID,
-                  type: 'broker',
-                  label: brokerInfo.name,
-                  width: BROKER_NODE_DIAMETER,
-                  height: BROKER_NODE_DIAMETER,
-                  shape: NodeShape.ellipse,
-                  status: NodeStatus.info,
-                  style: {
-                    fill: "black"
-                  },
-                  data: {
-                    badge: 'Broker'
-                  }
-                }
-                var newBrokerNodes: NodeModel[] = [];
-                var newBrokerEdges: EdgeModel[] = [];
-                newBrokerNodes.push(brokerNode);
-
-                brokerInfo.networkTopology.brokers.forEach(broker => {
-                  if (brokerInfo.nodeID !== broker.nodeID) {
-                    var brokerNode: NodeModel = {
-                      id: broker.nodeID,
-                      type: 'broker',
-                      label: broker.live,
-                      width: BROKER_NODE_DIAMETER,
-                      height: BROKER_NODE_DIAMETER,
-                      shape: NodeShape.ellipse,
-                      status: NodeStatus.info,
-                      data: {
-                        badge: 'Broker'
-                      }
-                    }
-                    newBrokerNodes.push(brokerNode);
-                    if (viewOptions.showConnectors) {
-                      var brokerEdge: EdgeModel = {
-                        id: 'broker-edge-' + brokerInfo.nodeID + '-broker-node-' + broker.nodeID,
-                        type: 'edge',
-                        source: brokerInfo.nodeID,
-                        target: broker.nodeID,
-                        edgeStyle: EdgeStyle.default
-                      };
-                      newBrokerEdges.push(brokerEdge);
-                    }
-                  }
-                })
-
-                const model: Model = {
-                  nodes: newBrokerNodes,
-                  edges: newBrokerEdges,
-                  graph: {
-                    id: 'g1',
-                    type: 'graph',
-                    layout: 'Cola'
-                  }
-                };
-                artemisService.getAllAddresses()
-                .then((addresses) => {
-                  addresses.forEach(address => {
-                      if (viewOptions.showAddresses) {
-                        var internalAddress: boolean = isInternalName(address);
-                        if(internalAddress && viewOptions.showInternalAddresses) {
-                          addInternalAddress(address, newBrokerNodes, brokerInfo, newBrokerEdges, controller, model, viewOptions.showConnectors);
-                        } else if (!internalAddress && viewOptions.showAddresses) {
-                          addAddress(address, newBrokerNodes, brokerInfo, newBrokerEdges, controller, model, viewOptions.showConnectors);
-                        }
-                      }
-                      if (viewOptions.showQueues) {
-                        artemisService.getQueuesForAddress(address)
-                          .then(queues => {
-                            var parsedQueues: any[] = JSON.parse(queues).data;
-                            parsedQueues.forEach(queue => {
-                              if (internalAddress && viewOptions.showInternalQueues) {
-                                addInternalQueue(address, queue.name, newBrokerNodes, brokerInfo, newBrokerEdges, controller, model, viewOptions.showInternalAddresses, viewOptions.showConnectors); 
-                              } else if (!internalAddress &&viewOptions.showQueues) {
-                                addQueue(address, queue.name, newBrokerNodes, brokerInfo, newBrokerEdges, controller, model, viewOptions.showAddresses, viewOptions.showConnectors); 
-                              }
-                            })
-                          })}
-                  });
-                })         
-            })
-            .catch((error: string) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: error,
-                })
-            });
+    if (!topologyLoaded) {
+      artemisService.createBrokerTopology().then(brokerTopology => {
+        setTopologyLoaded(true);
+        setBrokerTopology(brokerTopology);
+      });
     }
-    getBrokerTopology();
+    if (topologyLoaded && brokerTopology) {
+      var brokerNode: NodeModel = {
+        id: brokerTopology.broker.nodeID,
+        type: 'broker',
+        label: brokerTopology.broker.name,
+        width: BROKER_NODE_DIAMETER,
+        height: BROKER_NODE_DIAMETER,
+        shape: NodeShape.ellipse,
+        status: NodeStatus.info,
+        style: {
+          fill: "black"
+        },
+        data: {
+          badge: 'Broker',
+          type: "local",
+          selectNode: selectNode
+        }
+      }
+      var newBrokerNodes: NodeModel[] = [];
+      var newBrokerEdges: EdgeModel[] = [];
+      newBrokerNodes.push(brokerNode);
 
-  }, [viewOptions, controller])
+      const model: Model = {
+        nodes: newBrokerNodes,
+        edges: newBrokerEdges,
+        graph: {
+          id: 'g1',
+          type: 'graph',
+          layout: 'Cola'
+        }
+      };
+
+      for (const broker of brokerTopology.broker.networkTopology.brokers) {
+        if (brokerTopology.broker.nodeID !== broker.nodeID) {
+          var remoteBrokerNode: NodeModel = {
+            id: broker.nodeID,
+            type: 'broker',
+            label: broker.live,
+            width: BROKER_NODE_DIAMETER,
+            height: BROKER_NODE_DIAMETER,
+            shape: NodeShape.ellipse,
+            status: NodeStatus.info,
+            data: {
+              badge: 'Broker',
+              type: "remote",
+              selectNode: selectNode
+            }
+          }
+          newBrokerNodes.push(remoteBrokerNode);
+          if (viewOptions.showConnectors) {
+            var brokerEdge: EdgeModel = {
+              id: 'broker-edge-' + brokerTopology.broker.nodeID + '-broker-node-' + broker.nodeID,
+              type: 'edge',
+              source: brokerTopology.broker.nodeID,
+              target: broker.nodeID,
+              edgeStyle: EdgeStyle.default
+            };
+            newBrokerEdges.push(brokerEdge);
+          }
+        }
+      }
+
+      for (const address of brokerTopology.addresses) {
+        var internalAddress: boolean = isInternalName(address.name);
+        if (viewOptions.showAddresses) {
+          if(internalAddress && viewOptions.showInternalAddresses) {
+            addInternalAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
+          } else if (!internalAddress && viewOptions.showAddresses) {
+            addAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
+          }
+        }
+        if (viewOptions.showQueues) {
+          for (const queue of address.queues) {
+            if (internalAddress && viewOptions.showInternalQueues) {
+              addInternalQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showInternalAddresses, viewOptions.showConnectors, selectNode); 
+            } else if (!internalAddress &&viewOptions.showQueues) {
+              addQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showAddresses, viewOptions.showConnectors, selectNode); 
+            }
+          }
+        }
+      }
+      controller.fromModel(model, false);
+    }
+
+  }, [viewOptions, controller, selectNode, topologyLoaded, brokerTopology])
 
 
 
   const contextToolbar = (
-    <ToolbarItem>
+    <><ToolbarItem>
       <Select
         variant={SelectVariant.checkbox}
-        customContent={
-          <div>
-            <SelectOption
-              value="show Labels"
-              isChecked={viewOptions.showLabels}
-              onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))}
-            />
-            <SelectOption
-              value="show Addresses"
-              isChecked={viewOptions.showAddresses}
-              onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))}
-            />
-            <SelectOption
-              value="show Queues"
-              isChecked={viewOptions.showQueues}
-              onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))}
-            />
-            <SelectOption
-              value="show Internal Addresses"
-              isChecked={viewOptions.showInternalAddresses}
-              onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))}
-            />
-            <SelectOption
-              value="show Internal Queues"
-              isChecked={viewOptions.showInternalQueues}
-              onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))}
-            />
-            <SelectOption
-              value="show Connectors"
-              isChecked={viewOptions.showConnectors}
-              onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}
-            />
-          </div>
-        }
+        customContent={<div>
+          <SelectOption
+            value="show Labels"
+            isChecked={viewOptions.showLabels}
+            onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))} />
+          <SelectOption
+            value="show Addresses"
+            isChecked={viewOptions.showAddresses}
+            onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))} />
+          <SelectOption
+            value="show Queues"
+            isChecked={viewOptions.showQueues}
+            onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))} />
+          <SelectOption
+            value="show Internal Addresses"
+            isChecked={viewOptions.showInternalAddresses}
+            onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))} />
+          <SelectOption
+            value="show Internal Queues"
+            isChecked={viewOptions.showInternalQueues}
+            onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))} />
+          <SelectOption
+            value="show Connectors"
+            isChecked={viewOptions.showConnectors}
+            onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))} />
+        </div>}
         onToggle={() => setViewOptionsOpen(prev => !prev)}
-        onSelect={() => {}}
+        onSelect={() => { } }
         isCheckboxSelectionBadgeHidden
         isOpen={viewOptionsOpen}
-        placeholderText="Node options"
-      />
-    </ToolbarItem>
+        placeholderText="Node options" />
+    </ToolbarItem><ToolbarItem>
+        <Button onClick={() => setTopologyLoaded(false)}>Refresh</Button>
+      </ToolbarItem></>
   );
 
   const topologySideBar = (
-    <TopologySideBar
-      className="topology-example-sidebar"
-      show={selectedIds.length > 0}
-      onClose={() => setSelectedIds([])}
+    <TopologySideBar 
+      header={sidebarTitle}
+      className="topology-sidebar"
+      show={showSidebar}
+      onClose={() => setShowSidebar(false)}
     >
-      <div style={{ marginTop: 27, marginLeft: 20, height: '800px' }}>{selectedIds[0]}</div>
+      <div style={{ marginTop: 100, marginLeft: 20, height: '800px' }}>
+        <Attributes />
+      </div>
     </TopologySideBar>
   );
 
   return (
-    <TopologyView contextToolbar={contextToolbar} sideBar={topologySideBar}>
+    <><TopologyView contextToolbar={contextToolbar} sideBar={topologySideBar}>
       <VisualizationProvider controller={controller}>
         <VisualizationSurface state={{ selectedIds, viewOptions }} />
       </VisualizationProvider>
-    </TopologyView>
+    </TopologyView><Attributes /></>
   );
 };
 
-function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean) {
+function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean, selectNode: Function) {
   var addressNode: NodeModel = {
     id: 'address-node-' + address,
     type: 'resource',
@@ -470,7 +510,9 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
     status: NodeStatus.info,
     data: {
       badge: 'Address',
-      className: 'artemisAddress'
+      className: 'artemisAddress',
+      address: address,
+      selectNode: selectNode
     }
   };
   newBrokerNodes.push(addressNode);
@@ -487,7 +529,7 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
   controller.fromModel(model, false);
 }
 
-function addInternalAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean) {
+function addInternalAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean, selectNode: Function) {
   var addressNode: NodeModel = {
     id: 'address-node-' + address,
     type: 'resource',
@@ -498,7 +540,9 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
     status: NodeStatus.info,
     data: {
       badge: 'Internal Address',
-      className: 'artemisInternalAddress'
+      className: 'artemisInternalAddress',
+      address: address,
+      selectNode: selectNode
     }
   };
   newBrokerNodes.push(addressNode);
@@ -515,7 +559,7 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
   controller.fromModel(model, false);
 }
 
-function addQueue(address: string, queue: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showAddresses: boolean, showConnectors: boolean) {
+function addQueue(address: string, queue: string, routingType: string,  newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showAddresses: boolean, showConnectors: boolean, selectNode: Function) {
   var queueNode: NodeModel = {
     id: 'queue-node-' + queue,
     type: 'resource',
@@ -526,7 +570,11 @@ function addQueue(address: string, queue: string, newBrokerNodes: NodeModel[], b
     status: NodeStatus.info,
     data: {
       badge: 'Queue',
-      className: 'artemisQueue'
+      className: 'artemisQueue',
+      address: address,
+      queue: queue,
+      routingType: routingType,
+      selectNode: selectNode
     }
   };
   newBrokerNodes.push(queueNode);
@@ -543,7 +591,7 @@ function addQueue(address: string, queue: string, newBrokerNodes: NodeModel[], b
   controller.fromModel(model, false);
 }
 
-function addInternalQueue(address: string, queue: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showInternalAddresses: boolean, showConnectors: boolean) {
+function addInternalQueue(address: string, queue: string, routingType: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showInternalAddresses: boolean, showConnectors: boolean, selectNode: Function) {
   var queueNode: NodeModel = {
     id: 'queue-node-' + queue,
     type: 'resource',
@@ -554,7 +602,11 @@ function addInternalQueue(address: string, queue: string, newBrokerNodes: NodeMo
     status: NodeStatus.info,
     data: {
       badge: 'Internal Queue',
-      className: 'artemisInternalAddress'
+      className: 'artemisInternalAddress',
+      address: address,
+      queue: queue,
+      routingType: routingType,
+      selectNode: selectNode
     }
   };
   newBrokerNodes.push(queueNode);
