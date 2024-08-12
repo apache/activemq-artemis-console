@@ -206,6 +206,7 @@
                                     <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
                                     <exclude>README.md</exclude>
                                     <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
+                                    <exclude>artemis-console-extension/artemis-extension/public/artemisconfig.json</exclude>
                                     <exclude>.github/**</exclude>
 
                                     <!-- NPM files -->
