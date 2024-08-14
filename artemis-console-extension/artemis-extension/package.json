@@ -34,6 +34,7 @@
     "replace": "^1.2.2"
   },
   "resolutions": {
+    "axios": "1.7.4",
     "@typescript-eslint/eslint-plugin": "6.9.0",
     "@typescript-eslint/parser": "6.9.0",
     "victory-area": "36.8.6",
