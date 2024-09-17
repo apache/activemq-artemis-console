@@ -48,6 +48,7 @@
 
             <!-- Removing ide files -->
             <exclude>etc/ide-settings/</exclude>
+            <exclude>.vscode/**</exclude>
 
             <!-- Exclude Release and Dev files -->
             <exclude>ratReport.txt</exclude>

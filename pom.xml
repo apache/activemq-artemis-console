@@ -205,9 +205,13 @@
                                     <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
                                     <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
                                     <exclude>README.md</exclude>
+                                    <exclude>Releasing.md</exclude>
                                     <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
                                     <exclude>artemis-console-extension/artemis-extension/public/artemisconfig.json</exclude>
                                     <exclude>.github/**</exclude>
+
+                                    <!-- Licenses -->
+                                    <exclude>**/src/main/resources/licenses/licenses/**</exclude>
 
                                     <!-- NPM files -->
                                     <exclude>**/node/**</exclude>
