@@ -94,7 +94,7 @@
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                         <fileset>
-                            <directory>${basedir}/${plugin.path}/node_modules</directory>
+                            <directory>${basedir}/artemis-extension/node_modules</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>

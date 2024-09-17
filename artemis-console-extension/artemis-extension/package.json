@@ -9,7 +9,8 @@
     "start": "craco start",
     "build": "craco build && yarn replace-version",
     "test": "craco test",
-    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\""
+    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\"",
+    "license": "yarn licenses generate-disclaimer -R > ../../artemis-console-distribution/src/main/resources/licenses/licenses/NPMLicenses.txt"
   },
   "dependencies": {
     "@hawtio/react": "1.2.5",
