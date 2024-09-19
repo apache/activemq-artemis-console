@@ -26,5 +26,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: rat
-          path: target/rat.txt
+          name: rat-${{ matrix.java }}
+          path: "**/target/rat.txt"
+          if-no-files-found: ignore
