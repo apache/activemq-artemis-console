@@ -176,6 +176,19 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     return selectedMessages.includes(id);
   }
 
+  const selectAllMessages = (isSelecting: boolean) => {
+    if(isSelecting) {
+        var updatedSelectedMessages: number[] = rows.map((row: any, index) => {
+          return Number(row.messageID);
+      })
+     setSelectedMessages(updatedSelectedMessages);
+    } else {
+      setSelectedMessages([]);
+    }
+  }
+
+  const areAllMessagesSelected = selectedMessages.length === rows.length;
+
   const handleDeleteMessages = () => {
 
     const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
@@ -266,7 +279,12 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       <TableComposable id='message-table' variant="compact" aria-label="Column Management Table">
         <Thead>
           <Tr >
-            <Th></Th>
+            <Th
+            select={{
+              onSelect: (_event, isSelecting) => selectAllMessages(isSelecting),
+              isSelected: areAllMessagesSelected
+            }}
+          />
             {columns.map((column, id) => {
               if (column.visible) {
                 return <Th key={id}>{column.name}</Th>
