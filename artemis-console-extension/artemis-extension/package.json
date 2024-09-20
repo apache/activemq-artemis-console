@@ -60,7 +60,9 @@
     "word-wrap": "1.2.4",
     "postcss": "8.4.31",
     "ws": "8.18.0",
-    "braces": "3.0.3"
+    "braces": "3.0.3",
+    "express": "4.21.0",
+    "webpack": "5.94.0"
   },
   "eslintConfig": {
     "extends": [
