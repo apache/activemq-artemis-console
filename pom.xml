@@ -192,42 +192,34 @@
                 <plugin>
                     <groupId>org.apache.rat</groupId>
                     <artifactId>apache-rat-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>check</goal>
-                            </goals>
-                            <configuration>
-                                <excludes>
-                                    <exclude>**/artemis-extension/src/artemis-extension/artemis/help.md</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/package.json</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
-                                    <exclude>README.md</exclude>
-                                    <exclude>Releasing.md</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/public/artemisconfig.json</exclude>
-                                    <exclude>.github/**</exclude>
+                    <configuration>
+                        <excludes>
+                            <exclude>**/artemis-extension/src/artemis-extension/artemis/help.md</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/package.json</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
+                            <exclude>README.md</exclude>
+                            <exclude>Releasing.md</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/public/artemisconfig.json</exclude>
+                            <exclude>.github/**</exclude>
 
-                                    <!-- Licenses -->
-                                    <exclude>**/src/main/resources/licenses/licenses/**</exclude>
+                            <!-- Licenses -->
+                            <exclude>**/src/main/resources/licenses/licenses/**</exclude>
 
-                                    <!-- NPM files -->
-                                    <exclude>**/node/**</exclude>
-                                    <exclude>**/node_modules/**</exclude>
-                                    <exclude>**/package.json</exclude>
-                                    <exclude>**/package-lock.json</exclude>
+                            <!-- NPM files -->
+                            <exclude>**/node/**</exclude>
+                            <exclude>**/node_modules/**</exclude>
+                            <exclude>**/package.json</exclude>
+                            <exclude>**/package-lock.json</exclude>
 
-                                    <!-- Yarn -->
-                                    <exclude>**/.yarn/**</exclude>
-                                    <exclude>**/yarn.lock</exclude>
-                                    <exclude>**/artemis-extension/build/**</exclude>
-                                    <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
-                                </excludes>
-                            </configuration>
-                        </execution>
-                    </executions>
+                            <!-- Yarn -->
+                            <exclude>**/.yarn/**</exclude>
+                            <exclude>**/yarn.lock</exclude>
+                            <exclude>**/artemis-extension/build/**</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
+                        </excludes>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
