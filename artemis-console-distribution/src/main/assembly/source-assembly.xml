@@ -138,6 +138,7 @@
          <includes>
             <!-- The whole .yarn directory is excluded above but we do need this to build-->
             <include>artemis-console-extension/artemis-extension/.yarn/releases/yarn*.cjs</include>
+            <include>artemis-console-extension/artemis-extension/.yarn/releases/LICENSE-yarn.txt</include>
          </includes>
       </fileSet>
    </fileSets>
