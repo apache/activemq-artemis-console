@@ -60,7 +60,7 @@ import {
 import { useEffect, useState } from 'react';
 import { artemisService, BrokerInfo, BrokerTopology } from '../artemis-service';
 import { Attributes } from '@hawtio/react';
-import { ToolbarItem, Select, SelectVariant, SelectOption, Button } from '@patternfly/react-core';
+import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList } from '@patternfly/react-core';
 import { createAddressObjectName, createQueueObjectName } from '../util/jmx';
 import { ArtemisContext } from '../context';
 
@@ -440,38 +440,47 @@ export const BrokerDiagram: React.FunctionComponent = () => {
   const contextToolbar = (
     <><ToolbarItem>
       <Select
-        variant={SelectVariant.checkbox}
-        customContent={<div>
+          toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+              <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setViewOptionsOpen(prev => !prev)}>
+                Node options
+              </MenuToggle>
+          )}
+          onSelect={() => {
+          }}
+          isOpen={viewOptionsOpen}>
+        <SelectList>
           <SelectOption
-            value="show Labels"
-            isChecked={viewOptions.showLabels}
-            onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))} />
+              value="show Labels"
+              hasCheckbox
+              isSelected={viewOptions.showLabels}
+              onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))}>show Labels</SelectOption>
           <SelectOption
-            value="show Addresses"
-            isChecked={viewOptions.showAddresses}
-            onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))} />
+              value="show Addresses"
+              hasCheckbox
+              isSelected={viewOptions.showAddresses}
+              onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))}>show Addresses</SelectOption>
           <SelectOption
-            value="show Queues"
-            isChecked={viewOptions.showQueues}
-            onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))} />
+              value="show Queues"
+              hasCheckbox
+              isSelected={viewOptions.showQueues}
+              onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))}>show Queues</SelectOption>
           <SelectOption
-            value="show Internal Addresses"
-            isChecked={viewOptions.showInternalAddresses}
-            onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))} />
+              value="show Internal Addresses"
+              hasCheckbox
+              isSelected={viewOptions.showInternalAddresses}
+              onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))}>show Internal Addresses</SelectOption>
           <SelectOption
-            value="show Internal Queues"
-            isChecked={viewOptions.showInternalQueues}
-            onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))} />
+              value="show Internal Queues"
+              hasCheckbox
+              isSelected={viewOptions.showInternalQueues}
+              onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))}>show Internal Queues</SelectOption>
           <SelectOption
-            value="show Connectors"
-            isChecked={viewOptions.showConnectors}
-            onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))} />
-        </div>}
-        onToggle={() => setViewOptionsOpen(prev => !prev)}
-        onSelect={() => { } }
-        isCheckboxSelectionBadgeHidden
-        isOpen={viewOptionsOpen}
-        placeholderText="Node options" />
+              value="show Connectors"
+              hasCheckbox
+              isSelected={viewOptions.showConnectors}
+              onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}>show Connectors</SelectOption>
+        </SelectList>
+      </Select>
     </ToolbarItem><ToolbarItem>
         <Button onClick={() => setTopologyLoaded(false)}>Refresh</Button>
       </ToolbarItem></>

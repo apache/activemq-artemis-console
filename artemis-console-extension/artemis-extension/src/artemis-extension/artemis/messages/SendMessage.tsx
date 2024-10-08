@@ -24,11 +24,12 @@ import {
   FlexItem,
   Form,
   FormGroup,
+  MenuToggle,
+  MenuToggleElement,
   PageSection,
   Select,
+  SelectList,
   SelectOption,
-  SelectOptionObject,
-  SelectVariant,
   TextInput,
   Title,
   Text,
@@ -89,7 +90,7 @@ const MessageBody: React.FunctionComponent<SendBodyMessageProps> = props => {
   const handleToggle = () => {
     setDropdownOpen(!isDropdownOpen)
   }
-  const handleFormatChange = (event: React.MouseEvent | React.ChangeEvent, value: string | SelectOptionObject) => {
+  const handleFormatChange = (_event?: (React.MouseEvent<Element, MouseEvent> | undefined), value?: (string | number | undefined)) => {
     setSelectedFormat(value as Language)
     setDropdownOpen(false)
   }
@@ -111,16 +112,21 @@ const MessageBody: React.FunctionComponent<SendBodyMessageProps> = props => {
           <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>
             {' '}
             <Select
-              variant={SelectVariant.single}
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={handleToggle}>
+                    {selectedFormat}
+                  </MenuToggle>
+              )}
               aria-label='Select Format'
-              onToggle={handleToggle}
               onSelect={handleFormatChange}
-              selections={selectedFormat}
+              selected={selectedFormat}
               isOpen={isDropdownOpen}
             >
-              <SelectOption label='plaintext' value={Language.plaintext} />
-              <SelectOption label='xml' value={Language.xml} />
-              <SelectOption label='json' value={Language.json} />
+              <SelectList>
+                <SelectOption label='plaintext' value={Language.plaintext}>{Language.plaintext}</SelectOption>
+                <SelectOption label='xml' value={Language.xml}>{Language.xml}</SelectOption>
+                <SelectOption label='json' value={Language.json}>{Language.json}</SelectOption>
+              </SelectList>
             </Select>
           </FlexItem>{' '}
           <FlexItem flex={{ default: 'flexNone', md: 'flex_1' }}>
@@ -193,7 +199,7 @@ const MessageHeaders: React.FunctionComponent<MessageHeadersProps> = props => {
                   aria-label={'name-input-' + index}
                   name='name'
                   value={header.name}
-                  onChange={(newValue, event) => handleInputChange(index, newValue, event)}
+                  onChange={(event, newValue) => handleInputChange(index, newValue, event)}
                 />
               </FlexItem>
               <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>
@@ -202,7 +208,7 @@ const MessageHeaders: React.FunctionComponent<MessageHeadersProps> = props => {
                   name='value'
                   aria-label={'value-input-' + index}
                   value={header.value}
-                  onChange={(newValue, event) => handleInputChange(index, newValue, event)}
+                  onChange={(event, newValue) => handleInputChange(index, newValue, event)}
                 />
               </FlexItem>
               <FlexItem flex={{ default: 'flexNone', md: 'flex_1' }} span={4}>
@@ -234,11 +240,11 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
     messageBody.current = body
   }
 
-  const handleUsernameChange = (name: string) => {
+  const handleUsernameChange = (_event: React.FormEvent<HTMLInputElement>, name: string) => {
     setUsername(name);
   };
 
-  const handlePasswordChange = (password: string) => {
+  const handlePasswordChange = (_event: React.FormEvent<HTMLInputElement>, password: string) => {
     setPassword(password);
   };
 

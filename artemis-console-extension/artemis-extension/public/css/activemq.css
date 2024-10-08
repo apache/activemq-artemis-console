@@ -17,27 +17,27 @@
 /* You can customise the styles of your application here. */
 
 
-.pf-c-login,
-.pf-c-about-modal-box__hero {
+.pf-v5-c-login,
+.pf-v5-c-about-modal-box__hero {
   background-image: url("../img/background.png") !important;
   background-size: cover;
 }
 
-.pf-c-login__container {
+.pf-v5-c-login__container {
   justify-content: left;
 }
-.pf-c-login__main {
+.pf-v5-c-login__main {
   background-color: transparent;
 }
 
-.pf-c-login__main-body label {
+.pf-v5-c-login__main-body label {
   color: white;
 }
 
-.pf-c-expandable-section__toggle {
+.pf-v5-c-expandable-section__toggle {
   display: flex;
-  padding: var(--pf-c-expandable-section__toggle--PaddingTop) var(--pf-c-expandable-section__toggle--PaddingRight) var(--pf-c-expandable-section__toggle--PaddingBottom) var(--pf-c-expandable-section__toggle--PaddingLeft);
-  margin-top: var(--pf-c-expandable-section__toggle--MarginTop);
+  padding: var(--pf-v5-c-expandable-section__toggle--PaddingTop) var(--pf-v5-c-expandable-section__toggle--PaddingRight) var(--pf-v5-c-expandable-section__toggle--PaddingBottom) var(--pf-v5-c-expandable-section__toggle--PaddingLeft);
+  margin-top: var(--pf-v5-c-expandable-section__toggle--MarginTop);
   color: var(--artemis-global--primary-color--100);
   border: none;
 }
@@ -46,6 +46,7 @@
 svg text {
   font-family: PatternFlyIcons-webfont;
 }
+
 
 .pf-topology__node.artemisBroker.pf-m-info .pf-topology__node__background {
   stroke: #801944;
@@ -74,18 +75,18 @@ svg text {
   fill: #fff;
 }
 
-.pf-c-button.pf-m-primary {
+.pf-v5-c-button.pf-m-primary {
   background-color: var(--artemis-global--primary-color--200);
 }
 
-.pf-c-button.pf-m-primary.pf-m-hover, .pf-c-button.pf-m-primary:hover {
+.pf-v5-c-button.pf-m-primary.pf-m-hover, .pf-v5-c-button.pf-m-primary:hover {
   background-color: var(--artemis-global--primary-color--100);
   background-image: linear-gradient(to bottom,var(--artemis-global--primary-color--100) 0,#B24E78 100%);
   background: var(--artemis-global--primary-color-dark);
   border-color: var(--artemis-global--primary-color--100);
 }
 
-.pf-c-title.pf-m-3xl {
+.pf-v5-c-title.pf-m-3xl {
   color: white;
 }
 
@@ -156,11 +157,11 @@ tbody>tr:hover {
 }
 
 /* This changes the color of the underline in the main left menu*/
-.pf-c-nav__list .pf-m-current.pf-c-nav__link::after, .pf-c-nav__list .pf-m-current>.pf-c-nav__link::after {
+.pf-v5-c-nav__list .pf-m-current.pf-v5-c-nav__link::after, .pf-v5-c-nav__list .pf-m-current>.pf-v5-c-nav__link::after {
   background-color: var(--artemis-global--primary-color--100);
 }
 
-.pf-c-nav__list .pf-c-nav__link.pf-m-hover::after, .pf-c-nav__list .pf-c-nav__link:hover::after {
+.pf-v5-c-nav__list .pf-v5-c-nav__link.pf-m-hover::after, .pf-v5-c-nav__list .pf-v5-c-nav__link:hover::after {
   background-color: var(--artemis-global--primary-color--100);
 }
 
@@ -180,21 +181,21 @@ background-color: var(--artemis-global--primary-color--200);
   --artemis-global--primary-color--400: #c77e9c; 
   --artemis-global--primary-color-dark: #B21054;
   --artemis-global--primary-second-color-100: #2b326e;
-  --pf-c-button--m-primary--BackgroundColor: var(--artemis-global--primary-color--200);
-  --pf-c-button--m-primary--BackgroundColor-hover: var(--artemis-global--primary-color--100);
-  --pf-global--active-color--100: var(--artemis-global--primary-color--200);
-  --pf-global--active-color--200:var(--artemis-global--primary-color--200);
-  --pf-global--active-color--300: var(--artemis-global--primary-color--300);
-  --pf-global--active-color--400: var(--artemis-global--primary-color--400);
-  --pf-global--primary-color--100: var(--artemis-global--primary-color--100);
-  --pf-global--primary-color--200: var(--artemis-global--primary-color--200); 
-  --pf-global--primary-color--light-100: var(--artemis-global--primary-color--100);
-  --pf-global--primary-color--dark-100: var(--artemis-global--primary-color--100);
-  --pf-global--link--Color--hover: var(--artemis-global--primary-second-color-100);
-  --pf-global--link--Color: var(--artemis-global--primary-color--100);
-  --pf-global--link--Color--dark: var(--artemis-global--primary-color--100);
-  --pf-global--link--Color--light: var(--artemis-global--primary-color--300);;
-  --pf-global--link--Color--light--hover: var(--artemis-global--primary-color--400);
+  --pf-v5-c-button--m-primary--BackgroundColor: var(--artemis-global--primary-color--200);
+  --pf-v5-c-button--m-primary--BackgroundColor-hover: var(--artemis-global--primary-color--100);
+  --pf-v5-global--active-color--100: var(--artemis-global--primary-color--200);
+  --pf-v5-global--active-color--200:var(--artemis-global--primary-color--200);
+  --pf-v5-global--active-color--300: var(--artemis-global--primary-color--300);
+  --pf-v5-global--active-color--400: var(--artemis-global--primary-color--400);
+  --pf-v5-global--primary-color--100: var(--artemis-global--primary-color--100);
+  --pf-v5-global--primary-color--200: var(--artemis-global--primary-color--200);
+  --pf-v5-global--primary-color--light-100: var(--artemis-global--primary-color--100);
+  --pf-v5-global--primary-color--dark-100: var(--artemis-global--primary-color--100);
+  --pf-v5-global--link--Color--hover: var(--artemis-global--primary-second-color-100);
+  --pf-v5-global--link--Color: var(--artemis-global--primary-color--100);
+  --pf-v5-global--link--Color--dark: var(--artemis-global--primary-color--100);
+  --pf-v5-global--link--Color--light: var(--artemis-global--primary-color--300);;
+  --pf-v5-global--link--Color--light--hover: var(--artemis-global--primary-color--400);
   /** icon inside broker diagram */
-  --pf-topology__node--Color: var(--artemis-global--primary-color--100)
+  --pf-v5-topology__node--Color: var(--artemis-global--primary-color--100)
 }

@@ -15,32 +15,34 @@
  * limitations under the License.
  */
 import { ChartDonutUtilization } from "@patternfly/react-charts"
-import { Card, 
-    CardBody, 
-    CardTitle, 
-    Divider, 
-    ExpandableSection, 
-    Grid, 
-    GridItem, 
-    CardHeader, 
-    TextList, 
-    TextContent, 
-    TextListItem, 
+import {
+    Card,
+    CardBody,
+    CardTitle,
+    Divider,
+    ExpandableSection,
+    Grid,
+    GridItem,
+    CardHeader,
+    TextList,
+    TextContent,
+    TextListItem,
     TextListItemVariants,
-    CardActions, 
-    Dropdown, 
-    KebabToggle, 
-    DropdownItem, 
-    Button, 
-    Modal, 
-    ModalVariant} from "@patternfly/react-core"
-import { ExclamationCircleIcon, OkIcon } from '@patternfly/react-icons'
+    Dropdown,
+    DropdownItem,
+    Button,
+    Modal,
+    ModalVariant,
+    DropdownList,
+    MenuToggleElement,
+    MenuToggle
+} from "@patternfly/react-core"
+import { EllipsisVIcon, ExclamationCircleIcon, OkIcon } from '@patternfly/react-icons'
 import { Attributes, eventService, Operations } from '@hawtio/react';
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Acceptors, artemisService, BrokerInfo, ClusterConnections } from "../artemis-service";
 import { ArtemisContext } from "../context";
-import { TableComposable, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
-
+import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
 
 export const Status: React.FunctionComponent = () => {
 
@@ -121,33 +123,37 @@ export const Status: React.FunctionComponent = () => {
         setShowOperationsDialog(true);
     }
 
-
-    const brokerInfoDropdownItems = [
-        <DropdownItem key="attributes" component="button" onClick={() => openAttrubutes()}>
-            Attributes
-        </DropdownItem>,
-        <DropdownItem key="operations" component="button" onClick={() => openOperations()}>
-            Operations
-        </DropdownItem>,
-    ];
+    const statusActions = (
+        <Dropdown
+            onSelect={onBrokerInfoSelect}
+            popperProps={{
+                position: 'right'
+            }}
+            toggle={(toggleRef: React.RefObject<MenuToggleElement>) => (
+                <MenuToggle variant="plain" isExpanded={isBrokerInfoOpen} ref={toggleRef} onClick={() => onBrokerInfoSelect()}>
+                    <EllipsisVIcon aria-hidden="true" />
+                </MenuToggle>
+            )}
+            isOpen={isBrokerInfoOpen}
+        >
+            <DropdownList>
+                <DropdownItem key="attributes" component="button" onClick={() => openAttrubutes()}>
+                    Attributes
+                </DropdownItem>
+                <DropdownItem key="operations" component="button" onClick={() => openOperations()}>
+                    Operations
+                </DropdownItem>
+            </DropdownList>
+        </Dropdown>
+    );
 
     return (
         <>
             <Grid hasGutter>
                 <GridItem span={2} rowSpan={3}>
                     <Card isFullHeight={true} >
-                        <CardHeader>
+                        <CardHeader actions={{ actions: statusActions, hasNoOffset: false }}>
                             <CardTitle>Broker Info</CardTitle>
-                            <CardActions>
-                                <Dropdown
-                                    onSelect={onBrokerInfoSelect}
-                                    toggle={<KebabToggle onToggle={setIsBrokerInfoOpen} />}
-                                    isOpen={isBrokerInfoOpen}
-                                    isPlain
-                                    dropdownItems={brokerInfoDropdownItems}
-                                    position={'right'}
-                                />
-                            </CardActions>
                         </CardHeader>
                         <CardBody>
                             <Divider />
@@ -199,7 +205,7 @@ export const Status: React.FunctionComponent = () => {
                                     <CardTitle>{acceptor.Name} ({acceptor.FactoryClassName.indexOf("Netty") === -1?"VM":"TCP"}): {acceptor.Started && <OkIcon color="green" />}{!acceptor.Started && <ExclamationCircleIcon color="red"/>}</CardTitle>
                                     <CardBody>
                                         <Divider />
-                                        <TableComposable variant="compact" aria-label="Column Management Table">
+                                        <Table variant="compact" aria-label="Column Management Table">
                                         <Thead>
                                             <Tr key={"acceptor-list-param-title"}>
                                                 <Th key={"acceptor-list-param-key" + index}>key</Th>
@@ -219,7 +225,7 @@ export const Status: React.FunctionComponent = () => {
                                             })
                                         }
                                         </Tbody>
-                                        </TableComposable>
+                                        </Table>
                                     </CardBody>
                                 </Card>
                             </GridItem>
@@ -235,7 +241,7 @@ export const Status: React.FunctionComponent = () => {
                                     <Card isFlat={true}>
                                         <CardTitle>{'Cluster(' + clusterConnection.Name + ')'}</CardTitle>
                                         <CardBody>
-                                            <TableComposable variant="compact" aria-label="Coluster Table">
+                                            <Table variant="compact" aria-label="Coluster Table">
                                             <Thead>
                                                 <Tr key={"cluster-list-row-" + index}>
                                                     <Th key={"cluster-list-param-key-name" + index}>name</Th>
@@ -260,7 +266,7 @@ export const Status: React.FunctionComponent = () => {
                                                     <Td key={"cluster-list-value-key-dd" + index}>{""+clusterConnection.DuplicateDetection}</Td>
                                                 </Tr>
                                             </Tbody>
-                                            </TableComposable>
+                                            </Table>
                                         </CardBody>
                                     </Card>
                                 </GridItem>
@@ -273,7 +279,7 @@ export const Status: React.FunctionComponent = () => {
                             <GridItem key={index} span={3}>
                                 <Card isFlat={true}>
                                     <CardTitle>{broker.nodeID}</CardTitle>
-                                    <TableComposable variant="compact" aria-label="Network Table">
+                                    <Table variant="compact" aria-label="Network Table">
                                         <Thead>
                                             <Tr key={"network-row-title-" + index}>
                                                 <Th key={"network-cell-primary-" + index}>primary</Th>
@@ -286,7 +292,7 @@ export const Status: React.FunctionComponent = () => {
                                                 <Td key={"network-val-backup-" + index}>{broker.backup}</Td>
                                             </Tr>
                                         </Tbody>
-                                    </TableComposable>
+                                    </Table>
                                 </Card>
                             </GridItem>
                         ))

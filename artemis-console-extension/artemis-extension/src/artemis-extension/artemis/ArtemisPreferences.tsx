@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, Select, SelectOption, SelectOptionObject, SelectVariant, TextInput } from '@patternfly/react-core'
+import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInput } from '@patternfly/react-core'
 import React, { useState } from 'react'
 import { artemisPreferencesService, ArtemisOptions } from './artemis-preferences-service'
 import { Icon, Tooltip } from '@patternfly/react-core'
@@ -66,8 +66,8 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
     setArtemisPreferences(updatedPreferences)
   }
 
-  const updateStringValueFor = (key: keyof ArtemisOptions): ((value: string) => void) => {
-    return (value: string) => {
+  const updateStringValueFor = (key: keyof ArtemisOptions): ((event: React.FormEvent<HTMLInputElement>, value: string) => void) => {
+    return (_event: React.FormEvent<HTMLInputElement>, value: string) => {
       if (!value) return
 
       updatePreferences(value, key)
@@ -78,7 +78,7 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
     setDropdownOpen(!isDropdownOpen)
   }
 
-  const handleFormatChange = (event: React.MouseEvent | React.ChangeEvent, value: string | SelectOptionObject) => {
+  const handleFormatChange = (event?: React.MouseEvent<Element, MouseEvent>, value?: string | number) => {
     setSelectedFormat(value as string);
     setDropdownOpen(false);
     const format = formats.find(format => format.description === value);
@@ -129,19 +129,24 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
           <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>
             {' '}
             <Select
-              variant={SelectVariant.single}
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={handleToggle}>
+                    {selectedFormat}
+                  </MenuToggle>
+                )}
               aria-label='Select Format'
-              onToggle={handleToggle}
               onSelect={handleFormatChange}
-              selections={selectedFormat}
+              selected={selectedFormat}
               isOpen={isDropdownOpen}
             >
-              <SelectOption label={off.id} value={off.description} />
-              <SelectOption label={text.id} value={text.description} />
-              <SelectOption label={decimal.id} value={decimal.description} />
-              <SelectOption label={hex.id} value={hex.description} />
-              <SelectOption label={decimaltext.id} value={decimaltext.description} />
-              <SelectOption label={hexttext.id} value={hexttext.description} />
+              <SelectList>
+                <SelectOption label={off.id} value={off.description}>{off.description}</SelectOption>
+                <SelectOption label={text.id} value={text.description}>{text.description}</SelectOption>
+                <SelectOption label={decimal.id} value={decimal.description}>{decimal.description}</SelectOption>
+                <SelectOption label={hex.id} value={hex.description}>{hex.description}</SelectOption>
+                <SelectOption label={decimaltext.id} value={decimaltext.description}>{decimaltext.description}</SelectOption>
+                <SelectOption label={hexttext.id} value={hexttext.description}>{hexttext.description}</SelectOption>
+              </SelectList>
             </Select>
           </FlexItem>
         </Flex>

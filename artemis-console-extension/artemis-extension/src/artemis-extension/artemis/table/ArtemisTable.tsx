@@ -28,24 +28,26 @@ import {
   ToolbarContent,
   ToolbarItem,
   Modal,
-  OptionsMenu,
-  OptionsMenuToggle,
   Pagination,
   PaginationVariant,
   Text,
   TextContent,
   Select,
-  SelectVariant,
-  OptionsMenuItemGroup,
-  OptionsMenuItem,
-  OptionsMenuSeparator,
   SelectOption,
   SearchInput,
-  SelectOptionObject
+  MenuToggleElement,
+  MenuToggle,
+  SelectList
 } from '@patternfly/react-core';
 import SortAmountDownIcon from '@patternfly/react-icons/dist/esm/icons/sort-amount-down-icon';
-import { TableComposable, Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn } from '@patternfly/react-table';
+import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table } from '@patternfly/react-table';
 import { artemisPreferencesService } from '../artemis-preferences-service';
+import {
+  OptionsMenu,
+  OptionsMenuItem,
+  OptionsMenuItemGroup,
+  OptionsMenuSeparator, OptionsMenuToggle
+} from '@patternfly/react-core/deprecated'
 
 export type Column = {
   id: string
@@ -147,14 +149,6 @@ const operationOptions = [
     setIsModalOpen(!isModalOpen);
   };
 
-  const onFilterColumnStatusToggle = (isExpanded: boolean) => {
-    setFilterColumnStatusIsExpanded(isExpanded);
-  };
-
-  const onFilterColumnOperationToggle = (isExpanded: boolean) => {
-    setFilterColumnOperationIsExpanded(isExpanded);
-  };  
-
   const onSave = () => {
     setIsModalOpen(!isModalOpen);
 
@@ -191,16 +185,16 @@ const operationOptions = [
   }
 
   const onFilterColumnStatusSelect = (
-    _event: React.MouseEvent | React.ChangeEvent,
-    selection: string | SelectOptionObject
+    _event?: React.MouseEvent<Element, MouseEvent> | undefined,
+    selection?: string | number | undefined
   ) => {
     setFilterColumnStatusSelected(selection as string);
     setFilterColumnStatusIsExpanded(false);
   };
 
   const onFilterColumnOperationSelect = (
-    _event: React.MouseEvent | React.ChangeEvent,
-    selection: string | SelectOptionObject
+    _event?: React.MouseEvent<Element, MouseEvent> | undefined,
+    selection?: string | number | undefined
   ) => {
     const operation = operationOptions.find(operation => operation.name === selection);
     if (operation) {
@@ -245,7 +239,7 @@ const operationOptions = [
       onPerPageSelect={handlePerPageSelect}
       variant={variant}
       titles={{
-        paginationTitle: `${variant} pagination`
+        paginationAriaLabel: `${variant} pagination`
       }}
     />
   );
@@ -355,30 +349,40 @@ const operationOptions = [
           </ToolbarItem>
           <ToolbarItem variant="search-filter" key='column-id-select'>
             <Select
-              variant={SelectVariant.single}
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setFilterColumnStatusIsExpanded(prev => !prev)}>
+                    {filterColumnStatusSelected}
+                  </MenuToggle>
+              )}
               aria-label="Select Input"
-              onToggle={onFilterColumnStatusToggle}
               onSelect={onFilterColumnStatusSelect}
-              selections={filterColumnStatusSelected}
+              selected={filterColumnStatusSelected}
               isOpen={filterColumnStatusIsExpanded}
             >
-              {columns.map((column, index) => (
-                <SelectOption key={column.id} value={column.name} />
-              ))}
+              <SelectList>
+                {columns.map((column, index) => (
+                  <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
+                ))}
+              </SelectList>
             </Select>
           </ToolbarItem>
           <ToolbarItem variant="search-filter" key="filter-type">
             <Select
-              variant={SelectVariant.single}
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setFilterColumnOperationIsExpanded(prev => !prev)}>
+                    {filterColumnOperationSelected}
+                  </MenuToggle>
+              )}
               aria-label="Select Input"
-              onToggle={onFilterColumnOperationToggle}
               onSelect={onFilterColumnOperationSelect}
-              selections={filterColumnOperationSelected}
+              selected={filterColumnOperationSelected}
               isOpen={filterColumnOperationIsExpanded}
             >
-              {operationOptions.map((column, index) => (
-                <SelectOption key={column.id} value={column.name} />
-              ))}
+              <SelectList>
+                {operationOptions.map((column, _index) => (
+                    <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
+                ))}
+              </SelectList>
             </Select>
           </ToolbarItem>
           <ToolbarItem variant="search-filter" key="search=text">
@@ -412,7 +416,7 @@ const operationOptions = [
   return (
     <React.Fragment>
       {toolbarItems}
-      <TableComposable variant="compact" aria-label="Data Table" id='data-table'>
+      <Table variant="compact" aria-label="Data Table" id='data-table'>
         <Thead>
           <Tr >
             {columns.map((column, id) => {
@@ -450,7 +454,7 @@ const operationOptions = [
             </Tr>
           ))}
         </Tbody>
-      </TableComposable>
+      </Table>
       {renderPagination(PaginationVariant.bottom)}
       {renderModal()}
     </React.Fragment>
