@@ -16,7 +16,7 @@
  */
 import React, { useEffect, useState } from 'react'
 import { Title, TextArea, Divider, Button } from '@patternfly/react-core';
-import { TableComposable, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
+import { Thead, Tr, Th, Tbody, Td, Table } from '@patternfly/react-table';
 import { log } from '../globals';
 import { artemisService } from '../artemis-service';
 
@@ -129,7 +129,7 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
     <Title headingLevel="h4">Displaying Body as : {messageTextMode}</Title>
     <TextArea id="body" autoResize isDisabled value={messageBody}></TextArea>
     <Title headingLevel="h4">Headers</Title>
-    <TableComposable variant="compact" aria-label="Headers Table">
+    <Table variant="compact" aria-label="Headers Table">
       <Thead>
         <Tr id="heading">
           <Th>key</Th>
@@ -186,10 +186,10 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
           <Td>{currentMessage.userID}</Td>
         </Tr>
       </Tbody>    
-    </TableComposable>
+    </Table>
     <Divider/>
     <Title headingLevel="h4">Properties</Title>
-      <TableComposable variant="compact" aria-label="Properties Table">
+      <Table variant="compact" aria-label="Properties Table">
       <Thead>
         <Tr id="propsHeaders">
           <Th>key</Th>
@@ -223,7 +223,7 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
           getProps(currentMessage.ShortProperties, "Short")
       }
       </Tbody>
-      </TableComposable>
+      </Table>
     {props.back &&
         <><Button id='message-view-queues-button' onClick={() => { if (props.back) { props.back(0); } } }>Queues</Button>
         <Button id='message-view-browse-button'  onClick={() => { if (props.back) { props.back(1); } }}>Browse</Button></>

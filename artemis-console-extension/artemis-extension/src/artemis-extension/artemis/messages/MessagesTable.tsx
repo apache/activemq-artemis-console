@@ -18,7 +18,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Column } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
 import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant } from '@patternfly/react-core';
-import { TableComposable, Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction } from '@patternfly/react-table';
+import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table } from '@patternfly/react-table';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { createQueueObjectName } from '../util/jmx';
 import { Link } from 'react-router-dom';
@@ -320,7 +320,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      <TableComposable id='message-table' variant="compact" aria-label="Column Management Table">
+      <Table id='message-table' variant="compact" aria-label="Column Management Table">
         <Thead>
           <Tr >
             <Th
@@ -368,7 +368,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             </Tr>
           ))}
         </Tbody>
-      </TableComposable>
+      </Table>
       <Pagination
         itemCount={resultsSize}
         page={page}
@@ -377,7 +377,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
         onPerPageSelect={handlePerPageSelect}
         variant={PaginationVariant.bottom}
         titles={{
-          paginationTitle: `${PaginationVariant.bottom} pagination`
+          paginationAriaLabel: `${PaginationVariant.bottom} pagination`
         }}
       />
       {props.back &&

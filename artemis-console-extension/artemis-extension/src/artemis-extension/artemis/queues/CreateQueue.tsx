@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import { ActionGroup, Button, Checkbox, Flex, FlexItem, Form, FormGroup, NumberInput, Radio, TextInput, Title, Text, TextContent, Popover, Tooltip } from '@patternfly/react-core';
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { TrashIcon, OutlinedQuestionCircleIcon, InfoCircleIcon } from '@patternfly/react-icons'
 import { artemisService } from '../artemis-service';
 import { eventService, workspace } from '@hawtio/react';
@@ -32,7 +32,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
     const [isPurgeChecked, setPurgeChecked] = useState<boolean>(false);
     const [configurations, setConfigurations] = useState<Array<{ name: string; value: string }>>([])
 
-    const handleQueueNameChange = (name: string) => {
+    const handleQueueNameChange = (_event: React.FormEvent<HTMLInputElement>, name: string) => {
         setQueueName(name);
     };
 
@@ -78,7 +78,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
         setIsDurableChecked(checked)
     }
 
-    const handleFilterChange = (filter: string) => {
+    const handleFilterChange = (_event: FormEvent<HTMLInputElement>, filter: string) => {
         setFilter(filter);
     };
 
@@ -183,8 +183,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                         inputName="input"
                         inputAriaLabel="number input"
                         minusBtnAriaLabel="minus"
-                        plusBtnAriaLabel="plus"
-                        allowEmptyInput />
+                        plusBtnAriaLabel="plus" />
                 </FormGroup>
                 <FormGroup label="Purge when no Consumers"
                     labelIcon={<Tooltip content='Purge on no consumers means the queue will not start receiving messages until a consumer is attached. When the last consumer is detached from the queue. The queue is purged (its messages are removed) and will not receive any more messages until a new consumer is attached.'><InfoCircleIcon /></Tooltip>}
@@ -220,7 +219,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                                         aria-label={'name-input-' + index}
                                         name='name'
                                         value={header.name}
-                                        onChange={(newValue, event) => handleConfigurationChange(index, newValue, event)} />
+                                        onChange={(event, newValue) => handleConfigurationChange(index, newValue, event)} />
                                 </FlexItem>
                                 <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>
                                     <TextInput
@@ -228,7 +227,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                                         name='value'
                                         aria-label={'value-input-' + index}
                                         value={header.value}
-                                        onChange={(newValue, event) => handleConfigurationChange(index, newValue, event)} />
+                                        onChange={(event, newValue) => handleConfigurationChange(index, newValue, event)} />
                                 </FlexItem>
                                 <FlexItem flex={{ default: 'flexNone', md: 'flex_1' }} span={4}>
                                     <Button variant='link' onClick={() => handleRemoveConfiguration(index)} aria-label='Remove Header'>

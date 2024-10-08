@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from 'react';
-import { Select, SelectOption, SelectOptionObject, SelectVariant } from '@patternfly/react-core';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { Button, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInputGroup, TextInputGroupMain, TextInputGroupUtilities } from '@patternfly/react-core';
 import { artemisService } from '../artemis-service';
 import { ActiveSort, Filter, SortDirection } from '../table/ArtemisTable';
+import { TimesIcon } from '@patternfly/react-icons'
 
 export type QueueSelectProps = {
   selectQueue: Function
@@ -25,13 +26,16 @@ export type QueueSelectProps = {
 
 export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queueSelectProps) => {
 
+  // TODO: there's something wrong with typeahead - also with Patternfly 4...
 
     const [queues, setQueues] = useState<any[]>()
+    const [filterText, setFilterText] = useState<string>('')
     const [filter, setFilter] = useState<Filter>({
       column: 'name',
       operation: 'EQUALS',
       input: ''
     })
+    const textInputRef = React.useRef<HTMLInputElement>();
 
     useEffect(() => {
       const listData = async () => {
@@ -40,7 +44,12 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
           order: SortDirection.ASCENDING
         }
         var data: any = await artemisService.getQueues(1, 10, activeSort, filter);
-        setQueues(JSON.parse(data).data);
+        var queues = JSON.parse(data).data
+        if (queues.length > 0) {
+          setQueues(queues);
+        } else {
+          setQueues([{name: "No results found"}])
+        }
       }
       listData();
   
@@ -53,36 +62,49 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
 
     const onToggle = () => {
       setIsOpen(!isOpen);
+      if (isOpen) {
+        textInputRef?.current?.focus();
+      }
     };
 
-    const handleSelectQueueChange = (event: React.MouseEvent | React.ChangeEvent, value: string | SelectOptionObject) => {
+    const handleSelectQueueChange = (_event: React.MouseEvent<Element, MouseEvent> | undefined, value: string | number | undefined) => {
       setIsOpen(false);
       var queueName: string = value as string;
       setSelected(queueName);
+      setFilterText(queueName)
       queueSelectProps.selectQueue(queueName);
     }
 
     const clearSelection = () => {
       setSelected('');
+      setFilterText('');
       setIsOpen(false);
+      setFilter({
+        column: 'name',
+        operation: 'CONTAINS',
+        input: ''
+      });
+      textInputRef?.current?.focus();
     };
 
-    const customFilter = (e: React.ChangeEvent<HTMLInputElement> | null, value: string) => {
-      if (!value) {
-        return queues?.map((queue: any, index) => (
-          <SelectOption key={index} value={queue.name}/>
-        ));
+    const onFilterClick = () => {
+      if (!isOpen) {
+        setIsOpen(true);
+        textInputRef?.current?.focus();
+      } else if (!filterText) {
+        setIsOpen(false)
       }
+    };
+
+    const customFilter = (_event: FormEvent<HTMLInputElement>, value: string) => {
+      setFilterText(value)
 
       var newFilter: Filter = {
         column: 'name',
         operation: 'CONTAINS',
-        input: value}
-        setFilter(newFilter);
-
-      return queues?.map((queue: any, index) => (
-              <SelectOption key={index} value={queue.name}/>
-            ))
+        input: value
+      }
+      setFilter(newFilter);
     };
 
     return (
@@ -91,25 +113,44 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
           Select a Queue
         </span>
         <Select
-          variant={SelectVariant.typeahead}
-          menuAppendTo="parent"
-          typeAheadAriaLabel="Select a Queue"
-          onToggle={onToggle}
-          onSelect={handleSelectQueueChange}
-          onClear={clearSelection}
-          onFilter={customFilter}
-          selections={selected}
-          isOpen={isOpen}
-          aria-labelledby={"select-queue"}
-          placeholderText="Type Queue Name"
+            toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                <MenuToggle ref={toggleRef} variant='typeahead' isFullWidth aria-label='Select a Queue' onClick={onToggle}>
+                  <TextInputGroup isPlain>
+                    <TextInputGroupMain
+                        value={filterText}
+                        onClick={onFilterClick}
+                        onChange={customFilter}
+                        id="typeahead-select-input"
+                        autoComplete="off"
+                        placeholder="Type Queue Name"
+                        role="combobox"
+                        isExpanded={isOpen}
+                        aria-controls="select-queue"
+                        innerRef={textInputRef}
+                    />
+                    <TextInputGroupUtilities {...(!filterText ? { style: { display: 'none' } } : {})}>
+                      <Button variant="plain" onClick={clearSelection} aria-label="Clear input value">
+                        <TimesIcon aria-hidden/>
+                      </Button>
+                    </TextInputGroupUtilities>
+                  </TextInputGroup>
+                </MenuToggle>
+            )}
+            selected={selected}
+            onSelect={handleSelectQueueChange}
+            aria-labelledby="select-queue"
+            isOpen={isOpen}
         >
-          
+          <SelectList>
             {
-              queues?.map((queue: any, index) => (
-                <SelectOption key={index} value={queue.name}/>
-              ))
+              queues?.map((queue: any, index) => {
+                if (queue.name === 'No results found') {
+                  return (<SelectOption disabled isAriaDisabled key={index} value={queue.name}>{queue.name}</SelectOption>)
+                }
+                return (<SelectOption key={index} value={queue.name}>{queue.name}</SelectOption>)
+              })
             }
-          
+          </SelectList>
         </Select>
       </div>
     );

@@ -70,9 +70,10 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
                 <nonFilteredFileExtensions>
-                <!-- default value contains jpg,jpeg,gif,bmp,png -->
-                <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
-                <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                    <!-- default value contains jpg,jpeg,gif,bmp,png -->
+                    <nonFilteredFileExtension>woff2</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>woff</nonFilteredFileExtension>
+                    <nonFilteredFileExtension>ttf</nonFilteredFileExtension>
                 </nonFilteredFileExtensions>
                     <webResources>
                         <!-- Add the plugin build to web resources -->

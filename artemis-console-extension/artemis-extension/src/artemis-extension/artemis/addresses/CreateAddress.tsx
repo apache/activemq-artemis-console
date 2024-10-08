@@ -24,7 +24,7 @@ export const CreateAddress: React.FunctionComponent = () => {
   const [addressName, setAddressName] = useState('');
   const [routingType, setRoutingType] = useState('');
 
-  const handleQueueNameChange = (name: string) => {
+  const handleQueueNameChange = (_event: React.FormEvent<HTMLInputElement>, name: string) => {
     setAddressName(name);
   };
 

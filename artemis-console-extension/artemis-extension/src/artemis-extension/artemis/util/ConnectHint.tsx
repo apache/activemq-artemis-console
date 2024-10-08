@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from "react"
 import { ExpandableSection, Text } from "@patternfly/react-core"
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons'
 
@@ -25,7 +26,7 @@ export const ConnectHint: React.FunctionComponent<ConnectProps> = props => {
     
     return (
         <ExpandableSection
-        displaySize='large'
+        displaySize='lg'
         toggleContent={
           <Text>
             <OutlinedQuestionCircleIcon />

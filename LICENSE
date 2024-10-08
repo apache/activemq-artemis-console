@@ -203,7 +203,7 @@
 
 
 ================================================================================================
-= For Yarn CJS :  artemis-console-extension/artemis-extension/.yarn/releases/yarn-4.1.1.cjs    =
+= For Yarn CJS :  artemis-console-extension/artemis-extension/.yarn/releases/yarn-4.5.0.cjs    =
 ================================================================================================
 
 The extension is built using Yarn CJS, which is available under an "MIT" license.
