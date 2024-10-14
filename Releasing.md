@@ -146,5 +146,43 @@ Rules for the Apache voting process are stipulated [here](https://www.apache.org
 Assuming the vote is successful send a email with a subject like `[RESULT] [VOTE] Apache ActiveMQ Artemis Console <version>`
 informing the list about the voting result.
 
+## Web site update:
 
+Wait for the CDN to sync first after updating SVN, and additionally for Maven Central to sync, before proceeding.
+
+The CDN content can be viewed [here](https://dlcdn.apache.org/activemq/activemq-artemis-console/).
+The Maven Central content can be viewed [here](https://repo1.maven.org/maven2/org/apache/activemq/).
+
+
+Clone the activemq-website repository:
+
+```sh
+git clone https://gitbox.apache.org/repos/asf/activemq-website.git
+cd activemq-website
+```
+
+**NOTE**: Some of the release scripts use [Python](https://www.python.org/), ensure you have it installed before proceeding.
+Also, the [PyYAML](https://pyyaml.org/wiki/PyYAMLDocumentation) lib is used. Examples for installing that include
+using `dnf install python3-pyyaml` on Fedora, or installing it using Pip by running `pip install pyyaml`.
+
+Once the CDN and Maven Central are up-to-date then update the site as follows:
+
+1. Run the release addition script to generate/perform most of the updates by running command of form:
+```
+./scripts/release/add-artemis-console-release.sh <new-version>
+```
+
+This does the following:
+- Creates the new release collection file at `src/_artemis_console_releases/artemis-console-<padded-version-string>.md`.
+- Creates the new release notes file at `src/components/artemis-console/download/release-notes-<new-version>.md`.
+
+Example from the 1.0.0 release:
+```
+./scripts/release/add-artemis-console-release.sh 1.0.0
+```
+2. Open the release collection file at `src/_artemis_console_releases/artemis-<padded-version-string>.md` and update _shortDescription_ as appropriate to the release content.
+3. Update the *artemis_console* list within the `src/_data/current_releases.yml` file if needed to set the new version stream as current.
+
+Check over `git status` etc. Run `git add` for all the added directories & files and then `git commit -m "updates for artemis-console <version> release"`.
+Once pushed, the changes should be published automatically by the `jekyll_websites` builder of the [apache buildbot](https://ci2.apache.org/#/builders).
 
