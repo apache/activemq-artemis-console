@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Column } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
 import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant } from '@patternfly/react-core';
@@ -26,6 +26,8 @@ import { eventService } from '@hawtio/react';
 import { QueueSelectInput } from './QueueSelect';
 import { SendMessage } from './SendMessage';
 import { Message } from './MessageView';
+import { ArtemisContext } from '../context';
+import { log } from '../globals';
 
 export type MessageProps = {
   address: string,
@@ -70,8 +72,11 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const [selectedTargetQueue, setSelectedTargetQueue] = useState<string>('');
   const [showDeleteMessagesModal, setShowDeleteMessagesModal] = useState(false);
   const [showMoveMessagesModal, setShowMoveMessagesModal] = useState(false);
+  const [showCopyMessagesModal, setShowCopyMessagesModal] = useState(false);
   const [showResendModal, setShowResendModal] = useState(false);
   const [ resendMessage, setResendMessage] = useState<Message | undefined>();
+
+  const { brokerNode } = useContext(ArtemisContext);
 
   useEffect(() => {
     const listData = async () => {
@@ -176,6 +181,13 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     return selectedMessages.includes(id);
   }
 
+  const doesCopyMessagemethodExist = artemisService.doesMethodExist(brokerNode, props.queue, "copyMessage");
+
+  if(!doesCopyMessagemethodExist) {
+    log.warn("Copy button method not available in this version of Artemis");
+    
+  }
+
   const selectAllMessages = (isSelecting: boolean) => {
     if(isSelecting) {
         var updatedSelectedMessages: number[] = rows.map((row: any, index) => {
@@ -247,6 +259,35 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     setSelectedMessages([]);
   }
 
+  const handleCopyMessages = () => {
+
+    const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
+    var results: Promise<unknown>[] = [];
+    for (let i = 0; i < selectedMessages.length; i++) {
+      var promise: Promise<unknown> = artemisService.copyMessage(selectedMessages[i], selectedTargetQueue, props.address, props.routingType, props.queue);
+      results.push(promise);
+    };
+    Promise.allSettled(results)
+      .then((results) => {
+        const rejectedReasons = results.filter(isRejected).map(p => p.reason);
+
+        if (rejectedReasons.length > 0) {
+          eventService.notify({
+            type: 'warning',
+            message: "not all messages copied: errors " + rejectedReasons.toString(),
+          })
+        } else {
+          eventService.notify({
+            type: 'success',
+            message: "Messages Successfully Copied [" + selectedMessages + "]",
+          })
+        }
+      });
+
+    setShowCopyMessagesModal(false);
+    setSelectedMessages([]);
+  }
+
   return (
     <React.Fragment>
       <Toolbar id="toolbar">
@@ -272,7 +313,10 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             <Button onClick={() => setShowMoveMessagesModal(true)}>Move</Button>
           </ToolbarItem>
           <ToolbarItem>
-            <Button variant='link' onClick={handleColumnsModalToggle}>Manage Columns</Button>
+            <Button onClick={() => setShowCopyMessagesModal(true)} isDisabled={!doesCopyMessagemethodExist} >Copy</Button>
+          </ToolbarItem>
+          <ToolbarItem>
+            <Button variant='link' onClick={handleColumnsModalToggle} >Manage Columns</Button>
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
@@ -388,6 +432,34 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
               <ExclamationCircleIcon />
             </Icon>
             You are about to move messages {selectedMessages.toString()}
+          </Text>
+          <Text component="p">
+            This operation cannot be undone so please be careful.
+          </Text>
+          <QueueSelectInput selectQueue={setSelectedTargetQueue}/>
+        </TextContent>
+      </Modal>
+      <Modal
+        aria-label='copy-message-modal'
+        variant={ModalVariant.medium}
+        isOpen={showCopyMessagesModal}
+        actions={[
+          <Button key="cancel" variant="secondary" onClick={() => setShowCopyMessagesModal(false)}>
+            Cancel
+          </Button>,
+          <Button key="copy" variant="primary" onClick={handleCopyMessages}>
+            Confirm
+          </Button>
+        ]}>
+        <TextContent>
+          <Text component="h2">
+            Confirm Copy Message(s)
+          </Text>
+          <Text component="p">
+            <Icon isInline status='warning'>
+              <ExclamationCircleIcon />
+            </Icon>
+            You are about to copy messages {selectedMessages.toString()}
           </Text>
           <Text component="p">
             This operation cannot be undone so please be careful.

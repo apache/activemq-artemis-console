@@ -116,6 +116,7 @@ const SEND_MESSAGE_SIG = "sendMessage(java.util.Map,int,java.lang.String,boolean
 const DELETE_ADDRESS_SIG = "deleteAddress(java.lang.String)";
 const DELETE_MESSAGE_SIG = "removeMessage(long)";
 const MOVE_MESSAGE_SIG = "moveMessage(long,java.lang.String)";
+const COPY_MESSAGE_SIG = "copyMessage(long,java.lang.String)";
 const CREATE_QUEUE_SIG = "createQueue(java.lang.String,boolean)"
 const CREATE_ADDRESS_SIG = "createAddress(java.lang.String,java.lang.String)"
 const COUNT_MESSAGES_SIG = "countMessages()";
@@ -300,6 +301,11 @@ class ArtemisService {
     async moveMessage(id: number, targetQueue: string,  address: string, routingType: string, queue: string) {
         const mbean = createQueueObjectName(await this.getBrokerObjectName(), address, routingType, queue);
         return jolokiaService.execute(mbean, MOVE_MESSAGE_SIG, [id, targetQueue])
+    }
+
+    async copyMessage(id: number, targetQueue: string,  address: string, routingType: string, queue: string) {
+        const mbean = createQueueObjectName(await this.getBrokerObjectName(), address, routingType, queue);
+        return jolokiaService.execute(mbean, COPY_MESSAGE_SIG, [id, targetQueue])
     }
 
 
@@ -588,6 +594,20 @@ class ArtemisService {
 
     checkCanBrowseQueue = (queueMBean: MBeanNode ): boolean => {
         return (this.DEBUG_PRIVS && queueMBean?.hasInvokeRights(BROWSE_SIG)) ?? false;
+    }
+
+    doesCopyMessageMethodExist = (broker: MBeanNode | undefined, queue: string): boolean => {
+        return this.doesMethodExist(broker, queue, COPY_MESSAGE_SIG);
+    }
+
+    doesMethodExist = (broker: MBeanNode | undefined, queue: string, method: string): boolean => {
+        if(broker) {
+            var queueMBean = broker.parent?.find(node => { 
+                return node.propertyList?.get('subcomponent') === 'queues' && node.name === queue 
+            })
+            return queueMBean?queueMBean.hasOperations(method): false;
+        }
+        return false;
     }
 }
 
