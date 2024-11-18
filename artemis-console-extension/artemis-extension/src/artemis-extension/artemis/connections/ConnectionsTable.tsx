@@ -102,8 +102,8 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
           <Button key="cancel" variant="secondary" onClick={() => setShowConnectionCloseDialog(false)}>
             Cancel
           </Button>
-        ]}><p>You are about to close connection with id:  <b>{connectionToClose}</b>.</p>
-        <p>This operation cannot be undone so please be careful.</p>
+        ]}><p>You are about to close connection with id: <b>{connectionToClose}</b>.</p>
+        <p>This operation cannot be undone.</p>
       </Modal>
     </>)
 }

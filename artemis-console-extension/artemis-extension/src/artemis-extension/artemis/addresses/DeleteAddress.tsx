@@ -50,7 +50,7 @@ export const DeleteAddress: React.FunctionComponent<DeleteAddressProps> = (props
   return (
     <>
       <Title headingLevel="h2">Delete Address {props.address}</Title>
-      <ConnectHint text={["This page allows you to delete the chosen address on the broker.", "Note that this will only succeed if the address has no queues bound to it."]}/>
+      <ConnectHint text={["Use this page to delete the selected address on the broker. The address is deleted only if it has no queues bound to it."]}/>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowDeleteModal(true)} >Delete</Button>
@@ -79,7 +79,7 @@ export const DeleteAddress: React.FunctionComponent<DeleteAddressProps> = (props
           You are about to delete address {props.address}
         </Text>
         <Text component="p">
-          This operation cannot be undone so please be careful.
+          This operation cannot be undone.
         </Text>
       </TextContent>
     </Modal>

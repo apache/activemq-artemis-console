@@ -206,7 +206,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
             You are about to delete address {address}
           </Text>
           <Text component="p">
-            This operation cannot be undone so please be careful.
+            This operation cannot be undone.
           </Text>
         </TextContent>
       </Modal>   

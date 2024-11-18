@@ -73,13 +73,13 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
   return (
     <>
       <Title headingLevel="h2">Delete/Purge Queue {props.queue}</Title>
-      <ConnectHint text={["This allows you to delete the chosen Queue on the broker.", "Note that this will only succeed if the queue has no consumers bound to it."]}/>
+      <ConnectHint text={["Delete the selected broker queue. The queue is deleted only if it has no consumers bound to it."]}/>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowDeleteModal(true)} >Delete</Button>
         </ActionGroup>
       </Form>
-      <ConnectHint text={["This allows you to delete all the messages in the chosen Queue on the broker.", ""]}/>
+      <ConnectHint text={["Delete all the messages in the selected broker queue."]}/>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowPurgeModal(true)} >Purge</Button>
@@ -99,7 +99,7 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
           Cancel
         </Button>
       ]}><p>You are about to delete queue <b>{props.queue}</b>.</p>
-      <p>This operation cannot be undone so please be careful.</p>
+      <p>This operation cannot be undone.</p>
     </Modal>
     <Modal
       aria-label='queue-purge-modal'
@@ -115,7 +115,7 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
           Cancel
         </Button>
       ]}><p>You are about to delete all the messages in queue <b>{props.queue}</b>.</p>
-      <p>This operation cannot be undone so please be careful.</p>
+      <p>This operation cannot be undone.</p>
     </Modal>
     </>
   )

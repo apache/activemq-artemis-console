@@ -268,7 +268,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
           Cancel
         </Button>
       ]}><p>You are about to delete queue <b>{queue}</b>.</p>
-      <p>This operation cannot be undone so please be careful.</p>
+      <p>This operation cannot be undone.</p>
     </Modal>
     <Modal
         aria-label='attributes-modal'
@@ -308,7 +308,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
           Cancel
         </Button>
       ]}><p>You are about to remove all messages from queue <b>{queue}</b>.</p>
-        <p>This operation cannot be undone so please be careful.</p>
+        <p>This operation cannot be undone.</p>
       </Modal>
       <Modal
         aria-label='queue-send-modal'

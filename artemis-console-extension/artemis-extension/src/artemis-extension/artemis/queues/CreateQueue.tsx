@@ -121,7 +121,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
     const Hint = () => (
         <TextContent>
             <Text component='p'>
-                This page allows you to create a queue bound to the chosen address.
+                Use this page to create a queue that is bound to the selected address.
             </Text>
         </TextContent>
     )
@@ -145,14 +145,14 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                         onChange={handleQueueNameChange} />
                 </FormGroup>
                 <FormGroup role="radiogroup" isInline fieldId="routing-typr" label="Routing Type" labelIcon={
-                    <Tooltip content='if you want the queue to support JMS like queues, i.e. point to point, then choose anycast. If you want your address to support JMS like topic subscriptions, publish/subscribe, then choose multicast.'><InfoCircleIcon /></Tooltip>}
+                    <Tooltip content='If you want the queue to support JMS-like queues, that is point-to-point messaging, choose Anycast. If you want the address to support JMS-like topic subscriptions, that is publish-subscribe messaging, choose Multicast.'><InfoCircleIcon /></Tooltip>}
                 >
                     <Radio name="basic-inline-radio" label="Anycast" id="ANYCAST" onChange={() => handleQueueRoutingTypeChange("ANYCAST")} />
                     <Radio name="basic-inline-radio" label="Multicast" id="MULTICAST" onChange={() => handleQueueRoutingTypeChange("MULTICAST")} />
                 </FormGroup>
                 <FormGroup label="Durable"
                     labelIcon={
-                        <Tooltip content='Selecting durable means that the queue will survive a restart of the broker.'><InfoCircleIcon /></Tooltip>}
+                        <Tooltip content='Select durable to ensure that the queue remains on the broker after a broker restart.'><InfoCircleIcon /></Tooltip>}
                 >
                     <Checkbox
                         isChecked={isDurableChecked}
@@ -161,7 +161,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                 </FormGroup>
                 <FormGroup label="Filter"
                     labelIcon={
-                        <Tooltip content={<Text>Adding a filter expression will mean that only messages that match that filter will be routed to this queue: see <a href="https://activemq.apache.org/components/artemis/documentation/latest/filter-expressions.html" rel="noreferrer" target="_blank">Filter Expressions</a></Text>}><InfoCircleIcon /></Tooltip>}
+                        <Tooltip content={<Text>Only messages that match the filter expression are routed to this queue: see <a href="https://activemq.apache.org/components/artemis/documentation/latest/filter-expressions.html" rel="noreferrer" target="_blank">Filter Expressions</a></Text>}><InfoCircleIcon /></Tooltip>}
                 >
                     <TextInput
                         isRequired
@@ -173,7 +173,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                 </FormGroup>
                 <FormGroup label="Max Consumers"
                     labelIcon={
-                        <Tooltip content='Max consumers will limit how many consumers can consume from a queue at any one time, -1 means no limit.'><InfoCircleIcon /></Tooltip>}
+                        <Tooltip content='The maximum number of consumers that can consume from the queue at any one time, -1 means no limit.'><InfoCircleIcon /></Tooltip>}
                 >
                     <NumberInput
                         value={maxConsumers}
@@ -186,7 +186,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                         plusBtnAriaLabel="plus" />
                 </FormGroup>
                 <FormGroup label="Purge when no Consumers"
-                    labelIcon={<Tooltip content='Purge on no consumers means the queue will not start receiving messages until a consumer is attached. When the last consumer is detached from the queue. The queue is purged (its messages are removed) and will not receive any more messages until a new consumer is attached.'><InfoCircleIcon /></Tooltip>}
+                    labelIcon={<Tooltip content='Prevent the queue from receiving messages until a consumer attaches. Also, purge the queue to remove any messages present when the last remaining consumer detaches from the queue. After the queue is purged, it does not receive any further messages until a new consumer attaches.'><InfoCircleIcon /></Tooltip>}
                 >
                     <Checkbox
                         isChecked={isPurgeChecked}
@@ -194,7 +194,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                         id="purge" />
                 </FormGroup>
                 <FormGroup label="extra configuration" labelIcon={
-                    <Tooltip content={<Text>Extra configuration not exposed above can be configured using the JSON format of a set of key/value pairs, for instance <code>delay-before-dispatch</code> or <code>auto-delete</code>.</Text>}><InfoCircleIcon /></Tooltip>}
+                    <Tooltip content={<Text>Specify additional configuration items, that are not exposed, as a set of key-value pairs in JSON format. For example, <code>delay-before-dispatch</code> or <code>auto-delete</code>.</Text>}><InfoCircleIcon /></Tooltip>}
                 >
                     {/* eslint-disable-next-line react/jsx-no-undef */}
                     <Button variant='link' onClick={handleAddConfiguration}>
