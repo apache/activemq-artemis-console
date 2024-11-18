@@ -216,12 +216,12 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
         if (rejectedReasons.length > 0) {
           eventService.notify({
             type: 'warning',
-            message: "not all messages deleted: errors " + rejectedReasons.toString(),
+            message: "Not all messages deleted: errors " + rejectedReasons.toString(),
           })
         } else {
           eventService.notify({
             type: 'success',
-            message: "Messages Successfully Deleted [" + selectedMessages + "]",
+            message: "Messages deleted successfully [" + selectedMessages + "]",
           })
         }
       });
@@ -245,12 +245,12 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
         if (rejectedReasons.length > 0) {
           eventService.notify({
             type: 'warning',
-            message: "not all messages moved: errors " + rejectedReasons.toString(),
+            message: "Not all messages moved: errors " + rejectedReasons.toString(),
           })
         } else {
           eventService.notify({
             type: 'success',
-            message: "Messages Successfully Moved [" + selectedMessages + "]",
+            message: "Messages moved successfully [" + selectedMessages + "]",
           })
         }
       });
@@ -407,7 +407,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             You are about to delete message(s) {selectedMessages.toString()}
           </Text>
           <Text component="p">
-            This operation cannot be undone so please be careful.
+            This operation cannot be undone.
           </Text>
         </TextContent>
       </Modal>
@@ -434,7 +434,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             You are about to move messages {selectedMessages.toString()}
           </Text>
           <Text component="p">
-            This operation cannot be undone so please be careful.
+            This operation cannot be undone.
           </Text>
           <QueueSelectInput selectQueue={setSelectedTargetQueue}/>
         </TextContent>
@@ -486,7 +486,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
         variant="small"
         description={
           <TextContent>
-            <Text>Selected categories will be displayed in the table.</Text>
+            <Text>Selected categories are displayed in the table.</Text>
             <Button isInline onClick={selectAllColumns} variant="link">
               Select all
             </Button>

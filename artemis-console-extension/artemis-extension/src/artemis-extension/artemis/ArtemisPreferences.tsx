@@ -123,7 +123,7 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
         label='Browse Bytes Messages'
         fieldId='artemis-form-showJMXView'
         labelIcon={
-          <TooltipHelpIcon tooltip='Browsing Bytes messages should show the body as this.' />
+          <TooltipHelpIcon tooltip='Format in which a BytesMessage body is shown' />
         }>
         <Flex>
           <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>

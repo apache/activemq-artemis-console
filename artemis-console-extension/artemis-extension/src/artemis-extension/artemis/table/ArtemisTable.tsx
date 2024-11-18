@@ -251,7 +251,7 @@ const operationOptions = [
         variant="small"
         description={
           <TextContent>
-            <Text>Selected categories will be displayed in the table.</Text>
+            <Text>Selected categories are displayed in the table.</Text>
             <Button isInline onClick={selectAllColumns} variant="link">
               Select all
             </Button>

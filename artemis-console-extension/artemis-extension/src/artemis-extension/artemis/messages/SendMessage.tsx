@@ -285,12 +285,7 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
   const Hint = () => (
     <TextContent>
       <Text component='p'>
-        This page allows you to create a queue bound to the chosen address.
-      </Text>
-      <Text component='p'>
-        This page allows you to send a message to the chosen queue. The message will be of type <code>text</code>
-        message and it will be possible to add headers to the message. The sending of the message will be authenticated
-        using the current logon user, unselect <code>use current logon user</code> to use a different user.
+        Use this page to send a message of type <code>TextMessage</code> to an address or queue. 
       </Text>
     </TextContent>
   )
@@ -303,7 +298,7 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
       <Form onSubmit={handleSubmit}>
         <FormGroup
           label="Durable"
-          labelIcon={<Tooltip content='If durable the message will be marked persistent and written to the brokers journal if the destination queue is durable.'><InfoCircleIcon /></Tooltip>}
+          labelIcon={<Tooltip content='Mark the message as persistent and write it to the broker journal if the destination queue is durable.'><InfoCircleIcon /></Tooltip>}
         >
           <Checkbox
             isChecked={isDurableChecked}
@@ -313,9 +308,7 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
         </FormGroup>
         <FormGroup label="Create Message ID"
           labelIcon={
-            <Tooltip content='The Message ID is an automatically generated UUID that is set on the Message by the broker before it is routed.
-          If using a JMS client this would be the JMS Message ID on the JMS Message, this typically would not get
-          set for non JMS clients. Historically and on some other tabs this is also referred to as the User ID..'><InfoCircleIcon />
+            <Tooltip content='Select to request that the broker generates a universally unique identifier (UUID) on the message before it is routed. For a JMS client, the UUID is the JMS Message ID of the message. Normally, not required if you are using a non-JMS client.'><InfoCircleIcon />
             </Tooltip>}>
           <Checkbox
             isChecked={isCreateIDChecked}
@@ -323,7 +316,7 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
             id="createid" />
         </FormGroup>
         <FormGroup label="Use Current Logged in User"
-          labelIcon={<Tooltip content='This option allows a user to send messages with the permissions of the users current logon, disable it to send messages with different permissions than the users current logon provides'><InfoCircleIcon /></Tooltip>}
+          labelIcon={<Tooltip content='Use the credentials of the user that is currently logged in to the console to send a message. If you want to use a different user, clear the checkbox and specify a username and password.'><InfoCircleIcon /></Tooltip>}
         >
           <Checkbox
             isChecked={isUseLogonChecked}

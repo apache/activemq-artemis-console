@@ -134,7 +134,7 @@ export const ConsumerTable: React.FunctionComponent<Navigate> = navigate => {
             Cancel
           </Button>
         ]}><p>You are about to close consumer with id:  <b>{consumerToClose}</b>.</p>
-        <p>This operation cannot be undone so please be careful.</p>
+        <p>This operation cannot be undone.</p>
       </Modal>
       </>
     )

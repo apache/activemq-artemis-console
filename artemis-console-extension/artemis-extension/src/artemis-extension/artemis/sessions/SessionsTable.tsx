@@ -123,7 +123,7 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
           Cancel
         </Button>
       ]}><p>You are about to close session with id:  <b>{sessionToClose}</b>.</p>
-      <p>This operation cannot be undone so please be careful.</p>
+      <p>This operation cannot be undone.</p>
     </Modal></>
   )
 }
