@@ -267,6 +267,18 @@ module.exports = (webpackEnv, args) => {
       ],
     },
     devServer: {
+      static: [
+        {
+          directory: path.resolve(__dirname, "build"),
+          publicPath: "/console",
+        }
+      ],
+      devMiddleware: {
+        mimeTypes: {
+          mjs: "application/javascript"
+        },
+        writeToDisk: true
+      },
       setupMiddlewares: (middlewares, devServer) => {
           // Enabling branding in dev mode
           devServer.app.use((req, _, next) => {
