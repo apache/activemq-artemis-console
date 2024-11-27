@@ -450,32 +450,32 @@ export const BrokerDiagram: React.FunctionComponent = () => {
           isOpen={viewOptionsOpen}>
         <SelectList>
           <SelectOption
-              value="show Labels"
+              value="Labels"
               hasCheckbox
               isSelected={viewOptions.showLabels}
               onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))}>show Labels</SelectOption>
           <SelectOption
-              value="show Addresses"
+              value="Addresses"
               hasCheckbox
               isSelected={viewOptions.showAddresses}
               onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))}>show Addresses</SelectOption>
           <SelectOption
-              value="show Queues"
+              value="Queues"
               hasCheckbox
               isSelected={viewOptions.showQueues}
               onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))}>show Queues</SelectOption>
           <SelectOption
-              value="show Internal Addresses"
+              value="Internal Addresses"
               hasCheckbox
               isSelected={viewOptions.showInternalAddresses}
               onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))}>show Internal Addresses</SelectOption>
           <SelectOption
-              value="show Internal Queues"
+              value="Internal Queues"
               hasCheckbox
               isSelected={viewOptions.showInternalQueues}
               onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))}>show Internal Queues</SelectOption>
           <SelectOption
-              value="show Connectors"
+              value="Connectors"
               hasCheckbox
               isSelected={viewOptions.showConnectors}
               onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}>show Connectors</SelectOption>

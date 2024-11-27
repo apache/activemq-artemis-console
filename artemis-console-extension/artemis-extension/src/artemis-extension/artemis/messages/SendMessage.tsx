@@ -292,7 +292,7 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
 
   return (
     <PageSection variant='light'>
-      <Title headingLevel='h1'>Send Message to {props.isAddress ? 'Address' : 'Queue'} {props.address}
+      <Title headingLevel='h2'>Send Message to {props.isAddress ? 'Address' : 'Queue'} {props.address}{' '}
         <Popover bodyContent={Hint}><OutlinedQuestionCircleIcon /></Popover></Title>
       <Text component='p'>  <br /></Text>
       <Form onSubmit={handleSubmit}>

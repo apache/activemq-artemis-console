@@ -47,6 +47,10 @@ svg text {
   font-family: PatternFlyIcons-webfont;
 }
 
+svg.pf-v5-svg {
+  fill: #c12766;
+}
+
 
 .pf-topology__node.artemisBroker.pf-m-info .pf-topology__node__background {
   stroke: #801944;

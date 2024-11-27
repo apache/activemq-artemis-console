@@ -38,7 +38,7 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
     { id: 'protocol', name: 'Protocol', visible: true, sortable: true, filterable: true },
     { id: 'sessionCount', name: 'Session Count', visible: true, sortable: true, filterable: true, filter: getSessionFilter, filterTab: 2 },
     { id: 'remoteAddress', name: 'Remote Address', visible: true, sortable: true, filterable: true },
-    { id: 'localAddress', name: 'Local Address"', visible: true, sortable: true, filterable: true },
+    { id: 'localAddress', name: 'Local Address', visible: true, sortable: true, filterable: true },
     { id: 'session', name: 'Session ID', visible: true, sortable: true, filterable: false },
     { id: 'creationTime', name: 'Creation Time', visible: true, sortable: true, filterable: false }
   ];

@@ -215,6 +215,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
         aria-label='attributes-modal'
         variant={ModalVariant.medium}
         isOpen={showAttributesDialog}
+        onClose={() => setShowAttributesDialog(false)}
         actions={[
           <Button key="close" variant="primary" onClick={() => setShowAttributesDialog(false)}>
             Close
@@ -226,6 +227,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
         aria-label='operations-modal'
         variant={ModalVariant.medium}
         isOpen={showOperationsDialog}
+        onClose={() => setShowOperationsDialog(false)}
         actions={[
           <Button key="close" variant="primary" onClick={() => setShowOperationsDialog(false)}>
             Close

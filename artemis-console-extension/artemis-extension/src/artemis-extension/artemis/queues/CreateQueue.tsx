@@ -127,7 +127,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
     )
     return (
         <>
-            <Title headingLevel="h2">Create Queue on Address {props.address}
+            <Title headingLevel="h2">Create Queue on Address {props.address}{' '}
                 <Popover bodyContent={Hint}><OutlinedQuestionCircleIcon /></Popover>
             </Title>
             <Text component='p'>  <br /></Text>
@@ -193,7 +193,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                         onChange={() => handlePurgeChange(!isPurgeChecked)}
                         id="purge" />
                 </FormGroup>
-                <FormGroup label="extra configuration" labelIcon={
+                <FormGroup label="Extra configuration" labelIcon={
                     <Tooltip content={<Text>Specify additional configuration items, that are not exposed, as a set of key-value pairs in JSON format. For example, <code>delay-before-dispatch</code> or <code>auto-delete</code>.</Text>}><InfoCircleIcon /></Tooltip>}
                 >
                     {/* eslint-disable-next-line react/jsx-no-undef */}
