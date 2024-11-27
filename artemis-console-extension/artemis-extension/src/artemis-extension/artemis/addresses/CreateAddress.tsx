@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActionGroup, Button, Form, FormGroup, Radio, TextInput, Title } from '@patternfly/react-core';
+import { ActionGroup, Button, Form, FormGroup, Text, Popover, Radio, TextContent, TextInput, Title } from '@patternfly/react-core';
 import React, { useState } from 'react'
 import { artemisService } from '../artemis-service';
 import { eventService } from '@hawtio/react';
-import { ConnectHint } from '../util/ConnectHint';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 
 export const CreateAddress: React.FunctionComponent = () => {
   const [addressName, setAddressName] = useState('');
@@ -48,10 +48,17 @@ export const CreateAddress: React.FunctionComponent = () => {
       })
   };
 
+  const Hint = () => (
+    <TextContent>
+        <Text component='p'>
+        Use this page to create a new address on the broker. If you want the address to support JMS-like queues, that is point-to-point messaging, choose Anycast. If you want the  address to support JMS-like topic subscriptions, that is publish-subscribe messaging, choose Multicast.
+        </Text>
+    </TextContent>
+)
+
   return (
     <>
-    <Title headingLevel="h2">Create Address</Title>
-      <ConnectHint text={['Use this page to create a new address on the broker. If you want the address to support JMS-like queues, that is point-to-point messaging, choose Anycast. If you want the  address to support JMS-like topic subscriptions, that is publish-subscribe messaging, choose Multicast.']}/>
+    <Title headingLevel="h2">Create Address{' '}<Popover bodyContent={Hint}><OutlinedQuestionCircleIcon /></Popover></Title>
       <br/>
       <Form>
         <FormGroup label="Address Name">

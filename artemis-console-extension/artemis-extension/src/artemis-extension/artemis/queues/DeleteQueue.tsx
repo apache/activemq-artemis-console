@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActionGroup, Button, Form, Modal, ModalVariant, Title } from '@patternfly/react-core';
+import { ActionGroup, Button, Form, Modal, ModalVariant, Popover, TextContent, Title, Text } from '@patternfly/react-core';
 import React, { useState } from 'react'
-import { ConnectHint } from '../util/ConnectHint';
 import { eventService, workspace } from '@hawtio/react';
 import { artemisService } from '../artemis-service';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 
 type DeleteQueueProps = {
   queue: string
@@ -70,19 +70,35 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
       });
   };
 
+  const HintDelete = () => (
+    <TextContent>
+      <Text component='p'>
+      Delete the selected broker queue. The queue is deleted only if it has no consumers bound to it.
+      </Text>
+    </TextContent>
+  )
+  const HintPurge = () => (
+    <TextContent>
+      <Text component='p'>
+      Delete all the messages in the selected broker queue.
+      </Text>
+    </TextContent>
+  )
+
   return (
     <>
-      <Title headingLevel="h2">Delete/Purge Queue {props.queue}</Title>
-      <ConnectHint text={["Delete the selected broker queue. The queue is deleted only if it has no consumers bound to it."]}/>
+      <Title headingLevel="h2">Delete/Purge Queue {props.queue}{' '}
+      </Title>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowDeleteModal(true)} >Delete</Button>
+          <Text>{' '}<Popover bodyContent={HintDelete}><OutlinedQuestionCircleIcon /></Popover></Text>
         </ActionGroup>
       </Form>
-      <ConnectHint text={["Delete all the messages in the selected broker queue."]}/>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowPurgeModal(true)} >Purge</Button>
+          <Text>{' '}<Popover bodyContent={HintPurge}><OutlinedQuestionCircleIcon /></Popover></Text>
         </ActionGroup>
       </Form>
       <Modal

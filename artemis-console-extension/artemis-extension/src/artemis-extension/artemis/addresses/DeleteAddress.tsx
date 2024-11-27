@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActionGroup, Text, Button, Form, Icon, Modal, ModalVariant, TextContent, Title } from '@patternfly/react-core';
+import { ActionGroup, Text, Button, Form, Icon, Modal, ModalVariant, TextContent, Title, Popover } from '@patternfly/react-core';
 import React, { useState } from 'react'
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
-import { ConnectHint } from '../util/ConnectHint';
 import { eventService, workspace } from '@hawtio/react';
 import { artemisService } from '../artemis-service';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 
 type DeleteAddressProps = {
   address: string
@@ -47,10 +47,19 @@ export const DeleteAddress: React.FunctionComponent<DeleteAddressProps> = (props
       })
   };
 
+  const Hint = () => (
+    <TextContent>
+        <Text component='p'>
+          Use this page to delete the selected address on the broker. The address is deleted only if it has no queues bound to it.
+        </Text>
+    </TextContent>
+)
+
   return (
     <>
-      <Title headingLevel="h2">Delete Address {props.address}</Title>
-      <ConnectHint text={["Use this page to delete the selected address on the broker. The address is deleted only if it has no queues bound to it."]}/>
+      <Title headingLevel="h2">Delete Address {props.address}{' '}
+          <Popover bodyContent={Hint}><OutlinedQuestionCircleIcon /></Popover>
+      </Title>
       <Form>
         <ActionGroup>
           <Button variant="primary" onClick={() => setShowDeleteModal(true)} >Delete</Button>
