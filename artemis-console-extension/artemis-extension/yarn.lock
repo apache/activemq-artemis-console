@@ -1708,10 +1708,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bitauth/libauth@npm:^1.17.1":
-  version: 1.19.1
-  resolution: "@bitauth/libauth@npm:1.19.1"
-  checksum: 10c0/ee6979916e4f58064982e595b29de72ba6fc2b50284fabfc62122452eee8a7b52d2ddc110f0d2ae65d94b944cf8898eabe527c31a73db2521a88066c6c487d56
+"@bitauth/libauth@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "@bitauth/libauth@npm:3.0.0"
+  checksum: 10c0/8a58fec9e9d2d296742020c54029c7a536de143e551157da2c1bd420bba9d7f2fd9a0bb9b27ca02a3ba4786da910256db9a6a3d82165a23e1558ef423725b779
   languageName: node
   linkType: hard
 
@@ -1979,18 +1979,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hawtio/backend-middleware@npm:^1.0.5":
-  version: 1.0.5
-  resolution: "@hawtio/backend-middleware@npm:1.0.5"
+"@hawtio/backend-middleware@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "@hawtio/backend-middleware@npm:1.0.6"
   dependencies:
-    "@bitauth/libauth": "npm:^1.17.1"
-    "@types/express": "npm:^4.17.14"
-    "@types/jest": "npm:^29.5.12"
-    "@types/node": "npm:^20.12.7"
-    axios: "npm:^1.0.0"
-    express: "npm:^4.18.1"
+    "@bitauth/libauth": "npm:^3.0.0"
+    "@types/express": "npm:^5.0.0"
+    "@types/jest": "npm:^29.5.14"
+    "@types/node": "npm:^22.9.0"
+    axios: "npm:^1.7.7"
+    express: "npm:^4.21.1"
     js-logger: "npm:^1.6.1"
-  checksum: 10c0/121742f427188ffba967c2da4aefb750d212ac3aa15b0aa96926ad77bd2802605e4ec15f67f78e8f6f5102e52e538bbcf8fbf58d2d821c4b0620766b7d519620
+  checksum: 10c0/4ea63d5b872c078cdacc9b1c52074dc2c93592d59f92cbb76035a7cb58df54e9bce78cdba52384b5050196eeb20153495b0b220a698aaf277d3a5437ceaa2795
   languageName: node
   linkType: hard
 
@@ -3914,6 +3914,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/express-serve-static-core@npm:^5.0.0":
+  version: 5.0.2
+  resolution: "@types/express-serve-static-core@npm:5.0.2"
+  dependencies:
+    "@types/node": "npm:*"
+    "@types/qs": "npm:*"
+    "@types/range-parser": "npm:*"
+    "@types/send": "npm:*"
+  checksum: 10c0/9f6ee50bd81f0aa6cc9df6ad2c2d221a3a63249da944db58ec8bb8681e77a5b3b3fdb1931bda73beb13cfaf9125731f835fe5256afb6a6da35b0eb08ccbdbfdf
+  languageName: node
+  linkType: hard
+
 "@types/express@npm:*, @types/express@npm:^4.17.13":
   version: 4.17.17
   resolution: "@types/express@npm:4.17.17"
@@ -3926,15 +3938,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express@npm:^4.17.14":
-  version: 4.17.21
-  resolution: "@types/express@npm:4.17.21"
+"@types/express@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@types/express@npm:5.0.0"
   dependencies:
     "@types/body-parser": "npm:*"
-    "@types/express-serve-static-core": "npm:^4.17.33"
+    "@types/express-serve-static-core": "npm:^5.0.0"
     "@types/qs": "npm:*"
     "@types/serve-static": "npm:*"
-  checksum: 10c0/12e562c4571da50c7d239e117e688dc434db1bac8be55613294762f84fd77fbd0658ccd553c7d3ab02408f385bc93980992369dd30e2ecd2c68c358e6af8fabf
+  checksum: 10c0/0d74b53aefa69c3b3817ee9b5145fd50d7dbac52a8986afc2d7500085c446656d0b6dc13158c04e2d9f18f4324d4d93b0452337c5ff73dd086dca3e4ff11f47b
   languageName: node
   linkType: hard
 
@@ -4011,17 +4023,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^29.5.12":
-  version: 29.5.13
-  resolution: "@types/jest@npm:29.5.13"
-  dependencies:
-    expect: "npm:^29.0.0"
-    pretty-format: "npm:^29.0.0"
-  checksum: 10c0/9c31af0b155387b9860908830de63c6b79011d7c87c8b61b39da124e26e55423dd51b006749aafe4f0ef3a065016619a1f93ef4b055157d43727f448e67824b7
-  languageName: node
-  linkType: hard
-
-"@types/jest@npm:^29.5.13":
+"@types/jest@npm:^29.5.13, @types/jest@npm:^29.5.14":
   version: 29.5.14
   resolution: "@types/jest@npm:29.5.14"
   dependencies:
@@ -4077,6 +4079,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/mime@npm:^1":
+  version: 1.3.5
+  resolution: "@types/mime@npm:1.3.5"
+  checksum: 10c0/c2ee31cd9b993804df33a694d5aa3fa536511a49f2e06eeab0b484fef59b4483777dbb9e42a4198a0809ffbf698081fdbca1e5c2218b82b91603dfab10a10fbc
+  languageName: node
+  linkType: hard
+
 "@types/ms@npm:*":
   version: 0.7.31
   resolution: "@types/ms@npm:0.7.31"
@@ -4091,21 +4100,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^20.12.7":
-  version: 20.16.11
-  resolution: "@types/node@npm:20.16.11"
-  dependencies:
-    undici-types: "npm:~6.19.2"
-  checksum: 10c0/bba43f447c3c80548513954dae174e18132e9149d572c09df4a282772960d33e229d05680fb5364997c03489c22fe377d1dbcd018a3d4ff1cfbcfcdaa594a9c3
-  languageName: node
-  linkType: hard
-
 "@types/node@npm:^22.7.5":
   version: 22.9.1
   resolution: "@types/node@npm:22.9.1"
   dependencies:
     undici-types: "npm:~6.19.8"
   checksum: 10c0/ea489ae603aa8874e4e88980aab6f2dad09c755da779c88dd142983bfe9609803c89415ca7781f723072934066f63daf2b3339ef084a8ad1a8079cf3958be243
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^22.9.0":
+  version: 22.10.0
+  resolution: "@types/node@npm:22.10.0"
+  dependencies:
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/efb3783b6fe74b4300c5bdd4f245f1025887d9b1d0950edae584af58a30d95cc058c10b4b3428f8300e4318468b605240c2ede8fcfb6ead2e0f05bca31e54c1b
   languageName: node
   linkType: hard
 
@@ -4245,6 +4254,16 @@ __metadata:
   version: 7.5.6
   resolution: "@types/semver@npm:7.5.6"
   checksum: 10c0/196dc32db5f68cbcde2e6a42bb4aa5cbb100fa2b7bd9c8c82faaaf3e03fbe063e205dbb4f03c7cdf53da2edb70a0d34c9f2e601b54281b377eb8dc1743226acd
+  languageName: node
+  linkType: hard
+
+"@types/send@npm:*":
+  version: 0.17.4
+  resolution: "@types/send@npm:0.17.4"
+  dependencies:
+    "@types/mime": "npm:^1"
+    "@types/node": "npm:*"
+  checksum: 10c0/7f17fa696cb83be0a104b04b424fdedc7eaba1c9a34b06027239aba513b398a0e2b7279778af521f516a397ced417c96960e5f50fcfce40c4bc4509fb1a5883c
   languageName: node
   linkType: hard
 
@@ -5184,7 +5203,7 @@ __metadata:
   resolution: "artemis-console@workspace:."
   dependencies:
     "@craco/craco": "npm:^7.1.0"
-    "@hawtio/backend-middleware": "npm:^1.0.5"
+    "@hawtio/backend-middleware": "npm:^1.0.6"
     "@hawtio/react": "npm:1.6.2"
     "@patternfly/react-charts": "npm:~7.3.0"
     "@patternfly/react-core": "npm:~5.3.3"
@@ -16308,10 +16327,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici-types@npm:~6.19.2, undici-types@npm:~6.19.8":
+"undici-types@npm:~6.19.8":
   version: 6.19.8
   resolution: "undici-types@npm:6.19.8"
   checksum: 10c0/078afa5990fba110f6824823ace86073b4638f1d5112ee26e790155f481f2a868cc3e0615505b6f4282bdf74a3d8caad715fd809e870c2bb0704e3ea6082f344
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
   languageName: node
   linkType: hard
 

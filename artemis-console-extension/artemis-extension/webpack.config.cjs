@@ -273,7 +273,11 @@ module.exports = (webpackEnv, args) => {
           publicPath: "/console",
         }
       ],
+      historyApiFallback: {
+        index: "/console/"
+      },
       devMiddleware: {
+        publicPath: "/console",
         mimeTypes: {
           mjs: "application/javascript"
         },
