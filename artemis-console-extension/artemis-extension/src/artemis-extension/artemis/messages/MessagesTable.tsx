@@ -28,6 +28,7 @@ import { SendMessage } from './SendMessage';
 import { Message } from './MessageView';
 import { ArtemisContext } from '../context';
 import { log } from '../globals';
+import { artemisPreferencesService } from '../artemis-preferences-service';
 
 export type MessageProps = {
   address: string,
@@ -90,6 +91,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       const response = await artemisService.getMessages(queueMBean, page, perPage, filter);
       return response;
     }
+    setPerPage(artemisPreferencesService.loadTablePageSize("messagesColumnDefs", 10));
     listData();
 
   }, [props.address, props.routingType, props.queue, page, perPage, filter, selectedMessages])
@@ -99,6 +101,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   };
 
   const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
+    artemisPreferencesService.saveTablePageSize("messagesColumnDefs", newPerPage)
     setPerPage(newPerPage);
   };
 
