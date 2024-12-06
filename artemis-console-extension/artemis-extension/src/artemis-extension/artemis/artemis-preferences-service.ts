@@ -16,6 +16,8 @@
  */
 import { Column } from "./table/ArtemisTable"
 
+const PAGE_SIZE = ".pageSize";
+
 export interface IArtemisPreferencesService {
   loadArtemisPreferences(): ArtemisOptions
   saveArtemisPreferences(newValues: Partial<ArtemisOptions>): void
@@ -66,6 +68,18 @@ class ArtemisPreferencesService implements IArtemisPreferencesService {
     const data: { name: string; visible: boolean }[] = [];
     columns.forEach(column => { data.push({ name: column.id, visible: column.visible }) });
     localStorage.setItem(storageLocation, JSON.stringify(data));
+  }
+
+  loadTablePageSize(storageLocation: string|undefined, size: number): number {
+    const localStorageData = localStorage.getItem(storageLocation + PAGE_SIZE);
+    if (localStorageData) {
+        return Number(localStorageData);
+    }
+    return size;
+  }
+
+  saveTablePageSize(storageLocation: string, size: number) {
+    localStorage.setItem(storageLocation + PAGE_SIZE, size.toString());
   }
 
   private loadFromStorage(): Partial<ArtemisOptions> {

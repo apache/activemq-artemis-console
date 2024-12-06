@@ -141,6 +141,9 @@ const operationOptions = [
       setColumns(updatedColumns);
       setColumnsLoaded(true);
     }
+    if(broker.storageColumnLocation) {
+      setPerPage(artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation, 10));
+    }
     listData();
 
   }, [columns, page, activeSort, filter, perPage, columnsLoaded, broker])
@@ -215,6 +218,9 @@ const operationOptions = [
   };
 
   const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
+    if(broker.storageColumnLocation) {
+      artemisPreferencesService.saveTablePageSize(broker.storageColumnLocation, newPerPage)
+    }
     setPerPage(newPerPage);
   };
 
