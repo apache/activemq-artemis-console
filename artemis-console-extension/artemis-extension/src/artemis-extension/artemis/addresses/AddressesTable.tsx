@@ -169,7 +169,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
 
   return (
     <ArtemisContext.Provider value={{ tree, selectedNode, brokerNode, setSelectedNode, findAndSelectNode }}>
-      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
+      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} storageColumnLocation="addressesColumnDefs"  toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
       <Modal
         aria-label='create-queue-modal'
         variant={ModalVariant.medium}

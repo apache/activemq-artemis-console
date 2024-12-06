@@ -67,6 +67,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const [rows, setRows] = useState([])
   const [perPage, setPerPage] = useState(10);
   const [columns, setColumns] = useState(allColumns);
+  const [columnsLoaded, setColumnsLoaded] = useState(false);
   const [columnsModalOpen, setColumnsModalOpen] = useState(false);
   const [resultsSize, setresultsSize] = useState(0);
   const [selectedMessages, setSelectedMessages] = useState<number[]>([]);
@@ -92,6 +93,11 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       return response;
     }
     setPerPage(artemisPreferencesService.loadTablePageSize("messagesColumnDefs", 10));
+    if (!columnsLoaded) {
+      const updatedColumns: Column[] = artemisPreferencesService.loadColumnPreferences("messagesColumnDefs", allColumns);
+      setColumns(updatedColumns);
+      setColumnsLoaded(true);
+    }
     listData();
 
   }, [props.address, props.routingType, props.queue, page, perPage, filter, selectedMessages])
@@ -158,6 +164,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
 
   const onSave = () => {
     setColumnsModalOpen(!columnsModalOpen);
+    artemisPreferencesService.saveColumnPreferences("messagesColumnDefs", columns);
   };
 
   const updateColumnStatus = (index: number, column: Column) => {
