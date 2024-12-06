@@ -21,6 +21,7 @@ import { artemisService } from '../artemis-service';
 import { eventService } from '@hawtio/react';
 import { Modal, ModalVariant, Button } from '@patternfly/react-core';
 import { IAction } from '@patternfly/react-table';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const ConsumerTable: React.FunctionComponent<Navigate> = navigate => {
   const getSessionFilter = (row: any) => {
@@ -120,7 +121,7 @@ export const ConsumerTable: React.FunctionComponent<Navigate> = navigate => {
       
     return (
       <>
-      <ArtemisTable allColumns={allColumns} getData={listConsumers} getRowActions={getRowActions} storageColumnLocation="consumerColumnDefs"  navigate={navigate.search} filter={navigate.filter}/>
+      <ArtemisTable allColumns={allColumns} getData={listConsumers} getRowActions={getRowActions} storageColumnLocation={columnStorage.consumers}  navigate={navigate.search} filter={navigate.filter}/>
       <Modal
         aria-label='consumer-close-modal'
         variant={ModalVariant.medium}

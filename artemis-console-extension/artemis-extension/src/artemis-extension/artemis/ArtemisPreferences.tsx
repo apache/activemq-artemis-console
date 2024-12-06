@@ -59,6 +59,9 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
   const format = formats.find(format => format.index === artemisPreferences.artemisBrowseBytesMessages);
   const [selectedFormat, setSelectedFormat] = useState(format ? format.description : off.description);
 
+  const [selectedPageSize, setSelectedPageSize] = useState(artemisPreferencesService.loadArtemisPreferences().artemisDefaultPageSize)
+  const [isPageSizeDropdownOpen, setPageSizeDropdownOpen] = React.useState(false);
+
   const updatePreferences = (value: string | number | boolean, key: keyof ArtemisOptions): void => {
     const updatedPreferences = { ...artemisPreferences, ...{ [key]: value } }
 
@@ -78,6 +81,10 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
     setDropdownOpen(!isDropdownOpen)
   }
 
+  const handlePageSizeToggle = () => {
+    setPageSizeDropdownOpen(!isPageSizeDropdownOpen)
+  }
+
   const handleFormatChange = (event?: React.MouseEvent<Element, MouseEvent>, value?: string | number) => {
     setSelectedFormat(value as string);
     setDropdownOpen(false);
@@ -85,6 +92,13 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
     if (format) {
       updatePreferences(format?.index, 'artemisBrowseBytesMessages');
     }
+  }
+
+  const handlePageSizeChange = (event?: React.MouseEvent<Element, MouseEvent>, value?: string | number) => {
+    setSelectedPageSize(value as number);
+    setPageSizeDropdownOpen(false);
+    updatePreferences(value as number, 'artemisDefaultPageSize');
+    artemisPreferencesService.resetPageSizes();
   }
 
 
@@ -146,6 +160,37 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
                 <SelectOption label={hex.id} value={hex.description}>{hex.description}</SelectOption>
                 <SelectOption label={decimaltext.id} value={decimaltext.description}>{decimaltext.description}</SelectOption>
                 <SelectOption label={hexttext.id} value={hexttext.description}>{hexttext.description}</SelectOption>
+              </SelectList>
+            </Select>
+          </FlexItem>
+        </Flex>
+      </FormGroup>
+      <FormGroup
+        hasNoPaddingTop
+        label='Default Page Size'
+        fieldId='artemis-form-default-pagesize'
+        labelIcon={
+          <TooltipHelpIcon tooltip='he default page size to use for Artemis table views. This will replace all page sizes to the default' />
+        }>
+        <Flex>
+          <FlexItem flex={{ default: 'flexNone', md: 'flex_2' }}>
+            {' '}
+            <Select
+              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
+                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={handlePageSizeToggle}>
+                    {selectedPageSize}
+                  </MenuToggle>
+                )}
+              aria-label='Select Format'
+              onSelect={handlePageSizeChange}
+              selected={selectedPageSize}
+              isOpen={isPageSizeDropdownOpen}
+            >
+              <SelectList>
+                <SelectOption label={"10"} value={"10"}>{"10"}</SelectOption>
+                <SelectOption label={"20"} value={"20"}>{"20"}</SelectOption>
+                <SelectOption label={"50"} value={"50"}>{"50"}</SelectOption>
+                <SelectOption label={"100"} value={"100"}>{"100"}</SelectOption>
               </SelectList>
             </Select>
           </FlexItem>

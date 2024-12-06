@@ -18,6 +18,7 @@ import React, { } from 'react'
 import { Navigate } from '../views/ArtemisTabView.js';
 import { ActiveSort, ArtemisTable, Column, Filter } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
   const getSessionFilter = (row: any) => {
@@ -60,5 +61,5 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
         return data;
       }
       
-    return <ArtemisTable allColumns={allColumns} getData={listProducers} storageColumnLocation="producerColumnDefs" navigate={navigate.search} filter={navigate.filter}/>
+    return <ArtemisTable allColumns={allColumns} getData={listProducers} storageColumnLocation={columnStorage.producers} navigate={navigate.search} filter={navigate.filter}/>
 }

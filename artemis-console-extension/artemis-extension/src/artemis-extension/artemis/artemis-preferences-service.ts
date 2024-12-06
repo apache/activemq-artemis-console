@@ -18,6 +18,15 @@ import { Column } from "./table/ArtemisTable"
 
 const PAGE_SIZE = ".pageSize";
 
+export const columnStorage = {
+  queues: "queuesColumnDefs",
+  addresses: "addressesColumnDefs",
+  connections: "connectionsColumnDefs",
+  consumers: "consumerColumnDefs",
+  producers: "producerColumnDefs",
+  sessions: "sessionsColumnDefs",
+  messages: "messagesColumnDefs"
+}
 export interface IArtemisPreferencesService {
   loadArtemisPreferences(): ArtemisOptions
   saveArtemisPreferences(newValues: Partial<ArtemisOptions>): void
@@ -29,12 +38,14 @@ export type ArtemisOptions = {
   artemisDLQ: string
   artemisExpiryQueue: string
   artemisBrowseBytesMessages: number
+  artemisDefaultPageSize: number
 }
 
 export const ARTEMIS_PREFERENCES_DEFAULT_VALUES: ArtemisOptions = {
   artemisDLQ: "^DLQ$",
   artemisExpiryQueue: "^ExpiryQueue$",
   artemisBrowseBytesMessages: 99,
+  artemisDefaultPageSize: 10
 } as const
 
 export const STORAGE_KEY_ARTEMIS_PREFERENCES = 'artemis.preferences'
@@ -70,16 +81,26 @@ class ArtemisPreferencesService implements IArtemisPreferencesService {
     localStorage.setItem(storageLocation, JSON.stringify(data));
   }
 
-  loadTablePageSize(storageLocation: string|undefined, size: number): number {
+  loadTablePageSize(storageLocation: string|undefined): number {
     const localStorageData = localStorage.getItem(storageLocation + PAGE_SIZE);
     if (localStorageData) {
         return Number(localStorageData);
     }
-    return size;
+    return this.loadArtemisPreferences().artemisDefaultPageSize;
   }
 
   saveTablePageSize(storageLocation: string, size: number) {
     localStorage.setItem(storageLocation + PAGE_SIZE, size.toString());
+  }
+
+  resetPageSizes() {
+    localStorage.removeItem(columnStorage.queues + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.addresses + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.connections + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.consumers + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.producers + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.sessions + PAGE_SIZE);
+    localStorage.removeItem(columnStorage.messages + PAGE_SIZE);
   }
 
   private loadFromStorage(): Partial<ArtemisOptions> {

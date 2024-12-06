@@ -28,6 +28,7 @@ import { CreateAddress } from './CreateAddress';
 import { SendMessage } from '../messages/SendMessage';
 import { createAddressObjectName } from '../util/jmx';
 import { useNavigate } from 'react-router-dom';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
   const getQueueFilter = (row: any) => {
@@ -169,7 +170,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
 
   return (
     <ArtemisContext.Provider value={{ tree, selectedNode, brokerNode, setSelectedNode, findAndSelectNode }}>
-      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} storageColumnLocation="addressesColumnDefs"  toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
+      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} storageColumnLocation={columnStorage.addresses}  toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
       <Modal
         aria-label='create-queue-modal'
         variant={ModalVariant.medium}
