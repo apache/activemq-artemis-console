@@ -142,7 +142,7 @@ const operationOptions = [
       setColumnsLoaded(true);
     }
     if(broker.storageColumnLocation) {
-      setPerPage(artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation, 10));
+      setPerPage(artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation));
     }
     listData();
 

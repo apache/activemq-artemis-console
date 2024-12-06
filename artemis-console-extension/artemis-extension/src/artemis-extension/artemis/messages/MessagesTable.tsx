@@ -28,7 +28,7 @@ import { SendMessage } from './SendMessage';
 import { Message } from './MessageView';
 import { ArtemisContext } from '../context';
 import { log } from '../globals';
-import { artemisPreferencesService } from '../artemis-preferences-service';
+import { artemisPreferencesService, columnStorage } from '../artemis-preferences-service';
 
 export type MessageProps = {
   address: string,
@@ -92,9 +92,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       const response = await artemisService.getMessages(queueMBean, page, perPage, filter);
       return response;
     }
-    setPerPage(artemisPreferencesService.loadTablePageSize("messagesColumnDefs", 10));
+    setPerPage(artemisPreferencesService.loadTablePageSize(columnStorage.messages));
     if (!columnsLoaded) {
-      const updatedColumns: Column[] = artemisPreferencesService.loadColumnPreferences("messagesColumnDefs", allColumns);
+      const updatedColumns: Column[] = artemisPreferencesService.loadColumnPreferences(columnStorage.messages, allColumns);
       setColumns(updatedColumns);
       setColumnsLoaded(true);
     }
@@ -107,7 +107,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   };
 
   const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
-    artemisPreferencesService.saveTablePageSize("messagesColumnDefs", newPerPage)
+    artemisPreferencesService.saveTablePageSize(columnStorage.messages, newPerPage)
     setPerPage(newPerPage);
   };
 
@@ -164,7 +164,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
 
   const onSave = () => {
     setColumnsModalOpen(!columnsModalOpen);
-    artemisPreferencesService.saveColumnPreferences("messagesColumnDefs", columns);
+    artemisPreferencesService.saveColumnPreferences(columnStorage.messages, columns);
   };
 
   const updateColumnStatus = (index: number, column: Column) => {

@@ -21,6 +21,7 @@ import React, { useState } from 'react'
 import { artemisService } from '../artemis-service';
 import { Navigate } from '../views/ArtemisTabView.js';
 import { ActiveSort, ArtemisTable, Column, Filter } from '../table/ArtemisTable';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {  
   const getConnectionFilter = (row: any) => {
@@ -109,7 +110,7 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
 
 
   return (
-    <><ArtemisTable allColumns={allColumns} getData={listSessions} storageColumnLocation="sessionsColumnDefs" getRowActions={getRowActions} loadData={loadData} navigate={navigate.search} filter={navigate.filter}/>
+    <><ArtemisTable allColumns={allColumns} getData={listSessions} storageColumnLocation={columnStorage.sessions} getRowActions={getRowActions} loadData={loadData} navigate={navigate.search} filter={navigate.filter}/>
     <Modal
       aria-label='session-close-modal'
       variant={ModalVariant.medium}

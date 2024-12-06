@@ -25,6 +25,7 @@ import { QueueNavigate } from './QueuesView.js';
 import { ArtemisContext } from '../context';
 import { createQueueObjectName } from '../util/jmx';
 import { useNavigate } from 'react-router-dom';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   const getAddressFilter = (row: any) => {
@@ -254,7 +255,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   };
 
   return (
-    <><ArtemisTable allColumns={allColumns} getData={listQueues} getRowActions={getRowActions} loadData={loadData} storageColumnLocation="queuesColumnDefs" navigate={navigate.search} filter={navigate.filter} /><Modal
+    <><ArtemisTable allColumns={allColumns} getData={listQueues} getRowActions={getRowActions} loadData={loadData} storageColumnLocation={columnStorage.queues} navigate={navigate.search} filter={navigate.filter} /><Modal
       aria-label='queue-delete-modal'
       variant={ModalVariant.medium}
       title="Delete Queue?"

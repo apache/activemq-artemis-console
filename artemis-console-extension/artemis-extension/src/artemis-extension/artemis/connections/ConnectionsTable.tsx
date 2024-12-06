@@ -21,6 +21,7 @@ import { artemisService } from '../artemis-service';
 import { Modal, ModalVariant, Button } from '@patternfly/react-core';
 import { IAction } from '@patternfly/react-table';
 import { eventService } from '@hawtio/react';
+import { columnStorage } from '../artemis-preferences-service';
 
 export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) => {
   const getSessionFilter = (row: any) => {
@@ -89,7 +90,7 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
 
   return (
     <>
-      <ArtemisTable allColumns={defaultColumns} getData={listConnections} storageColumnLocation="connectionsColumnDefs" getRowActions={getRowActions} loadData={loadData} navigate={navigate.search} filter={navigate.filter}/>
+      <ArtemisTable allColumns={defaultColumns} getData={listConnections} storageColumnLocation={columnStorage.connections} getRowActions={getRowActions} loadData={loadData} navigate={navigate.search} filter={navigate.filter}/>
       <Modal
         aria-label='connection-close-modal'
         variant={ModalVariant.medium}
