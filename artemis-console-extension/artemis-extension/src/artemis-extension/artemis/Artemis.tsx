@@ -14,16 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArtemisTabs } from './views/ArtemisTabView';
 import { PageSection, TextContent, Text, PageSectionVariants, Page } from '@patternfly/react-core';
 import { Grid } from '@patternfly/react-core';
 import { GridItem } from '@patternfly/react-core';
+import { artemisService } from './artemis-service';
+import { eventService } from '@hawtio/react';
 
 
 
 export const Artemis: React.FunctionComponent = () => {
 
+  const [brokerName, setBrokerName] = useState("");
+
+  useEffect(() => {
+    const getBrokerInfo = async () => {
+        artemisService.getBrokerInfo()
+            .then((brokerInfo) => {
+                setBrokerName(brokerInfo.name)
+            })
+            .catch((error: string) => {
+                eventService.notify({
+                    type: 'warning',
+                    message: error,
+                })
+            });
+    }
+    getBrokerInfo();
+  }, [brokerName])
 
   return ( 
   <Page>
@@ -31,7 +50,7 @@ export const Artemis: React.FunctionComponent = () => {
       <Grid >
         <GridItem span={2}>
           <TextContent>
-            <Text component="h1">Broker</Text>
+            <Text component="h1">Broker: {brokerName}</Text>
           </TextContent>
         </GridItem>
       </Grid>

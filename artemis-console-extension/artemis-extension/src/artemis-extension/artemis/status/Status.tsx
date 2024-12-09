@@ -55,7 +55,7 @@ export const Status: React.FunctionComponent = () => {
     const [showOperationsDialog, setShowOperationsDialog] = useState(false);
     useEffect(() => {
         const getBrokerInfo = async () => {
-            artemisService.createBrokerInfo()
+            artemisService.getBrokerInfo()
                 .then((brokerInfo) => {
                     setBrokerInfo(brokerInfo)
                 })

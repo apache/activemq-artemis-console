@@ -144,9 +144,11 @@ const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", 
 class ArtemisService {
 
     private brokerObjectName: Promise<string>
+    private brokerInfo: Promise<BrokerInfo>
 
     constructor() {
         this.brokerObjectName = this.initBrokerObjectName();
+        this.brokerInfo = this.initBrokerInfo();
     }
 
     private async initBrokerObjectName(): Promise<string> {
@@ -157,7 +159,7 @@ class ArtemisService {
 
 
 
-    async createBrokerInfo(): Promise<BrokerInfo> {
+    async initBrokerInfo(): Promise<BrokerInfo> {
         return new Promise<BrokerInfo>(async (resolve, reject) => {
             var brokerObjectName = await this.brokerObjectName;
             var response = await jolokiaService.readAttributes(brokerObjectName);
@@ -196,10 +198,14 @@ class ArtemisService {
         });
     }
 
+    async getBrokerInfo(): Promise<BrokerInfo> {
+        return await this.brokerInfo;
+    }
+
     async createBrokerTopology(): Promise<BrokerTopology> {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
             try {
-                var brokerInfo = await this.createBrokerInfo();
+                var brokerInfo = await this.getBrokerInfo();
                 var brokerTopology: BrokerTopology = {
                     broker: brokerInfo,
                     addresses: []
