@@ -115,7 +115,7 @@ svg.pf-v5-svg {
 
 /*These change the row in a table when hovered over*/
 .table-hover>tbody>tr:hover {
-  background-color: var(--artemis-global--primary-color--200);
+  background-color: var(--artemis-global--primary-color--300);
 }
 
 .table-hover>tbody>tr:hover td {
@@ -129,7 +129,7 @@ select>option:active {
 }
 
 tbody>tr:hover {
-  background-color: var(--artemis-global--primary-color--200);
+  background-color: var(--artemis-global--primary-color--300);
 }
 
 /*These button settings control the color of the buttons when clicked, hovered or visited*/
@@ -175,7 +175,7 @@ tbody>tr:hover {
 
 /*This changes the hover color in all the tables*/
 .table-hover tbody tr:hover td.focus {
-background-color: var(--artemis-global--primary-color--200);
+background-color: var(--artemis-global--primary-color--300);
 }
 
 :root {
