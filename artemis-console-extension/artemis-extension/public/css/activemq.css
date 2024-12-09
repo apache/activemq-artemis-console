@@ -57,6 +57,10 @@ svg.pf-v5-svg {
   fill: #c12766;
 }
 
+.pf-topology__node.artemisBackupBroker.pf-m-info .pf-topology__node__background {
+  stroke: #82171b;
+  fill: #cf242a;
+}
 
 .pf-topology__node.artemisAddress.pf-m-info .pf-topology__node__background {
   stroke:  #2b326e;

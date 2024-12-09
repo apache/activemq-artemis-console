@@ -206,6 +206,9 @@ class ArtemisService {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
             try {
                 var brokerInfo = await this.getBrokerInfo();
+                var brokerObjectName = await this.brokerObjectName;
+                const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
+                brokerInfo.networkTopology =  new BrokerNetworkTopology(JSON.parse(topology));
                 var brokerTopology: BrokerTopology = {
                     broker: brokerInfo,
                     addresses: []

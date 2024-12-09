@@ -63,6 +63,7 @@ import { Attributes } from '@hawtio/react';
 import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList } from '@patternfly/react-core';
 import { createAddressObjectName, createQueueObjectName } from '../util/jmx';
 import { ArtemisContext } from '../context';
+import { log } from '../globals';
 
 
 const BadgeColors = [
@@ -143,7 +144,35 @@ const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDrag
       {...rest}
     >
       <g transform={`translate(25, 25)`}>
-        <Icon style={{ color: '#393F44' }} width={25} height={25}></Icon>
+        <Icon style={{ color: '#000000', fill: '#000000' }} width={25} height={25}></Icon>
+      </g>
+    </DefaultNode>
+  );
+};
+
+const BrokerBackupCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNodeProps & WithDndDropProps> = ({ element, onSelect, selected, ...rest }) => {
+  const data = element.getData();
+  const selectNode = data.selectNode;
+  const Icon = ClusterIcon;
+  const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
+  const { viewOptions } = element.getController().getState<ControllerState>();
+
+  return (
+    <DefaultNode 
+      element={element}
+      showStatusDecorator
+      badge={data.badge}
+      badgeColor={badgeColors?.badgeColor}
+      badgeTextColor={badgeColors?.badgeTextColor}
+      badgeBorderColor={badgeColors?.badgeBorderColor}
+      showLabel={viewOptions.showLabels}
+      className="artemisBackupBroker"
+      onSelect={() => selectNode(data)}
+      selected={selected}
+      {...rest}
+    >
+      <g transform={`translate(25, 25)`}>
+        <Icon style={{ color: '#000000', fill: '#000000' }} width={25} height={25}></Icon>
       </g>
     </DefaultNode>
   );
@@ -185,6 +214,9 @@ const customComponentFactory: ComponentFactory = (kind: ModelKind, type: string)
             case 'broker':
               return withDndDrop(nodeDropTargetSpec([CONNECTOR_TARGET_DROP]))(
                 withDragNode(nodeDragSourceSpec('node', true, true))(BrokerCustomNode));
+            case 'backupBroker':
+              return withDndDrop(nodeDropTargetSpec([CONNECTOR_TARGET_DROP]))(
+                withDragNode(nodeDragSourceSpec('node', true, true))(BrokerBackupCustomNode));
             case 'resource':
               return withDndDrop(nodeDropTargetSpec([CONNECTOR_TARGET_DROP]))(
                 withDragNode(nodeDragSourceSpec('node', true, true))(ResourceNode));
@@ -404,6 +436,61 @@ export const BrokerDiagram: React.FunctionComponent = () => {
               type: 'edge',
               source: brokerTopology.broker.nodeID,
               target: broker.nodeID,
+              edgeStyle: EdgeStyle.default
+            };
+            newBrokerEdges.push(brokerEdge);
+          }
+          if(broker.backup) {
+            log.debug("adding backup to this live")
+            var backupBrokerNode: NodeModel = {
+              id: broker.nodeID + "backup",
+              type: 'backupBroker',
+              label: broker.backup,
+              width: BROKER_NODE_DIAMETER,
+              height: BROKER_NODE_DIAMETER,
+              shape: NodeShape.ellipse,
+              status: NodeStatus.info,
+              data: {
+                badge: 'Broker',
+                type: "backupBroker",
+                selectNode: selectNode
+              }
+            }
+            newBrokerNodes.push(backupBrokerNode);
+            if (viewOptions.showConnectors) {
+              var brokerEdge: EdgeModel = {
+                id: 'broker-edge-' + brokerTopology.broker.nodeID + "backup" + '-broker-node-' + broker.nodeID,
+                type: 'edge',
+                source: broker.nodeID,
+                target: broker.nodeID + "backup",
+                edgeStyle: EdgeStyle.default
+              };
+              newBrokerEdges.push(brokerEdge);
+            }
+          }
+        } else if (broker.backup) {
+          log.debug("adding backup to this live")
+          var backupBrokerNode: NodeModel = {
+            id: broker.nodeID + "backup",
+            type: 'backupBroker',
+            label: broker.backup,
+            width: BROKER_NODE_DIAMETER,
+            height: BROKER_NODE_DIAMETER,
+            shape: NodeShape.ellipse,
+            status: NodeStatus.info,
+            data: {
+              badge: 'Broker',
+              type: "backupBroker",
+              selectNode: selectNode
+            }
+          }
+          newBrokerNodes.push(backupBrokerNode);
+          if (viewOptions.showConnectors) {
+            var brokerEdge: EdgeModel = {
+              id: 'broker-edge-' + brokerTopology.broker.nodeID + "backup" + '-broker-node-' + broker.nodeID,
+              type: 'edge',
+              source: brokerTopology.broker.nodeID,
+              target: broker.nodeID + "backup",
               edgeStyle: EdgeStyle.default
             };
             newBrokerEdges.push(brokerEdge);
