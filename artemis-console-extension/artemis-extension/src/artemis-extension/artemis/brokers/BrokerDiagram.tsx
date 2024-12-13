@@ -500,20 +500,16 @@ export const BrokerDiagram: React.FunctionComponent = () => {
 
       for (const address of brokerTopology.addresses) {
         var internalAddress: boolean = isInternalName(address.name);
-        if (viewOptions.showAddresses) {
-          if(internalAddress && viewOptions.showInternalAddresses) {
-            addInternalAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
-          } else if (!internalAddress && viewOptions.showAddresses) {
-            addAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
-          }
+        if(internalAddress && viewOptions.showInternalAddresses) {
+          addInternalAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
+        } else if (!internalAddress && viewOptions.showAddresses) {
+          addAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
         }
-        if (viewOptions.showQueues) {
-          for (const queue of address.queues) {
-            if (internalAddress && viewOptions.showInternalQueues) {
-              addInternalQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showInternalAddresses, viewOptions.showConnectors, selectNode); 
-            } else if (!internalAddress &&viewOptions.showQueues) {
-              addQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showAddresses, viewOptions.showConnectors, selectNode); 
-            }
+        for (const queue of address.queues) {
+          if (internalAddress && viewOptions.showInternalQueues) {
+            addInternalQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showInternalAddresses, viewOptions.showConnectors, selectNode);
+          } else if (!internalAddress &&viewOptions.showQueues) {
+            addQueue(address.name, queue.name, queue.routingType, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showAddresses, viewOptions.showConnectors, selectNode);
           }
         }
       }
