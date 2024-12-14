@@ -54,32 +54,37 @@ svg.pf-v5-svg {
 
 .pf-topology__node.artemisBroker.pf-m-info .pf-topology__node__background {
   stroke: #801944;
+  stroke-width: 3;
   fill: #c12766;
 }
 
 .pf-topology__node.artemisBackupBroker.pf-m-info .pf-topology__node__background {
   stroke: #82171b;
+  stroke-width: 3;
   fill: #cf242a;
 }
 
 .pf-topology__node.artemisAddress.pf-m-info .pf-topology__node__background {
   stroke:  #2b326e;
+  stroke-width: 3;
   fill: #3e489f;
 }
 
 .pf-topology__node.artemisQueue.pf-m-info .pf-topology__node__background {
   stroke:  #50621d;
+  stroke-width: 3;
   fill: #78932c;
 }
 
 .pf-topology__node.artemisInternalAddress.pf-m-info .pf-topology__node__background {
   stroke:  #2b326e;
+  stroke-width: 3;
   fill: #fff;
 }
 
-
-.pf-topology__node.artemisInternalAddress.pf-m-info .pf-topology__node__background {
+.pf-topology__node.artemisInternalQueue.pf-m-info .pf-topology__node__background {
   stroke:  #50621d;
+  stroke-width: 3;
   fill: #fff;
 }
 
