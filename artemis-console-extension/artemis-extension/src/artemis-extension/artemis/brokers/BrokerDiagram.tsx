@@ -698,7 +698,7 @@ function addInternalQueue(address: string, queue: string, routingType: string, n
     status: NodeStatus.info,
     data: {
       badge: 'Internal Queue',
-      className: 'artemisInternalAddress',
+      className: 'artemisInternalQueue',
       address: address,
       queue: queue,
       routingType: routingType,
