@@ -536,32 +536,32 @@ export const BrokerDiagram: React.FunctionComponent = () => {
               value="Labels"
               hasCheckbox
               isSelected={viewOptions.showLabels}
-              onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))}>show Labels</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showLabels: !prev.showLabels }))}>Labels</SelectOption>
           <SelectOption
               value="Addresses"
               hasCheckbox
               isSelected={viewOptions.showAddresses}
-              onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))}>show Addresses</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showAddresses: !prev.showAddresses }))}>Addresses</SelectOption>
           <SelectOption
               value="Queues"
               hasCheckbox
               isSelected={viewOptions.showQueues}
-              onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))}>show Queues</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showQueues: !prev.showQueues }))}>Queues</SelectOption>
           <SelectOption
               value="Internal Addresses"
               hasCheckbox
               isSelected={viewOptions.showInternalAddresses}
-              onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))}>show Internal Addresses</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showInternalAddresses: !prev.showInternalAddresses }))}>Internal Addresses</SelectOption>
           <SelectOption
               value="Internal Queues"
               hasCheckbox
               isSelected={viewOptions.showInternalQueues}
-              onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))}>show Internal Queues</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showInternalQueues: !prev.showInternalQueues }))}>Internal Queues</SelectOption>
           <SelectOption
               value="Connectors"
               hasCheckbox
               isSelected={viewOptions.showConnectors}
-              onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}>show Connectors</SelectOption>
+              onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}>Connectors</SelectOption>
         </SelectList>
       </Select>
     </ToolbarItem><ToolbarItem>
