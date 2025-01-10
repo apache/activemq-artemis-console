@@ -11,7 +11,7 @@ yarn license
 Note that a check can be made to identify any possible problematic licenses by running in the `artemis-console-extension/artemis-extension` directory:
 
 ```shell
-npx license-checker --out licenses.csv --csv --onlyAllow "Apache-2.0;ISC;MIT;CC0-1.0;BSD-2-Clause;BSD-3-Clause;Python-2.0;UNLICENSED;MPL-2.0;CC-BY-4.0;Unlicense;0BSD"
+npx license-checker --out licenses.csv --csv --onlyAllow "Apache-2.0;ISC;MIT;CC0-1.0;BSD-2-Clause;BSD-3-Clause;Python-2.0;UNLICENSED;MPL-2.0;CC-BY-4.0;Unlicense;0BSD;Custom: https://jolokia.org"
 ```
 
 dependencies marked as unlicensed will need to be manually checked.
