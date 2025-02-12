@@ -304,6 +304,7 @@ export const Status: React.FunctionComponent = () => {
                 aria-label='attributes-modal'
                 variant={ModalVariant.medium}
                 isOpen={showAttributesDialog}
+                onClose={() => setShowAttributesDialog(false)}
                 actions={[
                     <Button key="close" variant="primary" onClick={() => setShowAttributesDialog(false)}>
                         Close
@@ -315,6 +316,7 @@ export const Status: React.FunctionComponent = () => {
                 aria-label='operations-modal'
                 variant={ModalVariant.medium}
                 isOpen={showOperationsDialog}
+                onClose={() => setShowOperationsDialog(false)}
                 actions={[
                     <Button key="close" variant="primary" onClick={() => setShowOperationsDialog(false)}>
                         Close
