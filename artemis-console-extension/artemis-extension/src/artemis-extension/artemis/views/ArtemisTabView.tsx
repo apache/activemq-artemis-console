@@ -67,7 +67,7 @@ export const ArtemisTabs: React.FunctionComponent = () => {
             <Tabs activeKey={activeTabKey}
               onSelect={handleTabClick}
               aria-label="artemistabs">
-              <Tab eventKey={0} title={<TabTitleText>Status</TabTitleText>} aria-label="connections">
+              <Tab eventKey={0} title={<TabTitleText>Status</TabTitleText>} aria-label="status">
                 {activeTabKey === 0 &&
                   <Status/>
                 }
