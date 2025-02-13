@@ -109,6 +109,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
     artemisPreferencesService.saveTablePageSize(columnStorage.messages, newPerPage)
     setPerPage(newPerPage);
+    setPage(1);
     selectAllMessages(false);
   };
 

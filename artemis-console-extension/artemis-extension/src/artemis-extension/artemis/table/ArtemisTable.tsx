@@ -221,6 +221,7 @@ const operationOptions = [
     if(broker.storageColumnLocation) {
       artemisPreferencesService.saveTablePageSize(broker.storageColumnLocation, newPerPage)
     }
+    setPage(1);
     setPerPage(newPerPage);
   };
 
