@@ -36,6 +36,8 @@ github:
     rebase:  true
   autolink_jira:
     - ARTEMIS
+  dependabot_alerts:  true
+  dependabot_updates: true
 notifications:
   commits:      commits@activemq.apache.org
   issues:       gitbox@activemq.apache.org
