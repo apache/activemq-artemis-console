@@ -47,7 +47,7 @@
     "webpack-manifest-plugin": "^5.0.0"
   },
   "resolutions": {
-    "axios": "1.7.4",
+    "axios": "1.8.2",
     "@typescript-eslint/eslint-plugin": "6.9.0",
     "@typescript-eslint/parser": "6.9.0",
     "victory-area": "36.9.2",
