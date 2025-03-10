@@ -83,7 +83,8 @@
     "nanoid": "3.3.8",
     "path-to-regexp": "0.1.12",
     "jolokia.js": "2.1.9",
-    "@jolokia.js/simple": "2.1.9"
+    "@jolokia.js/simple": "2.1.9",
+    "serialize-javascript": "6.0.2"
   },
   "eslintConfig": {
     "extends": [
