@@ -164,6 +164,15 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     setColumns(updatedColumns);
   };
 
+  const unselectAllColumns = () => {
+    const updatedColumns = [...columns]
+    updatedColumns.map((column) => {
+      column.visible = false;
+      return false;
+    })
+    setColumns(updatedColumns);
+  };
+
   const onSave = () => {
     setColumnsModalOpen(!columnsModalOpen);
     artemisPreferencesService.saveColumnPreferences(columnStorage.messages, columns);
@@ -501,6 +510,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             <Text>Selected categories are displayed in the table.</Text>
             <Button isInline onClick={selectAllColumns} variant="link">
               Select all
+            </Button>{ ' | ' }
+            <Button isInline onClick={unselectAllColumns} variant="link">
+              Unselect all
             </Button>
           </TextContent>
         }

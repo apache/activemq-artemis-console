@@ -169,6 +169,15 @@ const operationOptions = [
     setColumns(updatedColumns);
   };
 
+  const unselectAllColumns = () => {
+    const updatedColumns = [...columns]
+    updatedColumns.map((column) => {
+      column.visible = false;
+      return false;
+    })
+    setColumns(updatedColumns);
+  };
+
   const onSearchTextChange = (newValue: string) => {
     setInputValue(newValue);
   };
@@ -261,6 +270,9 @@ const operationOptions = [
             <Text>Selected categories are displayed in the table.</Text>
             <Button isInline onClick={selectAllColumns} variant="link">
               Select all
+            </Button>{ ' | ' }
+            <Button isInline onClick={unselectAllColumns} variant="link">
+              Unselect all
             </Button>
           </TextContent>
         }
