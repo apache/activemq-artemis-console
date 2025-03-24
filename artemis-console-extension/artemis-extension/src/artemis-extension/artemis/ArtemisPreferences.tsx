@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInput } from '@patternfly/react-core'
-import React, { useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { artemisPreferencesService, ArtemisOptions } from './artemis-preferences-service'
 import { Icon, Tooltip } from '@patternfly/react-core'
 import { HelpIcon } from '@patternfly/react-icons'
@@ -60,6 +60,8 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
   const [selectedFormat, setSelectedFormat] = useState(format ? format.description : off.description);
 
   const [selectedPageSize, setSelectedPageSize] = useState(artemisPreferencesService.loadArtemisPreferences().artemisDefaultPageSize)
+  const [artemisMaxDiagramAddressSize, setArtemisMaxDiagramAddressSize] = useState(artemisPreferencesService.loadArtemisPreferences().artemisMaxDiagramAddressSize)
+
   const [isPageSizeDropdownOpen, setPageSizeDropdownOpen] = React.useState(false);
 
   const updatePreferences = (value: string | number | boolean, key: keyof ArtemisOptions): void => {
@@ -101,6 +103,10 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
     artemisPreferencesService.resetPageSizes();
   }
 
+  const handleMaxDiagramAddressSize = (event: FormEvent<HTMLInputElement>, value: string) => {
+    setArtemisMaxDiagramAddressSize(Number(value));
+    updatePreferences(Number(value), 'artemisMaxDiagramAddressSize');
+  }
 
   return (
     <FormSection title='Artemis' titleElement='h2'>
@@ -195,6 +201,20 @@ const ArtemisPreferencesForm: React.FunctionComponent = () => {
             </Select>
           </FlexItem>
         </Flex>
+      </FormGroup>
+
+      <FormGroup
+        hasNoPaddingTop
+        label='Max Diagram Address Size'
+        fieldId='artemis-form-diagram'
+        labelIcon={<TooltipHelpIcon tooltip='How many addresses will be loaded in the broker diagram tab' />}
+      >
+        <TextInput
+          id='artemis-input-diagram'
+          type='number'
+          value={artemisMaxDiagramAddressSize}
+          onChange={handleMaxDiagramAddressSize}
+        />
       </FormGroup>
 
     </FormSection>
