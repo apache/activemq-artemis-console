@@ -202,7 +202,7 @@ class ArtemisService {
         return await this.brokerInfo;
     }
 
-    async createBrokerTopology(): Promise<BrokerTopology> {
+    async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology> {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
             try {
                 var brokerInfo = await this.getBrokerInfo();
@@ -213,7 +213,10 @@ class ArtemisService {
                     broker: brokerInfo,
                     addresses: []
                 }
-                var addresses: string[] = await this.getAllAddresses();
+                var addresses: string[] = (await this.getAllAddresses(addressFilter));
+                var max: number = maxAddresses < addresses.length ? maxAddresses: addresses.length;
+                addresses = addresses.slice(0, max);
+                log.info()
                 for (const address of addresses) {
                     var queuesJson: string = await this.getQueuesForAddress(address);
                     var queues: Queue[] = JSON.parse(queuesJson).data;
@@ -395,11 +398,18 @@ class ArtemisService {
         return await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ADDRESSES_SIG, [JSON.stringify(addressesFilter), page, perPage]) as string;
     }
 
-    async getAllAddresses(): Promise<string[]> {     
+    async getAllAddresses(addressFilter: string): Promise<string[]> {     
         return new Promise<string[]>(async (resolve, reject) => {
             var addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']) as string;
             if (addressesString) {
-                resolve(addressesString.split(','));           
+
+                var addressArray = addressesString.split(',')
+                if (addressFilter && addressFilter.length > 0) {
+                    var filtered = addressArray.filter(function (str) { return str.includes(addressFilter); });
+                    resolve(filtered);   
+                } else {
+                    resolve(addressArray);
+                }           
             }
             reject("invalid response:" + addressesString);
         });

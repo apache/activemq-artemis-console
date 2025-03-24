@@ -60,10 +60,11 @@ import {
 import { useEffect, useState } from 'react';
 import { artemisService, BrokerInfo, BrokerTopology } from '../artemis-service';
 import { Attributes } from '@hawtio/react';
-import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList } from '@patternfly/react-core';
+import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList, TextInput, Label, SearchInput, Text } from '@patternfly/react-core';
 import { createAddressObjectName, createQueueObjectName } from '../util/jmx';
 import { ArtemisContext } from '../context';
 import { log } from '../globals';
+import { artemisPreferencesService } from '../artemis-preferences-service';
 
 
 const BadgeColors = [
@@ -302,12 +303,17 @@ export const BrokerDiagram: React.FunctionComponent = () => {
   const [ showSidebar, setShowSidebar ] = React.useState(false);
   const [ sidebarTitle, setSidebarTitle ] = React.useState("");
   const [ brokerTopology, setBrokerTopology ] = React.useState<BrokerTopology>();
-  const[ topologyLoaded, setTopologyLoaded ] = React.useState(false);
+  const [ topologyLoaded, setTopologyLoaded ] = React.useState(false);
+  const [ addressFilter, setAddressFilter ] = React.useState('');
 
 
+  const maxAddresses: number = artemisPreferencesService.loadArtemisPreferences().artemisMaxDiagramAddressSize;
 
   const { findAndSelectNode } = React.useContext(ArtemisContext);
 
+  const onSearchTextChange = (newValue: string) => {
+    setAddressFilter(newValue);
+  };
 
   const selectNode = React.useCallback((data: any) => {
     if (data.queue != null) {
@@ -367,7 +373,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
 
   useEffect(() => {
     if (!topologyLoaded) {
-      artemisService.createBrokerTopology().then(brokerTopology => {
+      artemisService.createBrokerTopology(maxAddresses, addressFilter).then(brokerTopology => {
         setTopologyLoaded(true);
         setBrokerTopology(brokerTopology);
       });
@@ -563,9 +569,21 @@ export const BrokerDiagram: React.FunctionComponent = () => {
               onClick={() => setViewOptions(prev => ({ ...prev, showConnectors: !prev.showConnectors }))}>Connectors</SelectOption>
         </SelectList>
       </Select>
-    </ToolbarItem><ToolbarItem>
+    </ToolbarItem>
+    <ToolbarItem>
+      <SearchInput
+        aria-label="With filters example search input" hint={addressFilter == '' ? 'Address Filter':''}
+        onChange={(_event, value) => onSearchTextChange(value)}
+        value={addressFilter}
+        onClear={() => {
+          onSearchTextChange('');
+        }}
+      />
+
+    </ToolbarItem>
+    <ToolbarItem>
         <Button onClick={() => setTopologyLoaded(false)}>Refresh</Button>
-      </ToolbarItem></>
+    </ToolbarItem></>
   );
 
   const topologySideBar = (

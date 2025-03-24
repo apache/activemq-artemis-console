@@ -39,13 +39,15 @@ export type ArtemisOptions = {
   artemisExpiryQueue: string
   artemisBrowseBytesMessages: number
   artemisDefaultPageSize: number
+  artemisMaxDiagramAddressSize: number
 }
 
 export const ARTEMIS_PREFERENCES_DEFAULT_VALUES: ArtemisOptions = {
   artemisDLQ: "^DLQ$",
   artemisExpiryQueue: "^ExpiryQueue$",
   artemisBrowseBytesMessages: 99,
-  artemisDefaultPageSize: 10
+  artemisDefaultPageSize: 10,
+  artemisMaxDiagramAddressSize: 20
 } as const
 
 export const STORAGE_KEY_ARTEMIS_PREFERENCES = 'artemis.preferences'
