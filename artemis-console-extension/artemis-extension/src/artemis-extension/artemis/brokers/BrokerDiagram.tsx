@@ -99,14 +99,14 @@ const BadgeColors = [
   },
   {
     name: 'Internal Address',
-    badgeColor: 'white',
-    badgeTextColor: 'black',
+    badgeColor: '#cf242a',
+    badgeTextColor: 'white',
     badgeBorderColor: '#CBC1FF'
   },
   {
     name: 'Internal Queue',
-    badgeColor: 'white',
-    badgeTextColor: 'black',
+    badgeColor: '#cf242a',
+    badgeTextColor: 'white',
     badgeBorderColor: '#CBC1FF'
   }
 ];
@@ -126,7 +126,6 @@ const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDrag
   const data = element.getData();
   const selectNode = data.selectNode;
   const Icon = ClusterIcon;
-  const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
   const { viewOptions } = element.getController().getState<ControllerState>();
 
   return (
@@ -134,11 +133,9 @@ const BrokerCustomNode: React.FC<CustomNodeProps & WithSelectionProps & WithDrag
       element={element}
       showStatusDecorator
       badge={data.badge}
-      badgeColor={badgeColors?.badgeColor}
-      badgeTextColor={badgeColors?.badgeTextColor}
-      badgeBorderColor={badgeColors?.badgeBorderColor}
+      labelClassName={data.labelClassName}
       showLabel={viewOptions.showLabels}
-      className="artemisBroker"
+      className={data.className}
       onSelect={() => selectNode(data)}
       selected={selected}
       {...rest}
@@ -154,7 +151,6 @@ const BrokerBackupCustomNode: React.FC<CustomNodeProps & WithSelectionProps & Wi
   const data = element.getData();
   const selectNode = data.selectNode;
   const Icon = ClusterIcon;
-  const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
   const { viewOptions } = element.getController().getState<ControllerState>();
 
   return (
@@ -162,11 +158,9 @@ const BrokerBackupCustomNode: React.FC<CustomNodeProps & WithSelectionProps & Wi
       element={element}
       showStatusDecorator
       badge={data.badge}
-      badgeColor={badgeColors?.badgeColor}
-      badgeTextColor={badgeColors?.badgeTextColor}
-      badgeBorderColor={badgeColors?.badgeBorderColor}
+      labelClassName={data.labelClassName}
       showLabel={viewOptions.showLabels}
-      className="artemisBackupBroker"
+      className={data.className}
       onSelect={() => selectNode(data)}
       selected={selected}
       {...rest}
@@ -181,7 +175,6 @@ const BrokerBackupCustomNode: React.FC<CustomNodeProps & WithSelectionProps & Wi
 const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNodeProps & WithDndDropProps> = ({ element, onSelect, selected, ...rest  }) => {
   const data = element.getData();
   const selectNode = data.selectNode;
-  const badgeColors = BadgeColors.find(badgeColor => badgeColor.name === data.badge);
   const { viewOptions } = element.getController().getState<ControllerState>();
 
   return (
@@ -189,9 +182,7 @@ const ResourceNode: React.FC<CustomNodeProps & WithSelectionProps & WithDragNode
       element={element}
       showStatusDecorator
       badge={data.badge}
-      badgeColor={badgeColors?.badgeColor}
-      badgeTextColor={badgeColors?.badgeTextColor}
-      badgeBorderColor={badgeColors?.badgeBorderColor} 
+      labelClassName={data.labelClassName}
       showLabel={viewOptions.showLabels}
       className={data.className}
       onSelect={() => selectNode(data)}
@@ -313,10 +304,10 @@ export const BrokerDiagram: React.FunctionComponent = () => {
   const [ brokerTopology, setBrokerTopology ] = React.useState<BrokerTopology>();
   const[ topologyLoaded, setTopologyLoaded ] = React.useState(false);
 
- 
+
 
   const { findAndSelectNode } = React.useContext(ArtemisContext);
-  
+
 
   const selectNode = React.useCallback((data: any) => {
     if (data.queue != null) {
@@ -395,6 +386,8 @@ export const BrokerDiagram: React.FunctionComponent = () => {
         },
         data: {
           badge: 'Broker',
+          className: 'artemisBroker',
+          labelClassName: 'artemisBrokerLabel',
           type: "local",
           selectNode: selectNode
         }
@@ -425,6 +418,8 @@ export const BrokerDiagram: React.FunctionComponent = () => {
             status: NodeStatus.info,
             data: {
               badge: 'Broker',
+              className: 'artemisBroker',
+              labelClassName: 'artemisBrokerLabel',
               type: "remote",
               selectNode: selectNode
             }
@@ -452,6 +447,8 @@ export const BrokerDiagram: React.FunctionComponent = () => {
               status: NodeStatus.info,
               data: {
                 badge: 'Broker',
+                className: 'artemisBackupBroker',
+                labelClassName: 'artemisBackupBrokerLabel',
                 type: "backupBroker",
                 selectNode: selectNode
               }
@@ -480,6 +477,8 @@ export const BrokerDiagram: React.FunctionComponent = () => {
             status: NodeStatus.info,
             data: {
               badge: 'Broker',
+              className: 'artemisBackupBroker',
+              labelClassName: 'artemisBackupBrokerLabel',
               type: "backupBroker",
               selectNode: selectNode
             }
@@ -603,6 +602,7 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
     data: {
       badge: 'Address',
       className: 'artemisAddress',
+      labelClassName: 'artemisAddressLabel',
       address: address,
       selectNode: selectNode
     }
@@ -633,6 +633,7 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
     data: {
       badge: 'Internal Address',
       className: 'artemisInternalAddress',
+      labelClassName: 'artemisInternalAddressLabel',
       address: address,
       selectNode: selectNode
     }
@@ -663,6 +664,7 @@ function addQueue(address: string, queue: string, routingType: string,  newBroke
     data: {
       badge: 'Queue',
       className: 'artemisQueue',
+      labelClassName: 'artemisQueueLabel',
       address: address,
       queue: queue,
       routingType: routingType,
@@ -695,6 +697,7 @@ function addInternalQueue(address: string, queue: string, routingType: string, n
     data: {
       badge: 'Internal Queue',
       className: 'artemisInternalQueue',
+      labelClassName: 'artemisInternalQueueLabel',
       address: address,
       queue: queue,
       routingType: routingType,
