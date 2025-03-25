@@ -51,41 +51,140 @@ svg.pf-v5-svg {
   fill: #c12766;
 }
 
-
 .pf-topology__node.artemisBroker.pf-m-info .pf-topology__node__background {
-  stroke: #801944;
+  stroke:  var(--artemis-diag-broker-border);
   stroke-width: 3;
-  fill: #c12766;
+  fill: var(--artemis-diag-broker-color);
+}
+
+.pf-topology__node__label.artemisBrokerLabel {
+  & > rect {
+    stroke: var(--artemis-diag-broker-border);
+  }
+
+  .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-broker-border);
+      fill:  var(--artemis-diag-broker-color);
+    }
+    & > text {
+      fill: var(--artemis-diag-broker-label-text);
+    }
+  }
 }
 
 .pf-topology__node.artemisBackupBroker.pf-m-info .pf-topology__node__background {
-  stroke: #82171b;
+  stroke:  var(--artemis-diag-backup-broker-border);
   stroke-width: 3;
-  fill: #cf242a;
+  fill: var(--artemis-diag-backup-broker-color);
+}
+
+.pf-topology__node__label.artemisBackupBrokerLabel {
+  & > rect {
+    stroke: var(--artemis-diag-backup-broker-border);
+  }
+
+  .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-backup-broker-border);
+      fill:  var(--artemis-diag-backup-broker-color);
+    }
+    & > text {
+      fill: var(--artemis-diag-backup-broker-label-text);
+    }
+  }
 }
 
 .pf-topology__node.artemisAddress.pf-m-info .pf-topology__node__background {
-  stroke:  #2b326e;
+  stroke:  var(--artemis-diag-address-border);
   stroke-width: 3;
-  fill: #3e489f;
+  fill: var(--artemis-diag-address-color);
+  & > rect {
+    stroke: var(--artemis-diag-address-border);
+    fill:  var(--artemis-diag-address-color);
+  }
+}
+
+.pf-topology__node__label.artemisAddressLabel {
+  & > rect {
+    stroke: var(--artemis-diag-address-border);
+  }
+
+  .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-address-border);
+      fill:  var(--artemis-diag-address-color);
+    }
+    & > text {
+      fill: var(--artemis-diag-address-label-text);
+    }
+  }
+
 }
 
 .pf-topology__node.artemisQueue.pf-m-info .pf-topology__node__background {
-  stroke:  #50621d;
+  stroke:  var(--artemis-diag-queue-border);
   stroke-width: 3;
-  fill: #78932c;
+  fill: var(--artemis-diag-queue-color);
+}
+
+.pf-topology__node__label.artemisQueueLabel {
+  & > rect {
+    stroke: var(--artemis-diag-queue-border);
+  }
+
+   .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-queue-border);
+      fill:  var(--artemis-diag-queue-color);
+    }
+    & > text {
+      fill:var(--artemis-diag-queue-label-text);
+    }
+  }
 }
 
 .pf-topology__node.artemisInternalAddress.pf-m-info .pf-topology__node__background {
-  stroke:  #2b326e;
+  stroke:  var(--artemis-diag-internal-address-border);
   stroke-width: 3;
-  fill: #fff;
+  fill:  var(--artemis-diag-internal-address-color);
+}
+
+.pf-topology__node__label.artemisInternalAddressLabel {
+  & > rect {
+    stroke: var(--artemis-diag-internal-address-border);
+  }
+
+  .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-internal-address-border);
+      fill:  var(--artemis-diag-internal-address-color);
+    }
+    & > text {
+      fill: var(--artemis-diag-internal-address-label-text);
+    }
+  }
 }
 
 .pf-topology__node.artemisInternalQueue.pf-m-info .pf-topology__node__background {
-  stroke:  #50621d;
+  stroke:  var(--artemis-diag-internal-queue-border);
   stroke-width: 3;
-  fill: #fff;
+  fill: var(--artemis-diag-internal-queue-color);
+}
+
+.pf-topology__node__label.artemisInternalQueueLabel {
+  & > rect {
+    stroke: var(--artemis-diag-internal-queue-border);
+  }
+  .pf-topology__node__label__badge {
+    & > rect {
+      stroke: var(--artemis-diag-internal-queue-border);
+      fill:  var(--artemis-diag-internal-queue-color);
+    }
+    & > text {
+      fill: var(--artemis-diag-internal-queue-label-text);
+    }
+  }
 }
 
 .pf-v5-c-button.pf-m-primary {
@@ -194,6 +293,24 @@ background-color: var(--artemis-global--primary-color--300);
   --artemis-global--primary-color--400: #c77e9c; 
   --artemis-global--primary-color-dark: #B21054;
   --artemis-global--primary-second-color-100: #2b326e;
+  --artemis-diag-broker-color: #c12766;
+  --artemis-diag-broker-border:#801944;
+  --artemis-diag-broker-label-text:#fff;
+  --artemis-diag-backup-broker-color: #c77e9c;
+  --artemis-diag-backup-broker-border:#c12766;
+  --artemis-diag-backup-broker-label-text:#fff;
+  --artemis-diag-address-color: #3e489f;
+  --artemis-diag-address-border:#2b326e;
+  --artemis-diag-address-label-text:#fff;
+  --artemis-diag-queue-color: #78932c;
+  --artemis-diag-queue-border:#50621d;
+  --artemis-diag-queue-label-text:#fff;
+  --artemis-diag-internal-address-color: #fff;
+  --artemis-diag-internal-address-border:#2b326e;
+  --artemis-diag-internal-address-label-text:#000;
+  --artemis-diag-internal-queue-color: #fff;
+  --artemis-diag-internal-queue-border:#50621d;
+  --artemis-diag-internal-queue-label-text:#000;
   --pf-v5-c-button--m-primary--BackgroundColor: var(--artemis-global--primary-color--200);
   --pf-v5-c-button--m-primary--BackgroundColor-hover: var(--artemis-global--primary-color--100);
   --pf-v5-global--active-color--100: var(--artemis-global--primary-color--200);
