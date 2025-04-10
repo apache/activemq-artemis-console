@@ -46,8 +46,8 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
     return filter;
   }
 
-  const messageView = (row: any) => { 
-    navigate.selectQueue(row.name, row.address, row.routingType); 
+  const messageView = (row: any) => {
+    navigate.selectQueue(row.name, row.address, row.routingType);
   }
 
   const allColumns: Column[] = [
@@ -62,6 +62,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
     { id: 'consumerCount', name: 'Consumer Count', visible: true, sortable: true, filterable: true, filter: getConsumersFilter, filterTab: 4},
     { id: 'messageCount', name: 'Message Count', visible: true, sortable: true, filterable: true, link: messageView},
     { id: 'paused', name: 'Paused', visible: false, sortable: true, filterable: true },
+    { id: 'persistedPause', name: 'Persisted Pause', visible: false, sortable: true, filterable: true },
     { id: 'temporary', name: 'Temporary', visible: false, sortable: true, filterable: true },
     { id: 'autoCreated', name: 'Auto Created', visible: false, sortable: true, filterable: true },
     { id: 'user', name: 'User', visible: false, sortable: true, filterable: true },
@@ -98,7 +99,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   const [address, setAddress] = useState("");
   const [routingType, setRoutingType] = useState("");
   const [queueToPurgeAddress, setQueueToPurgeAddress] = useState("");
-  const [queueToPurgeRoutingType, setQueueToPurgeRoutingType] = useState(""); 
+  const [queueToPurgeRoutingType, setQueueToPurgeRoutingType] = useState("");
   const [showAttributesDialog, setShowAttributesDialog] = useState(false);
   const [showOperationsDialog, setShowOperationsDialog] = useState(false);
   const routenavigate = useNavigate();
@@ -176,7 +177,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
         onClick: async () => {
           setAddress(row.name);
           const brokerObjectName = await artemisService.getBrokerObjectName();
-          const queueObjectName = createQueueObjectName(brokerObjectName,row.address, row.routingType,  row.name);          
+          const queueObjectName = createQueueObjectName(brokerObjectName,row.address, row.routingType,  row.name);
           findAndSelectNode(queueObjectName, row.name);
           setShowAttributesDialog(true);
         }
@@ -217,7 +218,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
             setRoutingType(row.routingType)
             setShowSendDialog(true);
           }
-  
+
         }
       );
     }
@@ -245,7 +246,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
           onClick: () => {
             navigate.selectQueue(row.name, row.address, row.routingType);
           }
-  
+
         }
       );
     }
