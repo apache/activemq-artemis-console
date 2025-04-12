@@ -34,6 +34,11 @@
   color: white;
 }
 
+.pf-v5-c-table__tr {
+  --pf-v5-c-table--cell--PaddingTop: 0px !important;
+  --pf-v5-c-table--cell--PaddingBottom: 0px !important;
+}
+
 .pf-v5-c-expandable-section__toggle {
   display: flex;
   padding: var(--pf-v5-c-expandable-section__toggle--PaddingTop) var(--pf-v5-c-expandable-section__toggle--PaddingRight) var(--pf-v5-c-expandable-section__toggle--PaddingBottom) var(--pf-v5-c-expandable-section__toggle--PaddingLeft);
