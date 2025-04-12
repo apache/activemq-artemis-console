@@ -3,7 +3,7 @@
 
 The [Apache ActiveMQ Artemis](https://activemq.apache.org/components/artemis/) Console Plugin is written using [Hawtio v4](https://github.com/hawtio/hawtio).
 The plugin is written in TypeScript. Since a Hawtio plugin is based on React and [Webpack Module Federation](https://module-federation.github.io/),
-this project uses Yarn v3 and [CRACO](https://craco.js.org/) as the build tools.
+this project uses Yarn v4 and [Webpack](https://webpack.js.org/) as the build tools.
 
 The WAR file created by this project is consumed by ActiveMQ Artemis but can be developed and run standalone.
 
@@ -41,12 +41,12 @@ you can enter the Artemis Jolokia endpoint details, for a default Artemis instal
 | Key    | Value            |
 |--------|------------------|
 | Name   | Artemis          |
-| Schema | HTTP             |
+| Scheme | HTTP             |
 | Host   | 127.0.0.1        |
 | Port   | 8161             |
 | Path   | /console/jolokia |
 
-You can test the connection and then once saved connect to Artemis, This will open a new tab in the browser.
+You can test the connection and then once saved connect to Artemis. This will open a new tab in the browser.
 
 Note: If you use localhost for the 'Host' setting and you find the connection doesn't work this could be beacuse localhost 
 is being translated to your local ipv6 address rather than the ipv4 address. If that occurs use the IP address instead.
@@ -57,21 +57,25 @@ You could run `mvn install` or `mvn jetty:run` every time to incrementally devel
 frontend project while checking its behaviour in the browser. But this is not suitable for running the fast development feedback cycle.
 
 As shown below, a faster development cycle can be achieved by directly running the `artemis-console-extension` 
-frontend project itself in development mode with `yarn start`,
+frontend project itself in development mode with `yarn start` or `npm run start`.
 
 ### Development
-Start the plugin project in development mode:
+Start the plugin project in development mode with yarn:
 
 ```console
 cd artemis-console-extension/artemis-extension
 yarn start
 ```
 
-Now you should be able to preview the plugins under development at <http://localhost:3001/console/>. However, since it still 
-hasn't been connected to a backend JVM, you can then connect to a running Artemis instance using the connect tab using for 
+or with npm:
+
+```console
+cd artemis-console-extension/artemis-extension
+npm run start
+```
+
+
+Now you should be able to preview the plugins under development at <http://localhost:8080/console/>. However, since it still
+hasn't been connected to a backend JVM, you can then connect to a running Artemis instance using the connect tab using for
 instance http://localhost:8161/console/jolokia.
 You can now edit the artemis console web application and see changes loaded live.
-
-
-
-
