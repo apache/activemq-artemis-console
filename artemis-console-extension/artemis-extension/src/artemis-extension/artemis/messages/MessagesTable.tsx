@@ -322,6 +322,11 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
                 onSearchTextChange('');
                 applyFilter();
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  applyFilter();
+                }
+              }}
             />
           </ToolbarItem>
           <ToolbarItem>
