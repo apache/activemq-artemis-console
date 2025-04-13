@@ -95,9 +95,9 @@ export type TableData = {
 export const ArtemisTable: React.FunctionComponent<TableData> = broker => {
 
 const operationOptions = [
-    { id: 'EQUALS', name: 'Equals' },
     { id: 'CONTAINS', name: 'Contains' },
     { id: 'NOT_CONTAINS', name: 'Does Not Contain' },
+    { id: 'EQUALS', name: 'Equals' },
     { id: 'GREATER_THAN', name: 'Greater Than' },
     { id: 'LESS_THAN', name: 'Less Than' }
   ]
@@ -117,7 +117,7 @@ const operationOptions = [
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const initialFilter: Filter = {
-    column: columns[0].id,
+    column: columns[1].id,
     operation: operationOptions[0].id,
     input: ''
   }
