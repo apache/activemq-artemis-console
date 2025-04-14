@@ -17,7 +17,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Column } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
-import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant } from '@patternfly/react-core';
+import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant, PageSection } from '@patternfly/react-core';
 import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table } from '@patternfly/react-table';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { createQueueObjectName } from '../util/jmx';
@@ -341,55 +341,57 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
-      <Table id='message-table' variant="compact" aria-label="Column Management Table">
-        <Thead>
-          <Tr >
-            <Th
-            select={{
-              onSelect: (_event, isSelecting) => selectAllMessages(isSelecting),
-              isSelected: areAllMessagesSelected
-            }}
-          />
-            {columns.map((column, id) => {
-              if (column.visible) {
-                return <Th key={id}>{column.name}</Th>
-              } else return ''
-            }
-            )}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {rows.map((row, rowIndex) => (
-            <Tr key={rowIndex}>
-              <>
-                <Td
-                  select={{
-                    rowIndex,
-                    onSelect: (_event, isSelecting) => onSelectMessage(Number(artemisService.getKeyByValue(row, "messageID")), rowIndex, isSelecting),
-                    isSelected: isMessageSelected(Number(artemisService.getKeyByValue(row, "messageID")))
-                  }}
-                />
-                {columns.map((column, id) => {
-                  if (column.visible) {
-                    const text = artemisService.getKeyByValue(row, column.id);
-                    if (column.link) {
-                      return <Td key={id}><Link to="" onClick={() => { if (column.link) { column.link(row) } }}>{text}</Link></Td>
-                    } else {
-                      return <Td key={id}>{text}</Td>
-                    }
-                  } else return ''
-                }
-                )}
-                <td>
-                  <ActionsColumn
-                    items={getRowActions(row, rowIndex)}
-                  />
-                </td>
-              </>
+      <PageSection hasOverflowScroll frameBorder='false' aria-label='artemis-data-table' style={{ paddingTop: '0', paddingBottom: '0', paddingLeft: '0', paddingRight: '0' }} >
+        <Table id='message-table' variant="compact" aria-label="Column Management Table">
+          <Thead>
+            <Tr >
+              <Th
+              select={{
+                onSelect: (_event, isSelecting) => selectAllMessages(isSelecting),
+                isSelected: areAllMessagesSelected
+              }}
+            />
+              {columns.map((column, id) => {
+                if (column.visible) {
+                  return <Th key={id}>{column.name}</Th>
+                } else return ''
+              }
+              )}
             </Tr>
-          ))}
-        </Tbody>
-      </Table>
+          </Thead>
+          <Tbody>
+            {rows.map((row, rowIndex) => (
+              <Tr key={rowIndex}>
+                <>
+                  <Td
+                    select={{
+                      rowIndex,
+                      onSelect: (_event, isSelecting) => onSelectMessage(Number(artemisService.getKeyByValue(row, "messageID")), rowIndex, isSelecting),
+                      isSelected: isMessageSelected(Number(artemisService.getKeyByValue(row, "messageID")))
+                    }}
+                  />
+                  {columns.map((column, id) => {
+                    if (column.visible) {
+                      const text = artemisService.getKeyByValue(row, column.id);
+                      if (column.link) {
+                        return <Td key={id}><Link to="" onClick={() => { if (column.link) { column.link(row) } }}>{text}</Link></Td>
+                      } else {
+                        return <Td key={id}>{text}</Td>
+                      }
+                    } else return ''
+                  }
+                  )}
+                  <Td isActionCell>
+                    <ActionsColumn
+                      items={getRowActions(row, rowIndex)}
+                    />
+                  </Td>
+                </>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </PageSection>
       <Pagination
         itemCount={resultsSize}
         page={page}

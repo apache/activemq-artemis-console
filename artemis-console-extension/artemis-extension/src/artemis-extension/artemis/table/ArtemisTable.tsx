@@ -37,7 +37,8 @@ import {
   SearchInput,
   MenuToggleElement,
   MenuToggle,
-  SelectList
+  SelectList,
+  PageSection
 } from '@patternfly/react-core';
 import SortAmountDownIcon from '@patternfly/react-icons/dist/esm/icons/sort-amount-down-icon';
 import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table } from '@patternfly/react-table';
@@ -435,45 +436,47 @@ const operationOptions = [
   return (
     <React.Fragment>
       {toolbarItems}
-      <Table variant="compact" aria-label="Data Table" id='data-table'>
-        <Thead>
-          <Tr >
-            {columns.map((column, id) => {
-              if (column.visible) {
-                return <Th key={id}>{column.name}</Th>
-              } else return ''
-            }
-            )}
-          </Tr>
-        </Thead>
-        <Tbody>
-          {rows.map((row, rowIndex) => (
-            <Tr key={rowIndex}>
-              <>
+         <PageSection hasOverflowScroll frameBorder='false' aria-label='artemis-data-table' style={{ paddingTop: '0', paddingBottom: '0', paddingLeft: '0', paddingRight: '0' }} >
+          <Table variant="compact" aria-label="Data Table" id='data-table'>
+            <Thead>
+              <Tr >
                 {columns.map((column, id) => {
                   if (column.visible) {
-                    var key = getKeyByValue(row, column.id)
-                    if(column.filter) {
-                      var filter = column.filter(row);
-                      return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
-                    } else if (column.link) {
-                      return <Td key={id}><Link to="" onClick={() => {if (column.link) {column.link(row)}}}>{key}</Link></Td>
-                    } else {
-                      return <Td key={id}>{key}</Td>
-                    }
+                    return <Th key={id}>{column.name}</Th>
                   } else return ''
                 }
                 )}
-                <td>
-                  <ActionsColumn
-                    items={getRowActions(row, rowIndex)}
-                  />
-                </td>
-              </>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {rows.map((row, rowIndex) => (
+                <Tr key={rowIndex}>
+                  <>
+                    {columns.map((column, id) => {
+                      if (column.visible) {
+                        var key = getKeyByValue(row, column.id)
+                        if(column.filter) {
+                          var filter = column.filter(row);
+                          return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
+                        } else if (column.link) {
+                          return <Td key={id}><Link to="" onClick={() => {if (column.link) {column.link(row)}}}>{key}</Link></Td>
+                        } else {
+                          return <Td key={id}>{key}</Td>
+                        }
+                      } else return ''
+                    }
+                    )}
+                    <Td isActionCell>
+                      <ActionsColumn
+                        items={getRowActions(row, rowIndex)}
+                      />
+                    </Td>
+                  </>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </PageSection>
       {renderPagination(PaginationVariant.bottom)}
       {renderModal()}
     </React.Fragment>
