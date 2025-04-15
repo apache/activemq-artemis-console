@@ -26,10 +26,12 @@ export const artemisJMXPluginName = 'artemisJMX'
 export const artemisJMXPluginTitle = 'Artemis JMX'
 export const artemisJMXPluginPath = '/treeartemisJMX'
 
-export const log = Logger.get(artemisPluginName) 
 export const domainNodeType = 'Camel Domain'
 export const contextsType = 'contexts'
 export const contextNodeType = 'context'
 
 export const endpointNodeType = 'endpointNode'
 
+const isProd = process.env.NODE_ENV === 'production'
+Logger.setLevel(isProd ? 'ERROR' : 'INFO')
+export const log = Logger.get(artemisPluginName)
