@@ -18,7 +18,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Column } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
 import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant } from '@patternfly/react-core';
-import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table } from '@patternfly/react-table';
+import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table, InnerScrollContainer } from '@patternfly/react-table';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { createQueueObjectName } from '../util/jmx';
 import { Link } from 'react-router-dom';
@@ -341,6 +341,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           </ToolbarItem>
         </ToolbarContent>
       </Toolbar>
+      <InnerScrollContainer>
       <Table id='message-table' variant="compact" aria-label="Column Management Table">
         <Thead>
           <Tr >
@@ -383,6 +384,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
                 <td>
                   <ActionsColumn
                     items={getRowActions(row, rowIndex)}
+                    popperProps={{ position: 'right', appendTo: () => (document.getElementById('root') as HTMLElement) }}
                   />
                 </td>
               </>
@@ -390,6 +392,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           ))}
         </Tbody>
       </Table>
+      </InnerScrollContainer>
       <Pagination
         itemCount={resultsSize}
         page={page}
