@@ -40,7 +40,7 @@ import {
   SelectList
 } from '@patternfly/react-core';
 import SortAmountDownIcon from '@patternfly/react-icons/dist/esm/icons/sort-amount-down-icon';
-import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table } from '@patternfly/react-table';
+import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table, InnerScrollContainer } from '@patternfly/react-table';
 import { artemisPreferencesService } from '../artemis-preferences-service';
 import {
   OptionsMenu,
@@ -435,6 +435,7 @@ const operationOptions = [
   return (
     <React.Fragment>
       {toolbarItems}
+      <InnerScrollContainer>
       <Table variant="compact" aria-label="Data Table" id='data-table'>
         <Thead>
           <Tr >
@@ -467,6 +468,7 @@ const operationOptions = [
                 <td>
                   <ActionsColumn
                     items={getRowActions(row, rowIndex)}
+                    popperProps={{ position: 'right', appendTo: () => (document.getElementById('root') as HTMLElement) }}
                   />
                 </td>
               </>
@@ -474,6 +476,7 @@ const operationOptions = [
           ))}
         </Tbody>
       </Table>
+      </InnerScrollContainer>
       {renderPagination(PaginationVariant.bottom)}
       {renderModal()}
     </React.Fragment>
