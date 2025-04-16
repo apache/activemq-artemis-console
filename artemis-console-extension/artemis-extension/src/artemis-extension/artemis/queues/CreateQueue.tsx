@@ -44,7 +44,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
         var queueConfiguration: any = {
             "name": queueName,
             "address": props.address,
-            "filter": filter,
+            "filter-string": filter,
             "routing-type": queueRoutingType.toUpperCase(),
             "durable": isDurableChecked,
             "max-consumers": maxConsumers,
