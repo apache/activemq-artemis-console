@@ -413,6 +413,11 @@ const operationOptions = [
                 onSearchTextChange('');
                 applyFilter();
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  applyFilter();
+                }
+              }}
             />
           </ToolbarItem>
           <ToolbarItem key="search-button">

@@ -578,6 +578,11 @@ export const BrokerDiagram: React.FunctionComponent = () => {
         onClear={() => {
           onSearchTextChange('');
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            setTopologyLoaded(false);
+          }
+        }}
       />
 
     </ToolbarItem>
