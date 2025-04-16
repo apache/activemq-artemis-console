@@ -40,7 +40,7 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
   }
 
     const allColumns: Column[] = [
-        {id: 'id', name: 'ID', visible: true, sortable: true, filterable: true},
+        {id: 'id', name: 'ID', visible: false, sortable: true, filterable: true},
         {id: 'name', name: 'Name', visible: true, sortable: true, filterable: true},
         {id: 'session', name: 'Session', visible: true, sortable: true, filterable: true, filter: getSessionFilter, filterTab: 2},
         {id: 'clientID', name: 'Client ID', visible: true, sortable: true, filterable: true},
