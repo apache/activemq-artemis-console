@@ -33,7 +33,7 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
     return filter;
   }
   const defaultColumns: Column[] = [
-    { id: 'connectionID', name: 'ID', visible: true, sortable: true, filterable: true },
+    { id: 'connectionID', name: 'ID', visible: false, sortable: true, filterable: true },
     { id: 'clientID', name: 'Client ID', visible: true, sortable: true, filterable: true },
     { id: 'users', name: 'Users', visible: true, sortable: true, filterable: true },
     { id: 'protocol', name: 'Protocol', visible: true, sortable: true, filterable: true },
