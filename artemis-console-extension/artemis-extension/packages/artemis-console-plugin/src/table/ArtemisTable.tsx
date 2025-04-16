@@ -445,16 +445,33 @@ const operationOptions = [
       {toolbarItems}
       <InnerScrollContainer>
       <Table variant="compact" aria-label="Data Table" id='data-table'>
-        <Thead>
-          <Tr >
-            {columns.map((column, id) => {
-              if (column.visible) {
-                return <Th key={id}>{column.name}</Th>
-              } else return ''
-            }
-            )}
-          </Tr>
-        </Thead>
+      <Thead>
+        <Tr>
+          {columns.map((column, id) => {
+            if (!column.visible) return null;
+
+            const isSorted = column.id === activeSort.id;
+            const direction = isSorted ? activeSort.order : undefined;
+            const nextDirection =
+              isSorted && activeSort.order === SortDirection.ASCENDING
+                ? SortDirection.DESCENDING
+                : SortDirection.ASCENDING;
+            return (
+              <Th
+                key={id}
+                sort={{
+                  sortBy: {
+                    index: id,
+                    direction: direction === SortDirection.ASCENDING ? 'asc' : 'desc'
+                  },
+                  onSort: () => updateActiveSort(column.id, nextDirection),
+                  columnIndex: id
+                }}
+              >{column.name}</Th>
+            );
+          })}
+        </Tr>
+      </Thead>
         <Tbody>
           {rows.map((row, rowIndex) => (
             <Tr key={rowIndex}>
