@@ -377,6 +377,7 @@ const operationOptions = [
               onSelect={onFilterColumnStatusSelect}
               selected={filterColumnStatusSelected}
               isOpen={filterColumnStatusIsExpanded}
+              onOpenChange={(isOpen: boolean) => setFilterColumnStatusIsExpanded(isOpen)}
             >
               <SelectList>
                 {columns.map((column, index) => (
@@ -396,6 +397,7 @@ const operationOptions = [
               onSelect={onFilterColumnOperationSelect}
               selected={filterColumnOperationSelected}
               isOpen={filterColumnOperationIsExpanded}
+              onOpenChange={(isOpen: boolean) => setFilterColumnOperationIsExpanded(isOpen)}
             >
               <SelectList>
                 {operationOptions.map((column, _index) => (
