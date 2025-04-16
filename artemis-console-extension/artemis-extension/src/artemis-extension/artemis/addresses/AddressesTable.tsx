@@ -40,7 +40,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
     return filter;
   }
   const allColumns: Column[] = [
-    { id: 'id', name: 'ID', visible: true, sortable: true, filterable: true },
+    { id: 'id', name: 'ID', visible: false, sortable: true, filterable: true },
     { id: 'name', name: 'Name', visible: true, sortable: true, filterable: true },
     { id: 'routingTypes', name: 'Routing Types', visible: true, sortable: true, filterable: true },
     { id: 'queueCount', name: 'Queue Count', visible: true, sortable: true, filterable: true, filter: getQueueFilter, filterTab: 6 }

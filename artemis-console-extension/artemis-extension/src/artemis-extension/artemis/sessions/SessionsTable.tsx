@@ -53,7 +53,7 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
 
 
   const allColumns: Column[] = [
-    { id: 'id', name: 'ID', visible: true, sortable: true, filterable: true },
+    { id: 'id', name: 'ID', visible: false, sortable: true, filterable: true },
     { id: 'connectionID', name: 'Connection ID', visible: true, sortable: true, filterable: true, filter: getConnectionFilter, filterTab: 1 },
     { id: 'consumerCount', name: 'Consumer Count', visible: true, sortable: true, filterable: true, filter: getConsumerFilter, filterTab: 4 },
     { id: 'producerCount', name: 'Producer Count', visible: true, sortable: true, filterable: true, filter: getProducerFilter, filterTab: 3 },
