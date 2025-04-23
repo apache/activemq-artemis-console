@@ -28,6 +28,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const outputPath = path.resolve(__dirname, 'build')
 
+const InvestigationPlugin = require("../plugins/investigation-webpack-plugin/plugin")
+
 module.exports = (webpackEnv, args) => {
   const isEnvDevelopment = args.mode === 'development';
   const isEnvProduction = args.mode === 'production';
@@ -109,9 +111,9 @@ module.exports = (webpackEnv, args) => {
         name: 'artemisPlugin',
         filename: 'remoteEntry.js',
         // The key in exposes corresponds to 'remote' passed to HawtioPlugin
-        exposes: {
-          './plugin': './src/artemis-extension',
-        },
+        // exposes: {
+        //   './plugin': 'artemis-console-plugin',
+        // },
         shared: {
           ...dependencies,
           'react': {
@@ -130,21 +132,22 @@ module.exports = (webpackEnv, args) => {
             singleton: true,
             requiredVersion: dependencies['@hawtio/react'],
           },
-        },
-      })
+        }
+      }),
+      new InvestigationPlugin({})
     ],
     entry: "./src/index.ts",
     output: {
       // Required for Module Federation
       publicPath: 'auto',
       path: outputPath,
-      // Add /* filename */ comments to generated require()s in the output.
+      // Add /* filename */ comments to generated require()s in the output. Use "verbose" for origin information.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
       // In development, it does not produce real files.
       filename: isEnvProduction
           ? 'static/js/[name].[contenthash:8].js'
-          : isEnvDevelopment && 'static/js/bundle.js',
+          : isEnvDevelopment && 'static/js/[name].bundle.js',
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
           ? 'static/js/[name].[contenthash:8].chunk.js'
@@ -217,10 +220,10 @@ module.exports = (webpackEnv, args) => {
       extensions: ['.ts', '.tsx', '.js', '.cjs', '.jsx'],
        // To resolve errors for @module-federation/utilities 2.x
       // https://github.com/module-federation/universe/issues/827
-      fallback: {
-        path: require.resolve('path-browserify'),
-        os: require.resolve('os-browserify'),
-      },
+      // fallback: {
+      //   path: require.resolve('path-browserify'),
+      //   os: require.resolve('os-browserify'),
+      // },
     },
     optimization: {
       minimize: isEnvProduction,
@@ -265,6 +268,64 @@ module.exports = (webpackEnv, args) => {
         // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
+      splitChunks: {
+        chunks: 'all',
+        automaticNameDelimiter: '-',
+        cacheGroups: {
+          react: {
+            test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+            name: 'react',
+            priority: 40,
+            enforce: true,
+          },
+          patternfly: {
+            test: /[\\/]node_modules[\\/]@patternfly[\\/]/,
+            // name: 'patternfly',
+            name(module, chunks, cacheGroupKey) {
+              const allModules = module
+                  .identifier()
+                  .split('/')
+                  .filter(Boolean);
+
+              // Try to extract package name from node_modules
+              const nodeModulesIndex = allModules.indexOf('node_modules');
+              if (nodeModulesIndex !== -1) {
+                const packageName = allModules[nodeModulesIndex + 1];
+                if (packageName && packageName.startsWith('@')) {
+                  // Scoped package (e.g., @patternfly/react-core)
+                  return `${cacheGroupKey}-${packageName.replace('@', '').replace(/\//g, '-')}`;
+                }
+                return `${cacheGroupKey}-${packageName}`;
+              }
+
+              // Default to the cache group key (e.g., react, patternfly, monaco)
+              return cacheGroupKey;
+            },
+            priority: 30,
+            enforce: true,
+          },
+          monaco: {
+            test: /[\\/]node_modules[\\/](monaco-editor)[\\/]/,
+            name: 'monaco',
+            priority: 25,
+            enforce: true,
+          },
+          hawtio: {
+            test: /[\\/]node_modules[\\/]@hawtio[\\/]/,
+            name: 'hawtio',
+            priority: 20,
+            enforce: true,
+          },
+          vendors: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'other',
+            priority: 10,
+            enforce: true,
+            reuseExistingChunk: true,
+          },
+        },
+      },
+      runtimeChunk: 'single',
     },
     devServer: {
       static: [
@@ -312,6 +373,10 @@ module.exports = (webpackEnv, args) => {
           devServer.app.get('/console/auth/logout', (_, res) => {
             login = false
             res.redirect('/console/login')
+          })
+          devServer.app.get('/console/auth/config/session-timeout', (_, res) => {
+            res.type('application/json')
+            res.send('{}')
           })
           devServer.app.get('/console/proxy/enabled', (_, res) => res.send(String(proxyEnabled)))
           devServer.app.get('/console/plugin', (_, res) => res.send(JSON.stringify(plugin)))

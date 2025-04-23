@@ -16,33 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-{
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "compilerOptions": {
-    /* Language and Environment */
-    "target": "esnext",
-    "lib": [ "dom", "es2023" ],
-    "jsx": "react-jsx",
 
-    /* Modules */
-    "module": "esnext",
-    "moduleResolution": "bundler",
+import { defineConfig } from 'tsup'
 
-    /* JavaScript Support */
-    "allowJs": true,
-
-    /* Emit */
-    "declaration": true,
-    "declarationDir": "dist/dts",
-    "emitDeclarationOnly": true,
-    "noEmit": true,
-
-    /* Interop Constraints */
-    "isolatedModules": true,
-    "esModuleInterop": true,
-
-    /* Type Checking */
-    "strict": true,
-  },
-  "include": [ "src" ]
-}
+export default defineConfig({
+  entry: ["src/index.ts"],
+  format: "cjs",
+  target: "esnext",
+  sourcemap: true,
+  dts: true,
+  loader: {
+    ".md": "text"
+  }
+})

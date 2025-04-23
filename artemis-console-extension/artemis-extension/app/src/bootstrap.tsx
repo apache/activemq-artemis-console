@@ -17,7 +17,8 @@
 import { hawtio, Hawtio,  connect, jmx, keycloak, oidc, rbac, runtime, configManager } from '@hawtio/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { artemis } from './artemis-extension/artemis';
+import { artemis } from 'artemis-console-plugin';
+import 'artemis-console-plugin/styles';
 
 // Register builtin plugins
 
