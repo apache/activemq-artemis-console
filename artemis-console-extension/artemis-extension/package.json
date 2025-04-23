@@ -86,7 +86,8 @@
     "path-to-regexp": "0.1.12",
     "jolokia.js": "2.2.4",
     "@jolokia.js/simple": "2.2.4",
-    "serialize-javascript": "6.0.2"
+    "serialize-javascript": "6.0.2",
+    "caniuse-lite": "1.0.30001715"
   },
   "eslintConfig": {
     "extends": [
