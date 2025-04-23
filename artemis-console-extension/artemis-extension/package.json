@@ -1,15 +1,14 @@
 {
-  "name": "artemis-console",
-  "version": "1.1.0",
-  "description": "Artemis Console",
-  "main": "./src/main/webapp/app/artemis-console.js",
+  "name": "artemis-console-monorepo",
+  "version": "0",
+  "description": "Artemis Console Monorepo",
   "license": "Apache-2.0",
   "private": true,
+  "workspaces": [
+    "packages/*",
+    "app"
+  ],
   "scripts": {
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production && yarn replace-version",
-    "test": "craco test",
-    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\"",
     "license": "yarn licenses generate-disclaimer -R > ../../artemis-console-distribution/src/main/resources/licenses/licenses/NPMLicenses.txt"
   },
   "dependencies": {
@@ -92,5 +91,5 @@
       "last 1 safari version"
     ]
   },
-  "packageManager": "yarn@4.9.0"
+  "packageManager": "yarn@4.9.1"
 }

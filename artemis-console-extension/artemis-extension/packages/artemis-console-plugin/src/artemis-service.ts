@@ -154,7 +154,7 @@ class ArtemisService {
     private async initBrokerObjectName(): Promise<string> {
         const config = await configManager.getArtemisconfig();
         var search = await jolokiaService.search(config.jmx.domain + ":broker=*");
-        return search[0] ? search[0] : "";
+        return search && search[0] ? search[0] : "";
     }
 
 

@@ -18,8 +18,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Column } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
 import { Toolbar, ToolbarContent, ToolbarItem, Text, SearchInput, Button, PaginationVariant, Pagination, DataList, DataListCell, DataListCheck, DataListItem, DataListItemCells, DataListItemRow, Modal, TextContent, Icon, ModalVariant } from '@patternfly/react-core';
-import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table, InnerScrollContainer } from '@patternfly/react-table';
-import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
+import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table } from '@patternfly/react-table';
+import { ExclamationCircleIcon } from '@patternfly/react-icons';
 import { createQueueObjectName } from '../util/jmx';
 import { Link } from 'react-router-dom';
 import { eventService } from '@hawtio/react';

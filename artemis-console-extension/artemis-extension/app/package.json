@@ -1,29 +1,28 @@
 {
-  "name": "artemis-console",
+  "name": "artemis-console-app",
   "version": "1.1.0",
   "description": "Artemis Console",
-  "main": "./src/main/webapp/app/artemis-console.js",
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
     "start": "webpack serve --mode development",
     "build": "webpack --mode production && yarn replace-version",
-    "test": "craco test",
-    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\"",
-    "license": "yarn licenses generate-disclaimer -R > ../../artemis-console-distribution/src/main/resources/licenses/licenses/NPMLicenses.txt"
+    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\""
   },
   "dependencies": {
-    "@hawtio/react": "1.9.0",
+    "@hawtio/react": "1.9.2",
     "@patternfly/react-charts": "~7.4.9",
     "@patternfly/react-core": "~5.4.14",
-    "@patternfly/react-icons": "~5.3.2",
+    "@patternfly/react-icons": "~5.4.2",
+    "@patternfly/react-styles": "~5.4.1",
     "@patternfly/react-table": "~5.4.16",
-    "@patternfly/react-topology": "~5.4.1",
+    "@patternfly/react-tokens": "~5.4.1",
+    "@patternfly/react-topology": "~5.3.0",
+    "artemis-console-plugin": "1.1.0",
     "d3": "^7.8.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.27.0",
-    "react-scripts": "^5.0.1"
+    "react-router-dom": "^6.30.0"
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
@@ -44,30 +43,8 @@
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "4.13.1",
     "webpack-manifest-plugin": "^5.0.0"
-  },
-  "resolutions": {
-    "axios": "1.8.2",
-    "@typescript-eslint/eslint-plugin": "6.9.0",
-    "@typescript-eslint/parser": "6.9.0",
-    "d3-color": "3.1.0",
-    "nth-check": "2.0.1",
-    "tough-cookie": "4.1.3",
-    "semver": "7.5.2",
-    "word-wrap": "1.2.4",
-    "postcss": "8.4.31",
-    "ws": "8.18.0",
-    "braces": "3.0.3",
-    "express": "4.21.0",
-    "webpack": "5.95.0",
-    "cookie": "0.7.0",
-    "micromatch": "4.0.8",
-    "rollup": "2.79.2",
-    "http-proxy-middleware": "2.0.7",
-    "cross-spawn": "7.0.5",
-    "nanoid": "3.3.8",
-    "path-to-regexp": "0.1.12",
-    "serialize-javascript": "6.0.2"
   },
   "eslintConfig": {
     "extends": [
@@ -86,6 +63,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@4.5.0"
+  }
 }
