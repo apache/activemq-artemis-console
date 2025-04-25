@@ -239,6 +239,7 @@ const operationOptions = [
   }
 
   const applyFilter = () => {
+    setPage(1);
     const operation = operationOptions.find(operation => operation.name === filterColumnOperationSelected);
     const column = columns.find(column => column.name === filterColumnStatusSelected);
     if (operation && column) {
