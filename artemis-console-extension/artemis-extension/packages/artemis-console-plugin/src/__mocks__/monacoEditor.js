@@ -14,4 +14,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-declare module "*.md"
+module.exports = {
+  loader: {
+    config: _config => {},
+  },
+}
