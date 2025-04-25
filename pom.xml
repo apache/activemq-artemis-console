@@ -194,7 +194,8 @@
                     <artifactId>apache-rat-plugin</artifactId>
                     <configuration>
                         <excludes>
-                            <exclude>**/artemis-extension/src/artemis-extension/artemis/help.md</exclude>
+                            <exclude>**/artemis-extension/packages/artemis-console-plugin/src/help.md</exclude>
+                            <exclude>**/artemis-extension/DEV.md</exclude>
                             <exclude>artemis-console-extension/artemis-extension/package.json</exclude>
                             <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
                             <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
@@ -216,7 +217,8 @@
                             <!-- Yarn -->
                             <exclude>**/.yarn/**</exclude>
                             <exclude>**/yarn.lock</exclude>
-                            <exclude>**/artemis-extension/build/**</exclude>
+                            <exclude>**/artemis-extension/app/build/**</exclude>
+                            <exclude>**/artemis-extension/packages/artemis-console-plugin/dist/**</exclude>
                             <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
                         </excludes>
                     </configuration>
