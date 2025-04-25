@@ -122,6 +122,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   };
 
   const applyFilter = () => {
+    setPage(1);
     setFilter(inputValue);
   };
 
