@@ -87,14 +87,21 @@
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>${basedir}/${extension.path}/build</directory>
+                            <directory>${basedir}/${extension.path}/app/build</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>
                             <followSymlinks>false</followSymlinks>
                         </fileset>
                         <fileset>
-                            <directory>${basedir}/artemis-extension/node_modules</directory>
+                            <directory>${basedir}/${extension.path}/packages/artemis-console-plugin/dist</directory>
+                            <includes>
+                                <include>**/*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                            <directory>${basedir}/${extension.path}/node_modules</directory>
                             <includes>
                                 <include>**/*</include>
                             </includes>

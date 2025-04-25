@@ -79,7 +79,7 @@
                         <!-- Add the plugin build to web resources -->
                         <resource>
                             <filtering>true</filtering>
-                            <directory>../artemis-console-extension/artemis-extension/build</directory>
+                            <directory>../artemis-console-extension/artemis-extension/app/build</directory>
                             <includes>
                                 <include>**/*.*</include>
                             </includes>
