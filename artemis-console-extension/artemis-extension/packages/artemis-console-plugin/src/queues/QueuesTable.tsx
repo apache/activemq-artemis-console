@@ -52,7 +52,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
 
   const allColumns: Column[] = [
     { id: 'id', name: 'ID', visible: false, sortable: true, filterable: true },
-    { id: 'name', name: 'Name', visible: true, sortable: true, filterable: true },
+    { id: 'name', name: 'Name', visible: true, sortable: true, filterable: true, link: messageView },
     { id: 'address', name: 'Address', visible: true, sortable: true, filterable: true, filter: getAddressFilter, filterTab: 5},
     { id: 'routingType', name: 'Routing Type', visible: true, sortable: true, filterable: true },
     { id: 'filter', name: 'Filter', visible: true, sortable: true, filterable: true },
