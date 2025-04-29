@@ -19,7 +19,7 @@ To make it easier to maintain consistent dependencies between Hawtio (which can 
 
 ## Javascript tooling
 
-It's worth following some guidelines in the fascinating world of JavaScript build tools. Personally I find this distinction very important:
+It's worth following some guidelines in the fascinating world of JavaScript build tools. This distinction is very important:
 
 * _libraries_ - packages published to NPM registry and consumable by other packages/applications
 * _applications_ - final deployables that use other packages which are not consumed further
@@ -51,7 +51,7 @@ $ npm list -g
 2. `corepack` is documented [at Yarn page][13] and [at Node.js page][14] and is (as of April 2025) the recommended way to deal with Node package managers as Yarn.
 3. Main purpose of `corepack` is to find nearest `package.json` file and its `packageManager` field and delegate the package management to project-specific package manager.
 4. `corepack use yarn@latest` is the way to add `packageManager` field to your `package.json` and later, `yarn set version x.y.z` can be used to update this version
-5. I found it really handy, clear and transparent to use this additional option:
+5. This additional option is really handy, clear and transparent:
 ```console
 $ yarn set version 4.9.1 --yarn-path
 ➤ YN0000: Downloading https://repo.yarnpkg.com/4.9.1/packages/yarnpkg-cli/bin/yarn.js
