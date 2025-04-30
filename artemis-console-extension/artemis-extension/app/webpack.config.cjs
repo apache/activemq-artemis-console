@@ -101,7 +101,7 @@ module.exports = (webpackEnv, args) => {
             context: 'public/',
             globOptions: {
               gitignore: true,
-              ignore: ['**/index.html', '**/favicon.ico'],
+              ignore: ['**/index.html'],
             },
           },
         ],
