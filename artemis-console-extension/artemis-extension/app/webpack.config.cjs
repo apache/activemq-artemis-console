@@ -60,7 +60,7 @@ module.exports = (webpackEnv, args) => {
         }
       } : undefined)),
       new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
-        PUBLIC_URL: '/console'
+        PUBLIC_URL: '/hawtio'
       }),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
@@ -77,7 +77,7 @@ module.exports = (webpackEnv, args) => {
       //   can be used to reconstruct the HTML if necessary
       new WebpackManifestPlugin({
         fileName: 'asset-manifest.json',
-        publicPath: '/console',
+        publicPath: '/hawtio',
         generate: (seed, files, entrypoints) => {
           const manifestFiles = files.reduce((manifest, file) => {
             manifest[file.name] = file.path;
@@ -331,14 +331,14 @@ module.exports = (webpackEnv, args) => {
       static: [
         {
           directory: path.resolve(__dirname, "build"),
-          publicPath: "/console",
+          publicPath: "/hawtio",
         }
       ],
       historyApiFallback: {
-        index: "/console/"
+        index: "/hawtio/"
       },
       devMiddleware: {
-        publicPath: "/console",
+        publicPath: "/hawtio",
         mimeTypes: {
           mjs: "application/javascript"
         },
@@ -352,9 +352,9 @@ module.exports = (webpackEnv, args) => {
             }
             next()
           })
-          // Redirect / or /console to /console/
-          devServer.app.get('/', (_, res) => res.redirect('/console/'))
-          devServer.app.get('/console$', (_, res) => res.redirect('/console/'))
+          // Redirect / or /hawtio to /hawtio/
+          devServer.app.get('/', (_, res) => res.redirect('/hawtio/'))
+          devServer.app.get('/hawtio$', (_, res) => res.redirect('/hawtio/'))
 
           const username = 'developer'
           const proxyEnabled = true
@@ -363,30 +363,30 @@ module.exports = (webpackEnv, args) => {
 
           // Hawtio backend API mock
           let login = true
-          devServer.app.get('/console/user', (_, res) => {
+          devServer.app.get('/hawtio/user', (_, res) => {
             login ? res.send(`"${username}"`) : res.sendStatus(403)
           })
-          devServer.app.post('/console/auth/login', (_, res) => {
+          devServer.app.post('/hawtio/auth/login', (_, res) => {
             login = true
             res.send(String(login))
           })
-          devServer.app.get('/console/auth/logout', (_, res) => {
+          devServer.app.get('/hawtio/auth/logout', (_, res) => {
             login = false
-            res.redirect('/console/login')
+            res.redirect('/hawtio/login')
           })
-          devServer.app.get('/console/auth/config/session-timeout', (_, res) => {
+          devServer.app.get('/hawtio/auth/config/session-timeout', (_, res) => {
             res.type('application/json')
             res.send('{}')
           })
-          devServer.app.get('/console/proxy/enabled', (_, res) => res.send(String(proxyEnabled)))
-          devServer.app.get('/console/plugin', (_, res) => res.send(JSON.stringify(plugin)))
+          devServer.app.get('/hawtio/proxy/enabled', (_, res) => res.send(String(proxyEnabled)))
+          devServer.app.get('/hawtio/plugin', (_, res) => res.send(JSON.stringify(plugin)))
 
           // hawtconfig.json mock
-          devServer.app.get('/console/hawtconfig.json', (_, res) => res.send(JSON.stringify(hawtconfig)))
+          devServer.app.get('/hawtio/hawtconfig.json', (_, res) => res.send(JSON.stringify(hawtconfig)))
 
           middlewares.push({
             name: 'hawtio-backend',
-            path: '/console/proxy',
+            path: '/hawtio/proxy',
             middleware: hawtioBackend({
               // Uncomment it if you want to see debug log for Hawtio backend
               logLevel: 'debug',
