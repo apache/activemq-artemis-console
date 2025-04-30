@@ -40,7 +40,8 @@
             <!-- Yarn and NPM build dir -->
             <exclude>artemis-console-extension/artemis-extension/node/**</exclude>
             <exclude>artemis-console-extension/artemis-extension/node_modules/**</exclude>
-            <exclude>artemis-console-extension/artemis-extension/build/**</exclude>
+            <exclude>artemis-console-extension/artemis-extension/app/build/**</exclude>
+            <exclude>artemis-console-extension/artemis-extension/packages/artemis-console-plugin/dist/**</exclude>
             <exclude>artemis-console-extension/artemis-extension/.yarn/**</exclude>
 
             <!-- in case some of the build generates data, this needs to be ignored -->
