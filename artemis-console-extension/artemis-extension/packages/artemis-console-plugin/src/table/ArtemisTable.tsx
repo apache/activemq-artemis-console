@@ -323,7 +323,7 @@ const operationOptions = [
               id="options-menu-multiple-options-example"
               menuItems={[
                 <OptionsMenuItemGroup key="first group" aria-label="Sort column">
-                  {Object.values(broker.allColumns).map((column, columnIndex) => (
+                  {Object.values(broker.allColumns).filter((element) => element.visible).map((column, columnIndex) => (
                     <OptionsMenuItem
                       key={column.id}
                       isSelected={activeSort.id === column.id}
@@ -381,7 +381,7 @@ const operationOptions = [
               onOpenChange={(isOpen: boolean) => setFilterColumnStatusIsExpanded(isOpen)}
             >
               <SelectList>
-                {columns.map((column, index) => (
+                {columns.filter((element) => element.visible).map((column, index) => (
                   <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
                 ))}
               </SelectList>
