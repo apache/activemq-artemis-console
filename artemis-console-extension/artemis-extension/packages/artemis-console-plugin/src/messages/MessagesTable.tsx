@@ -82,9 +82,17 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
 
   useEffect(() => {
     const listData = async () => {
+      listMessages().then((data) => {
+        setRows(data.data);
+        setresultsSize(data.count);
+      }).catch((error: string) => {
+        eventService.notify({
+          type: 'warning',
+          message: error,
+        })
+      })
       var data = await listMessages();
-      setRows(data.data);
-      setresultsSize(data.count);
+      
     }
     const listMessages = async (): Promise<any> => {
       const brokerObjectname = await artemisService.getBrokerObjectName();
