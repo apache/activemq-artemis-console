@@ -339,7 +339,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             />
           </ToolbarItem>
           <ToolbarItem>
-            <Button onClick={applyFilter}>Search</Button>
+            <Button onClick={applyFilter}>Filter</Button>
           </ToolbarItem>
           <ToolbarItem>
             <Button onClick={() => setShowDeleteMessagesModal(true)}>Delete</Button>
