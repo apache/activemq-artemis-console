@@ -20,7 +20,6 @@ const { hawtioBackend } = require('@hawtio/backend-middleware')
 const { dependencies } = require('./package.json')
 const path = require("path")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const TerserPlugin = require("terser-webpack-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
@@ -59,9 +58,6 @@ module.exports = (webpackEnv, args) => {
           minifyURLs: true
         }
       } : undefined)),
-      new InterpolateHtmlPlugin(HtmlWebpackPlugin, {
-        PUBLIC_URL: '/hawtio'
-      }),
       new MiniCssExtractPlugin({
         // Options similar to the same options in webpackOptions.output
         // both options are optional
