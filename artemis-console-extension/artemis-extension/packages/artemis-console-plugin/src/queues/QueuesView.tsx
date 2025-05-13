@@ -19,8 +19,9 @@ import { Navigate } from '../views/ArtemisTabView';
 import { QueuesTable } from './QueuesTable';
 import { MessagesTable } from '../messages/MessagesTable';
 import { Filter } from '../table/ArtemisTable';
-import { Title } from '@patternfly/react-core';
+import { Button, Modal, ModalVariant, TextContent, Title, Text, Icon, TextVariants, TextList, TextListItem, TextListItemVariants, TextListVariants } from '@patternfly/react-core';
 import { Message, MessageView } from '../messages/MessageView';
+import { HelpIcon } from '@patternfly/react-icons';
 
 export type QueueNavigate = {
   search: Function
@@ -63,6 +64,7 @@ export const QueuesView: React.FunctionComponent<Navigate> = navigate => {
   const [ activeTabKey, setActiveTabKey ] = useState<string | number>(0);
   const [ currentQueue, setCurrentQueue ] = useState<Queue>({name: "", address: "", routingType: "ANYCAST"});
   const [ currentMessage, setCurrentMessage ] = useState<Message>(initialMessage);
+  const [ showHelpModal, setShowHelpModal ] = useState(false);
 
   const selectQueue = (queue: string, address: string, routingType: string) => {
     setCurrentQueue({
@@ -89,7 +91,7 @@ export const QueuesView: React.FunctionComponent<Navigate> = navigate => {
         }
         {activeTabKey === 1 &&
         <>
-        <Title headingLevel='h2'>Browsing {currentQueue.name}</Title>
+        <Title headingLevel='h2'>Browsing {currentQueue.name + ' '} <Icon status="info"><HelpIcon  onClick={() => setShowHelpModal(true)}/></Icon></Title>
         <MessagesTable address={currentQueue.address} queue={currentQueue.name} routingType={currentQueue.routingType} selectMessage={selectMessage} back={back}/>
         </>
         }
@@ -99,6 +101,62 @@ export const QueuesView: React.FunctionComponent<Navigate> = navigate => {
         <MessageView currentMessage={currentMessage} back={back}/>
         </>
         }
+        <Modal aria-label='copy-message-modal'
+                variant={ModalVariant.medium}
+                isOpen={showHelpModal}
+                actions={[
+                  <Button key="cancel" variant="secondary" onClick={() => setShowHelpModal(false)}>
+                    Close
+                  </Button>
+                ]}>
+          <TextContent>
+            <Text component={TextVariants.h1}>Using Filter Expressions</Text>
+            <Text component={TextVariants.h2}>Apache ActiveMQ Artemis provides a powerful filter language based on a subset of the SQL 92 expression syntax.</Text>
+            <Text>It is the same as the syntax used for JMS & Jakarta Messaging selectors. 
+              For documentation on JMS selector syntax please the JavaDoc for javax.jms.Message or jakarta.jms.Message</Text>
+              <Text>A Filter will search for messages that have a matching header.</Text>
+              <Text component={TextVariants.h3}>Filter Examples</Text>
+              <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>header = 'value'</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has the string value <b>value</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header = 1</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has the int, short, long or double value <b>1</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header {'>'} 1</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has an int, short, long or double value greater than <b>1</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header {'<>'} 'value'</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> exists and does not equal <b>value</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header in ('value1', 'value2')</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> equals either <b>value1</b> or <b>value2</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header1 = 'value1' AND header2 = 'value2'</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header1</b> has the value <b>value1</b> and the message header <b>header2</b> has the value <b>value2</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header LIKE 'value%'</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has the pattern matching value <b>value%</b> such as <b>value1</b>, <b>value2345</b> etc</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header LIKE 'value_'</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has the pattern matching value <b>value_</b> such as <b>value1</b> but not <b>value2345</b></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>header is null</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}> This will return any message where the message header <b>header</b> has a null value or does not exist</TextListItem>
+              </TextList>
+              <Text> The following pre defined identifiers can also be used to filter messages </Text>
+              <TextList component={TextListVariants.dl}>
+                <TextListItem component={TextListItemVariants.dt}>AMQUserID</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>The ID set by the user when the message is sent. This is analogous to the <b>JMSMessageID</b> for JMS-based clients.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQAddress</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>The group ID used when sending the message.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQPriority</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>To refer to the priority of a message. Message priorities are integers with valid values from 0 - 9. 0 is the lowest priority and 9 is the highest. e.g. <i>AMQPriority = 3 AND animal = 'aardvark'</i></TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQExpiration</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>To refer to the expiration time of a message. The value is a long integer.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQDurable</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>To refer to whether a message is durable or not. The value is a string with valid values: <b>DURABLE</b> or <b>NON_DURABLE</b>.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQTimestamp</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>The timestamp of when the message was created. The value is a long integer.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQSize</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>The size of a message in bytes. The value is an integer.</TextListItem>
+                <TextListItem component={TextListItemVariants.dt}>AMQGroupID</TextListItem>
+                <TextListItem component={TextListItemVariants.dd}>The group ID used when sending the message.</TextListItem>
+              </TextList>
+          </TextContent>
+          </Modal>
     </div>
   )
 }
