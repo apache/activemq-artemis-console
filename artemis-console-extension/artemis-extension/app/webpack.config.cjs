@@ -137,6 +137,7 @@ module.exports = (webpackEnv, args) => {
       // Required for Module Federation
       publicPath: 'auto',
       path: outputPath,
+      clean: true,
       // Add /* filename */ comments to generated require()s in the output. Use "verbose" for origin information.
       pathinfo: isEnvDevelopment,
       // There will be one main bundle, and one file per asynchronous chunk.
@@ -186,12 +187,7 @@ module.exports = (webpackEnv, args) => {
                 },
               }
             }
-          ],
-          // Don't consider CSS imports dead code even if the
-          // containing package claims to have no side effects.
-          // Remove this when webpack adds a warning or an error for this.
-          // See https://github.com/webpack/webpack/issues/6571
-          sideEffects: true
+          ]
         },
         {
           test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -227,41 +223,15 @@ module.exports = (webpackEnv, args) => {
         // This is only used in production mode
         new TerserPlugin({
           terserOptions: {
-            parse: {
-              // We want terser to parse ecma 8 code. However, we don't want it
-              // to apply any minification steps that turns valid ecma 5 code
-              // into invalid ecma 5 code. This is why the 'compress' and 'output'
-              // sections only apply transformations that are ecma 5 safe
-              // https://github.com/facebook/create-react-app/pull/4234
-              ecma: 8,
-            },
-            compress: {
-              ecma: 5,
-              warnings: false,
-              // Disabled because of an issue with Uglify breaking seemingly valid code:
-              // https://github.com/facebook/create-react-app/issues/2376
-              // Pending further investigation:
-              // https://github.com/mishoo/UglifyJS2/issues/2011
-              comparisons: false,
-              // Disabled because of an issue with Terser breaking valid code:
-              // https://github.com/facebook/create-react-app/issues/5250
-              // Pending further investigation:
-              // https://github.com/terser-js/terser/issues/120
-              inline: 2,
-            },
-            mangle: {
-              safari10: true,
-            },
+            ecma: 2023,
+            compress: true,
+            mangle: true,
             output: {
-              ecma: 5,
-              comments: false,
-              // Turned on because emoji and regex is not minified properly using default
-              // https://github.com/facebook/create-react-app/issues/2488
-              ascii_only: true,
+              ecma: 2023,
+              comments: false
             },
           },
         }),
-        // This is only used in production mode
         new CssMinimizerPlugin(),
       ],
       splitChunks: {
