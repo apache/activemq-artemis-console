@@ -39,6 +39,10 @@ module.exports = (webpackEnv, args) => {
     stats: "errors-warnings",
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     devtool: isEnvProduction ? false : 'cheap-module-source-map',
+    performance: {
+      maxAssetSize: 15727640, // 15MiB
+      maxEntrypointSize: 31457280, // 30MiB
+    },
     plugins: [
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(Object.assign({}, {
