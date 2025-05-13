@@ -196,13 +196,10 @@
                         <excludes>
                             <exclude>**/artemis-extension/packages/artemis-console-plugin/src/help.md</exclude>
                             <exclude>**/artemis-extension/DEV.md</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/package.json</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/tsconfig.json</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
                             <exclude>README.md</exclude>
                             <exclude>Releasing.md</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/public/hawtconfig.json</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/public/artemisconfig.json</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/app/public/hawtconfig.json</exclude>
+                            <exclude>artemis-console-extension/artemis-extension/app/public/artemisconfig.json</exclude>
                             <exclude>.github/**</exclude>
 
                             <!-- Licenses -->
@@ -217,9 +214,9 @@
                             <!-- Yarn -->
                             <exclude>**/.yarn/**</exclude>
                             <exclude>**/yarn.lock</exclude>
+                            <exclude>**/tsconfig.json</exclude>
                             <exclude>**/artemis-extension/app/build/**</exclude>
                             <exclude>**/artemis-extension/packages/artemis-console-plugin/dist/**</exclude>
-                            <exclude>artemis-console-extension/artemis-extension/yarn.lock</exclude>
                         </excludes>
                     </configuration>
                 </plugin>
