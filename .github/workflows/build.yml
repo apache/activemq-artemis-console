@@ -19,6 +19,7 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'temurin'
+          cache: 'maven'
 
       - name: Build
         run: mvn -B clean verify -Prelease
