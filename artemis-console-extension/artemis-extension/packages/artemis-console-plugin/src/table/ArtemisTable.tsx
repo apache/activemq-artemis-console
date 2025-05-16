@@ -101,11 +101,17 @@ const operationOptions = [
     { id: 'GREATER_THAN', name: 'Greater Than' },
     { id: 'LESS_THAN', name: 'Less Than' }
   ]
-
-  const initialActiveSort: ActiveSort = {
-    id: broker.allColumns[0].id,
-    order: SortDirection.ASCENDING
+  
+  const initialActiveSort = () => {
+    if (broker.storageColumnLocation && sessionStorage.getItem(broker.storageColumnLocation + '.activesort')) {
+      return JSON.parse(sessionStorage.getItem(broker.storageColumnLocation + '.activesort') as string);
+    }
+    return {
+      id: broker.allColumns[0].id,
+      order: SortDirection.ASCENDING
+    };
   }
+
   const [rows, setRows] = useState([])
   const [resultsSize, setresultsSize] = useState(0)
   const [columnsLoaded, setColumnsLoaded] = useState(false);
@@ -116,11 +122,17 @@ const operationOptions = [
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
-  const initialFilter: Filter = {
-    column: columns[1].id,
-    operation: operationOptions[0].id,
-    input: ''
+  const initialFilter = () =>  {
+    if (broker.storageColumnLocation && sessionStorage.getItem(broker.storageColumnLocation + '.filter')) {
+      return JSON.parse(sessionStorage.getItem(broker.storageColumnLocation + '.filter') as string);
+    }
+    return { 
+      column: columns[1].id,
+      operation: operationOptions[0].id,
+      input: ''
+    }
   }
+
   const [filter, setFilter] = useState(broker.filter !== undefined? broker.filter:initialFilter);
 
   const [filterColumnStatusSelected, setFilterColumnStatusSelected] = useState(columns.find(column => filter.column === column.id)?.name);
@@ -194,6 +206,7 @@ const operationOptions = [
       order: order
     };
     setActiveSort(updatedActiveSort)
+    sessionStorage.setItem(broker.storageColumnLocation + ".activesort",JSON.stringify(updatedActiveSort));
   }
 
   const onFilterColumnStatusSelect = (
@@ -243,7 +256,11 @@ const operationOptions = [
     const operation = operationOptions.find(operation => operation.name === filterColumnOperationSelected);
     const column = columns.find(column => column.name === filterColumnStatusSelected);
     if (operation && column) {
-      setFilter({ column: column.id, operation: operation.id, input: inputValue });
+      var filter = { column: column.id, operation: operation.id, input: inputValue };
+      setFilter(filter);
+      if (broker.storageColumnLocation) {
+        sessionStorage.setItem(broker.storageColumnLocation + '.filter', JSON.stringify(filter));
+      }
     }
   }
 
