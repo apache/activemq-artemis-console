@@ -17,8 +17,9 @@
     "./dist/index.css": "./dist/index.css"
   },
   "scripts": {
-    "build": "tsup --clean",
-    "test": "jest"
+    "build": "tsup --clean && yarn replace-version",
+    "test": "jest",
+    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./dist/index.js"
   },
   "dependencies": {
     "@hawtio/react": "1.9.2",
