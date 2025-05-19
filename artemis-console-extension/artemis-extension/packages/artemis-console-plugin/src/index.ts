@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { HawtioPlugin, hawtio, helpRegistry, workspace, preferencesRegistry} from '@hawtio/react'
+import { HawtioPlugin, hawtio, configManager as hawtioConfigMgr, helpRegistry, workspace, preferencesRegistry} from '@hawtio/react'
 import { Artemis } from './Artemis'
 import { ArtemisJMX } from './ArtemisJMX'
 import { ArtemisPreferences } from './ArtemisPreferences'
@@ -48,4 +48,7 @@ export const artemis: HawtioPlugin = () => {
 
   helpRegistry.add(artemisPluginName, artemisPluginTitle, help, 1)
   preferencesRegistry.add(artemisPluginName, artemisPluginTitle, ArtemisPreferences, 1)
+
+  // See package.json "replace-version" script for how to replace the version placeholder with a real version
+  hawtioConfigMgr.addProductInfo('Artemis Console Plugin', '__PACKAGE_VERSION_PLACEHOLDER__')
 }
