@@ -25,6 +25,7 @@ export const artemisNetworkPluginPath = '/artemis-network'
 export const artemisJMXPluginName = 'artemisJMX'
 export const artemisJMXPluginTitle = 'Artemis JMX'
 export const artemisJMXPluginPath = '/treeartemisJMX'
+export const artemisHeaderPluginName = 'artemisHeader'
 
 export const domainNodeType = 'Camel Domain'
 export const contextsType = 'contexts'

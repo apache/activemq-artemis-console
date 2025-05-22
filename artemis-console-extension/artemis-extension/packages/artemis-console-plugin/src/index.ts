@@ -18,12 +18,12 @@ import { HawtioPlugin, hawtio, configManager as hawtioConfigMgr, helpRegistry, w
 import { Artemis } from './Artemis'
 import { ArtemisJMX } from './ArtemisJMX'
 import { ArtemisPreferences } from './ArtemisPreferences'
-import { log, artemisPluginName, artemisPluginTitle, artemisPluginPath, artemisJMXPluginName, artemisJMXPluginPath, artemisJMXPluginTitle } from './globals'
+import { log, artemisPluginName, artemisPluginTitle, artemisPluginPath, artemisJMXPluginName, artemisJMXPluginPath, artemisJMXPluginTitle, artemisHeaderPluginName } from './globals'
 import help from './help.md'
 import { configManager } from './config-manager'
+import { ArtemisHeader } from './ArtemisHeader';
 
 export const artemis: HawtioPlugin = () => {
-
 
 
   log.info('Loading', artemisPluginName);
@@ -44,6 +44,14 @@ export const artemis: HawtioPlugin = () => {
     component: ArtemisJMX,
     order: -1,
     isActive:  async () => workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain),
+  })
+
+  hawtio.addPlugin({
+    id: artemisHeaderPluginName,
+    title: artemisHeaderPluginName,
+    headerItems: [{ component: ArtemisHeader, universal: true }],
+    order: 200,
+    isActive: async () => workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain),
   })
 
   helpRegistry.add(artemisPluginName, artemisPluginTitle, help, 1)

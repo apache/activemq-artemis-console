@@ -14,22 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from 'react'
-import { ArtemisTabs } from './views/ArtemisTabView';
-import { PageSection, Page } from '@patternfly/react-core';
-import { artemisService } from './artemis-service';
 import { eventService } from '@hawtio/react';
+import {  Text } from '@patternfly/react-core';
+import { useEffect, useState } from 'react';
+import { artemisService } from './artemis-service';
 
 
+export const ArtemisHeader: React.FunctionComponent = () => {
 
-export const Artemis: React.FunctionComponent = () => {
+    const [ brokerHeader, setBrokerHeader] = useState('')
 
-  return ( 
-  <Page>
-    <PageSection padding={{default: 'noPadding'}}>
-      <ArtemisTabs/>
-    </PageSection>
-  </Page>
-  )
+     useEffect(() => {
+
+        artemisService.getBrokerInfo()
+        .then((brokerInfo) => {
+           setBrokerHeader(brokerInfo.name);
+        })
+        .catch((error: string) => {
+            eventService.notify({
+                type: 'warning',
+                message: error,
+            })
+        });
+    })
+
+    return (
+        <><Text>{'Broker ('}</Text><Text style={{ color: 'var(--pf-v5-global--active-color--200)' }} >{brokerHeader}</Text><Text>{')'}</Text></>
+    );
 }
-
