@@ -13,7 +13,7 @@
     "license": "yarn licenses generate-disclaimer -R > ../../artemis-console-distribution/src/main/resources/licenses/licenses/NPMLicenses.txt"
   },
   "dependencies": {
-    "@hawtio/react": "1.9.2",
+    "@hawtio/react": "1.9.4",
     "@patternfly/react-charts": "~7.4.9",
     "@patternfly/react-code-editor": "~5.4.18",
     "@patternfly/react-core": "~5.4.14",
