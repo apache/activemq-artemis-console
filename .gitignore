@@ -16,6 +16,7 @@ build/
 artemis-console-extension/artemis-extension/build/**/*
 artemis-console-extension/artemis-extension/node_modules/**/*
 artemis-console-extension/artemis-extension/node/**/*
+artemis-console-extension/artemis-extension/packages/artemis-console-plugin/node_modules/
 
 # yarn (zero-installs)
 artemis-console-extension/artemis-extension/.yarn/**/*
