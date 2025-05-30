@@ -121,6 +121,7 @@ const operationOptions = [
   const [isSortDropdownOpen, setIsSortDropdownOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [page, setPage] = useState(1);
+  const [isCompact, setIsCompact] = useState(false);
   const [perPage, setPerPage] = useState(10);
   const initialFilter = () =>  {
     if (broker.storageColumnLocation && sessionStorage.getItem(broker.storageColumnLocation + '.filter')) {
@@ -243,8 +244,14 @@ const operationOptions = [
     if(broker.storageColumnLocation) {
       artemisPreferencesService.saveTablePageSize(broker.storageColumnLocation, newPerPage)
     }
+    if (newPerPage === -1) {
+      setIsCompact(true);
+      setPerPage(resultsSize);
+    } else {
+      setIsCompact(false);
+      setPerPage(newPerPage);
+    }
     setPage(1);
-    setPerPage(newPerPage);
   };
 
   const getKeyByValue = (producer: never, columnName: string) => {
@@ -264,6 +271,14 @@ const operationOptions = [
     }
   }
 
+  const pageSizeOptions = [
+    { title: '10 per page', value: 10 },
+    { title: '20 per page', value: 20 },
+    { title: '50 per page', value: 50 },
+    { title: '100 per page', value: 100 },
+    { title: 'All items', value: -1 },
+  ];
+
   const renderPagination = (variant: PaginationVariant | undefined) => (
     <Pagination
       itemCount={resultsSize}
@@ -271,9 +286,12 @@ const operationOptions = [
       perPage={perPage}
       onSetPage={handleSetPage}
       onPerPageSelect={handlePerPageSelect}
+      isCompact={isCompact}
+      perPageOptions={pageSizeOptions}
       variant={variant}
       titles={{
-        paginationAriaLabel: `${variant} pagination`
+        paginationAriaLabel: `${variant} pagination`,
+        perPageSuffix: ''
       }}
     />
   );
