@@ -492,20 +492,17 @@ const operationOptions = [
           {rows.map((row, rowIndex) => (
             <Tr key={rowIndex}>
               <>
-                {columns.map((column, id) => {
-                  if (column.visible) {
-                    var key = getKeyByValue(row, column.id)
-                    if(column.filter) {
-                      var filter = column.filter(row);
-                      return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
-                    } else if (column.link) {
-                      return <Td key={id}><Link to="" onClick={() => {if (column.link) {column.link(row)}}}>{key}</Link></Td>
-                    } else {
-                      return <Td key={id}>{key}</Td>
-                    }
-                  } else return ''
-                }
-                )}
+               {columns.filter((column) => column.visible).map((column, id) => {
+                  const key = getKeyByValue(row, column.id)
+                  if(column.filter) {
+                    const filter = column.filter(row);
+                    return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
+                  } else if (column.link) {
+                    return <Td key={id}><Link to="" onClick={() => {if (column.link) column.link(row)}}>{key}</Link></Td>
+                  } else {
+                    return <Td key={id}>{key}</Td>
+                  }
+                })}
                 <Td isActionCell>
                   <ActionsColumn
                     items={getRowActions(row, rowIndex)}
