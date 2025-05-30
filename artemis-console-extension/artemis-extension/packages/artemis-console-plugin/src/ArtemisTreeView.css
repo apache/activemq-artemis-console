@@ -14,29 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Split from 'react-split'
-import { ArtemisContext, useArtemisTree } from './context';
-import { ArtemisTreeView } from './ArtemisTreeView';
-import './artemisJMX.css'
-import { ArtemisJmxContent } from './ArtemisJMXContent';
-
-
-export const ArtemisJMX: React.FunctionComponent = () => {
-
-  const { tree, selectedNode, brokerNode, setSelectedNode, findAndSelectNode } = useArtemisTree();
-
-  return (
-      <ArtemisContext.Provider value={{ tree, selectedNode,brokerNode, setSelectedNode, findAndSelectNode }}>
-    
-        <Split className='artemis-split' sizes={[30, 70]} minSize={200} gutterSize={5}>
-          <div>
-            <ArtemisTreeView />
-          </div>
-          <div>
-              <ArtemisJmxContent/>
-          </div>
-        </Split>
-      </ArtemisContext.Provider>
-  )
+#artemis-tree-view .pf-v5-c-tree-view__list {
+  height: 100%;
 }
 
+#artemis-tree-view > .pf-v5-c-tree-view__list {
+  max-height: 83vh;
+  overflow: auto;
+}
+
+#artemis-tree-view .pf-v5-c-tree-view__node {
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+#artemis-tree-view .pf-v5-c-tree-view__node-toggle {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+#artemis-tree-view .pf-v5-c-tree-view__node-text {
+  padding-top: 2px;
+  font-size: smaller;
+}
+
+#artemis-tree-view .pf-v5-c-tree-view__node-icon {
+  flex-shrink: 0;
+}
+
+#artemis-tree-view .pf-v5-c-tree-view__node-text {
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActionGroup, Button, Checkbox, Flex, FlexItem, Form, FormGroup, NumberInput, Radio, TextInput, Title, Text, TextContent, Popover, Tooltip } from '@patternfly/react-core';
+import { ActionGroup, Button, Checkbox, Flex, FlexItem, Form, FormGroup, NumberInput, Radio, TextInput, Title, Text, TextContent, Popover, Tooltip, PageSection } from '@patternfly/react-core';
 import React, { FormEvent, useState } from 'react'
 import { TrashIcon, OutlinedQuestionCircleIcon, InfoCircleIcon } from '@patternfly/react-icons'
 import { artemisService } from '../artemis-service';

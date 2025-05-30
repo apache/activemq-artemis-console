@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React, { useContext, useState } from 'react'
-import { Tabs, Tab, TabTitleText, Button, Modal, ModalVariant } from '@patternfly/react-core';
+import { Tabs, Tab, TabTitleText, Button, Modal, ModalVariant, EmptyState, EmptyStateIcon, EmptyStateVariant, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
 import { Attributes, Chart, MBeanNode, Operations } from '@hawtio/react';
 import { CreateQueue } from '../queues/CreateQueue';
 import { DeleteAddress } from '../addresses/DeleteAddress';
@@ -26,13 +26,11 @@ import { Message, MessageView } from '../messages/MessageView';
 import { DeleteQueue } from '../queues/DeleteQueue';
 import { artemisService } from '../artemis-service';
 import { ArtemisContext } from '../context';
+import { CubesIcon } from '@patternfly/react-icons';
 
 
-export type JMXData = {
-  node: MBeanNode
-}
 
-export const ArtemisJMXTabs: React.FunctionComponent<JMXData> = (data: JMXData) => {
+export const ArtemisJMXTabs: React.FunctionComponent = () => {
   const initialMessage: Message = {
     messageID: '',
     address: '',
@@ -48,18 +46,23 @@ export const ArtemisJMXTabs: React.FunctionComponent<JMXData> = (data: JMXData) 
     userID: ''
   };
 
+  const { selectedNode, brokerNode } = useContext(ArtemisContext);
   const [activeTabKey, setActiveTabKey] = useState<string | number>(0);
   const [ showMessageDialog, setShowMessageDialog ] = useState<boolean>(false);
   const [ currentMessage, setCurrentMessage ] = useState<Message>(initialMessage);
-  const isAddress = isAnAddress(data.node)
-  const isAQueue = isQueue(data.node);
-  const { selectedNode, brokerNode } = useContext(ArtemisContext);
 
-  var prop = data.node.getProperty("routing-type");
+  if(!selectedNode) {
+    return  ('');
+  }
+
+  const isAddress = isAnAddress(selectedNode)
+  const isAQueue = isQueue(selectedNode);
+
+  var prop = selectedNode.getProperty("routing-type");
   const routingType: string  = prop === undefined?'':prop;
-  prop = data.node.getProperty("address");
+  prop = selectedNode.getProperty("address");
   const address: string | undefined = prop === undefined?'':prop;
-  prop = data.node.getProperty("queue");
+  prop = selectedNode.getProperty("queue");
   const queue: string | undefined = prop === undefined?'':prop;
 
   const handleTabClick = ( event: React.MouseEvent<any> | React.KeyboardEvent | MouseEvent, tabIndex: string | number
@@ -97,14 +100,18 @@ export const ArtemisJMXTabs: React.FunctionComponent<JMXData> = (data: JMXData) 
         { isAddress && artemisService.canCreateQueue(brokerNode) &&
           <Tab eventKey={3} title={<TabTitleText>Create Queue</TabTitleText>} aria-label="Create Queue">
               {activeTabKey === 3 &&
-                <CreateQueue address={data.node.name}/>
+                <PageSection padding={{default: 'padding'}}>
+                  <CreateQueue address={selectedNode.name}/>
+                </PageSection>
               }
           </Tab> 
         }
         { isAddress && artemisService.canDeleteAddress(brokerNode) &&
           <Tab eventKey={4} title={<TabTitleText>Delete Address</TabTitleText>} aria-label="">
               {activeTabKey === 4 &&
-                <DeleteAddress address={data.node.name}/>
+                <PageSection padding={{default: 'padding'}}>
+                  <DeleteAddress address={selectedNode.name}/>
+                </PageSection>
               }
           </Tab> 
         }
@@ -119,32 +126,37 @@ export const ArtemisJMXTabs: React.FunctionComponent<JMXData> = (data: JMXData) 
         { isAQueue && artemisService.checkCanBrowseQueue(selectedNode as MBeanNode) &&
           <Tab eventKey={6} title={<TabTitleText>Browse Messages</TabTitleText>} aria-label="">
              {activeTabKey === 6 &&
-             <><MessagesTable address={address} queue={queue} routingType={routingType} selectMessage={selectMessage} back={undefined} /><Modal
-                aria-label='message-view-modal'
-                variant={ModalVariant.medium}
-                isOpen={showMessageDialog}
-                onClose={() => setShowMessageDialog(false)}
-                actions={[
-                  <Button key="close" variant="secondary" onClick={() => setShowMessageDialog(false)}>
-                    Close
-                  </Button>
-                ]}>
-                <MessageView currentMessage={currentMessage} />
-              </Modal></>
+             <PageSection padding={{default: 'padding'}}>
+                <MessagesTable address={address} queue={queue} routingType={routingType} selectMessage={selectMessage} back={undefined} />
+                <Modal
+                  aria-label='message-view-modal'
+                  variant={ModalVariant.medium}
+                  isOpen={showMessageDialog}
+                  onClose={() => setShowMessageDialog(false)}
+                  actions={[
+                    <Button key="close" variant="secondary" onClick={() => setShowMessageDialog(false)}>
+                      Close
+                    </Button>
+                  ]}>
+                  <MessageView currentMessage={currentMessage} />
+                </Modal>
+              </PageSection>
            }
           </Tab>
         }
         { isAQueue && artemisService.canDeleteQueue(brokerNode) &&
           <Tab eventKey={7} title={<TabTitleText>Delete Queue</TabTitleText>} aria-label="">
               {activeTabKey === 7 &&
-                <DeleteQueue queue={data.node.name} address={address} routingType={routingType}/>
+                <PageSection padding={{default: 'padding'}}>
+                  <DeleteQueue queue={selectedNode.name} address={address} routingType={routingType}/>
+                </PageSection>
               }
           </Tab> 
         }
         { isAQueue && artemisService.checkCanSendMessageToQueue(selectedNode as MBeanNode) &&
           <Tab eventKey={8} title={<TabTitleText>Send Message</TabTitleText>} aria-label="">
               {activeTabKey === 8 &&
-                <SendMessage queue={data.node.name} routingType={routingType} address={address} isAddress={false}/>
+                <SendMessage queue={selectedNode.name} routingType={routingType} address={address} isAddress={false}/>
               }
           </Tab> 
         }

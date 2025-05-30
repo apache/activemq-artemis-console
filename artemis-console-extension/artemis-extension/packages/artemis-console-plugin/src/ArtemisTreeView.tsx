@@ -20,6 +20,8 @@ import React, { ChangeEvent, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArtemisContext } from './context'
 import { artemisJMXPluginPath } from './globals'
+import './ArtemisTreeView.css'
+
 
 /**
  * Expansion requires more than 2 states since the expandAll
