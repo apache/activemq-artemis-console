@@ -14,29 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import Split from 'react-split'
-import { ArtemisContext, useArtemisTree } from './context';
-import { ArtemisTreeView } from './ArtemisTreeView';
-import './artemisJMX.css'
-import { ArtemisJmxContent } from './ArtemisJMXContent';
-
-
-export const ArtemisJMX: React.FunctionComponent = () => {
-
-  const { tree, selectedNode, brokerNode, setSelectedNode, findAndSelectNode } = useArtemisTree();
-
-  return (
-      <ArtemisContext.Provider value={{ tree, selectedNode,brokerNode, setSelectedNode, findAndSelectNode }}>
-    
-        <Split className='artemis-split' sizes={[30, 70]} minSize={200} gutterSize={5}>
-          <div>
-            <ArtemisTreeView />
-          </div>
-          <div>
-              <ArtemisJmxContent/>
-          </div>
-        </Split>
-      </ArtemisContext.Provider>
-  )
+#artemis-jmx-content-main > article {
+  overflow: auto;
 }
-
+#artemis-jmx-content {
+  height: 100%;
+}
