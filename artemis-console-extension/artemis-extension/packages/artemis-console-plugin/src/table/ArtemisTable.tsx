@@ -133,7 +133,7 @@ const operationOptions = [
     }
   }
 
-  const [filter, setFilter] = useState(broker.filter !== undefined? broker.filter:initialFilter);
+  const [filter, setFilter] = useState(() => broker.filter !== undefined ? broker.filter : initialFilter());
 
   const [filterColumnStatusSelected, setFilterColumnStatusSelected] = useState(columns.find(column => filter.column === column.id)?.name);
   const [filterColumnOperationSelected, setFilterColumnOperationSelected] = useState(operationOptions.find(operation => operation.id === filter.operation)?.name);
@@ -141,24 +141,23 @@ const operationOptions = [
   const [filterColumnStatusIsExpanded, setFilterColumnStatusIsExpanded] = useState(false);
   const [filterColumnOperationIsExpanded, setFilterColumnOperationIsExpanded] = useState(false);
 
+  const listData = async () => {
+    const data = await broker.getData(page, perPage, activeSort, filter);
+    setRows(data.data);
+    setresultsSize(data.count);
+  };
 
   useEffect(() => {
-    const listData = async () => {
-      var data = await broker.getData(page, perPage, activeSort, filter);
-      setRows(data.data);
-      setresultsSize(data.count);
-    }
     if (!columnsLoaded && broker.storageColumnLocation) {
       const updatedColumns: Column[] = artemisPreferencesService.loadColumnPreferences(broker.storageColumnLocation, broker.allColumns);
       setColumns(updatedColumns);
       setColumnsLoaded(true);
     }
-    if(broker.storageColumnLocation) {
-      setPerPage(artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation));
-    }
-    listData();
+  }, [columns, columnsLoaded]);
 
-  }, [columns, page, activeSort, filter, perPage, columnsLoaded, broker])
+  useEffect(() => {
+    listData();
+  }, [page, perPage, activeSort, filter]);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
@@ -493,20 +492,17 @@ const operationOptions = [
           {rows.map((row, rowIndex) => (
             <Tr key={rowIndex}>
               <>
-                {columns.map((column, id) => {
-                  if (column.visible) {
-                    var key = getKeyByValue(row, column.id)
-                    if(column.filter) {
-                      var filter = column.filter(row);
-                      return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
-                    } else if (column.link) {
-                      return <Td key={id}><Link to="" onClick={() => {if (column.link) {column.link(row)}}}>{key}</Link></Td>
-                    } else {
-                      return <Td key={id}>{key}</Td>
-                    }
-                  } else return ''
-                }
-                )}
+               {columns.filter((column) => column.visible).map((column, id) => {
+                  const key = getKeyByValue(row, column.id)
+                  if(column.filter) {
+                    const filter = column.filter(row);
+                    return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
+                  } else if (column.link) {
+                    return <Td key={id}><Link to="" onClick={() => {if (column.link) column.link(row)}}>{key}</Link></Td>
+                  } else {
+                    return <Td key={id}>{key}</Td>
+                  }
+                })}
                 <Td isActionCell>
                   <ActionsColumn
                     items={getRowActions(row, rowIndex)}
