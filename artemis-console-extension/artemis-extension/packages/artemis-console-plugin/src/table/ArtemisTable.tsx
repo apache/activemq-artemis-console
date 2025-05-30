@@ -133,7 +133,7 @@ const operationOptions = [
     }
   }
 
-  const [filter, setFilter] = useState(broker.filter !== undefined? broker.filter:initialFilter);
+  const [filter, setFilter] = useState(() => broker.filter !== undefined ? broker.filter : initialFilter());
 
   const [filterColumnStatusSelected, setFilterColumnStatusSelected] = useState(columns.find(column => filter.column === column.id)?.name);
   const [filterColumnOperationSelected, setFilterColumnOperationSelected] = useState(operationOptions.find(operation => operation.id === filter.operation)?.name);
@@ -141,24 +141,23 @@ const operationOptions = [
   const [filterColumnStatusIsExpanded, setFilterColumnStatusIsExpanded] = useState(false);
   const [filterColumnOperationIsExpanded, setFilterColumnOperationIsExpanded] = useState(false);
 
+  const listData = async () => {
+    const data = await broker.getData(page, perPage, activeSort, filter);
+    setRows(data.data);
+    setresultsSize(data.count);
+  };
 
   useEffect(() => {
-    const listData = async () => {
-      var data = await broker.getData(page, perPage, activeSort, filter);
-      setRows(data.data);
-      setresultsSize(data.count);
-    }
     if (!columnsLoaded && broker.storageColumnLocation) {
       const updatedColumns: Column[] = artemisPreferencesService.loadColumnPreferences(broker.storageColumnLocation, broker.allColumns);
       setColumns(updatedColumns);
       setColumnsLoaded(true);
     }
-    if(broker.storageColumnLocation) {
-      setPerPage(artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation));
-    }
-    listData();
+  }, [columns, columnsLoaded]);
 
-  }, [columns, page, activeSort, filter, perPage, columnsLoaded, broker])
+  useEffect(() => {
+    listData();
+  }, [page, perPage, activeSort, filter]);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
