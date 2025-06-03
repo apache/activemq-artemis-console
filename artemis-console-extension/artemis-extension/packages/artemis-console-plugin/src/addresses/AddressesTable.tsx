@@ -43,7 +43,25 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
     { id: 'id', name: 'ID', visible: false, sortable: true, filterable: true },
     { id: 'name', name: 'Name', visible: true, sortable: true, filterable: true },
     { id: 'routingTypes', name: 'Routing Types', visible: true, sortable: true, filterable: true },
-    { id: 'queueCount', name: 'Queue Count', visible: true, sortable: true, filterable: true, filter: getQueueFilter, filterTab: 6 }
+    { id: 'queueCount', name: 'Queue Count', visible: true, sortable: true, filterable: true, filter: getQueueFilter, filterTab: 6 },
+    { id: 'internal', name: 'Internal', visible: false, sortable: true, filterable: true },
+    { id: 'temporary', name: 'Temporary', visible: false, sortable: true, filterable: true },
+    { id: 'autoCreated', name: 'Auto Created', visible: false, sortable: true, filterable: true },
+    { id: 'paused', name: 'Paused', visible: false, sortable: true, filterable: true },
+    { id: 'currentDuplicateIdCacheSize', name: 'Current Duplicate ID Cache Size', visible: false, sortable: true, filterable: true },
+    { id: 'retroactiveResource', name: 'Retroactive Resource', visible: false, sortable: true, filterable: true },
+    { id: 'unroutedMessageCount', name: 'Unrouted Message Count', visible: false, sortable: true, filterable: true },
+    { id: 'routedMessageCount', name: 'Routed Message Count', visible: false, sortable: true, filterable: true },
+    { id: 'messageCount', name: 'Message Count', visible: true, sortable: true, filterable: true },
+    { id: 'numberOfBytesPerPage', name: 'Number Of Bytes Per Page', visible: false, sortable: true, filterable: true },
+    { id: 'addressLimitPercent', name: 'Address Limit Percent', visible: true, sortable: true, filterable: true },
+    { id: 'paging', name: 'Paging', visible: true, sortable: true, filterable: true },
+    { id: 'numberOfPages', name: 'Number Of Pages', visible: false, sortable: true, filterable: true },
+    { id: 'addressSize', name: 'Address Size', visible: true, sortable: true, filterable: true },
+    { id: 'maxPageReadBytes', name: 'Max Page Read Bytes', visible: false, sortable: true, filterable: true },
+    { id: 'maxPageReadMessages', name: 'Max Page Read Messages', visible: false, sortable: true, filterable: true },
+    { id: 'prefetchPageBytes', name: 'Prefetch Page Bytes', visible: false, sortable: true, filterable: true },
+    { id: 'prefetchPageMessages', name: 'Prefetch Page Messages', visible: false, sortable: true, filterable: true }
   ];
 
   const listAddresses = async (page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<any> => {
@@ -107,8 +125,6 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
           setShowOperationsDialog(true);
         }
       }
-      
-      
     ];
 
     if (canDeleteAddress) {
@@ -132,7 +148,6 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
             setAddress(row.name);
             setShowSendDialog(true);
           }
-  
         }
       );
     }
@@ -210,8 +225,8 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
             This operation cannot be undone.
           </Text>
         </TextContent>
-      </Modal>   
-      }                     
+      </Modal>
+      }
       <Modal
         aria-label='attributes-modal'
         variant={ModalVariant.medium}
