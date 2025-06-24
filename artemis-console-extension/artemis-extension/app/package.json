@@ -1,6 +1,6 @@
 {
   "name": "artemis-console-app",
-  "version": "1.2.0",
+  "version": "1.3.0-SNAPSHOT",
   "description": "Artemis Console",
   "license": "Apache-2.0",
   "private": true,
@@ -19,7 +19,7 @@
     "@patternfly/react-table": "~5.4.16",
     "@patternfly/react-tokens": "~5.4.1",
     "@patternfly/react-topology": "~5.4.1",
-    "artemis-console-plugin": "1.2.0",
+    "artemis-console-plugin": "1.3.0-SNAPSHOT",
     "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
