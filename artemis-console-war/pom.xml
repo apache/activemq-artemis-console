@@ -36,6 +36,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-console-cache-key-provider</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- we need to depend on this for the build output -->
         <dependency>
             <groupId>org.apache.activemq</groupId>
