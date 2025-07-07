@@ -31,6 +31,10 @@
 
     <name>ActiveMQ Artemis Console War</name>
 
+    <properties>
+        <activemq.basedir>${project.parent.basedir}</activemq.basedir>
+    </properties>
+
     <dependencies>
         <!-- we need to depend on this for the build output -->
         <dependency>

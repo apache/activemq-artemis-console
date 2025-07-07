@@ -41,6 +41,7 @@
     <url>https://activemq.apache.org/components/artemis/</url>
 
     <properties>
+        <activemq.basedir>${project.basedir}</activemq.basedir>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
@@ -53,6 +54,8 @@
         <yarn-version>v1.22.22</yarn-version>
         <frontend-maven-plugin-version>1.15.1</frontend-maven-plugin-version>
         <project.build.outputTimestamp>2025-06-25T05:17:39Z</project.build.outputTimestamp>
+        <sevntu.checks.version>1.44.1</sevntu.checks.version>
+        <checkstyle.version>10.26.1</checkstyle.version>
     </properties>
 
     <scm>
@@ -226,6 +229,29 @@
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <tagNameFormat>@{project.version}</tagNameFormat>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.github.sevntu-checkstyle</groupId>
+                            <artifactId>sevntu-checks</artifactId>
+                            <version>${sevntu.checks.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>com.puppycrawl.tools</groupId>
+                            <artifactId>checkstyle</artifactId>
+                            <version>${checkstyle.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <configLocation>${activemq.basedir}/etc/checkstyle.xml</configLocation>
+                        <failsOnError>false</failsOnError>
+                        <failOnViolation>true</failOnViolation>
+                        <consoleOutput>true</consoleOutput>
+                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     </configuration>
                 </plugin>
             </plugins>
