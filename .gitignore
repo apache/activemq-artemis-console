@@ -20,9 +20,10 @@ artemis-console-extension/artemis-extension/packages/artemis-console-plugin/node
 artemis-console-extension/artemis-extension/app/node_modules/**/*
 
 # yarn (zero-installs)
-artemis-console-extension/artemis-extension/.yarn/**/*
-artemis-console-extension/artemis-extension/!.yarn/patches
-artemis-console-extension/artemis-extension/!.yarn/plugins
-artemis-console-extension/artemis-extension/!.yarn/releases
-artemis-console-extension/artemis-extension/!.yarn/sdks
-artemis-console-extension/artemis-extension/!.yarn/versions
+artemis-console-extension/artemis-extension/.yarn/install-state.gz
+.yarn/**
+!artemis-console-extension/artemis-extension/.yarn/patches
+!artemis-console-extension/artemis-extension/.yarn/plugins
+!artemis-console-extension/artemis-extension/.yarn/releases
+!artemis-console-extension/artemis-extension/.yarn/sdks
+!artemis-console-extension/artemis-extension/.yarn/versions

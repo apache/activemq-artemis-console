@@ -22,11 +22,11 @@ To make it easier to maintain consistent dependencies between Hawtio (which can 
 It's worth following some guidelines in the fascinating world of JavaScript build tools. This distinction is very important:
 
 * _libraries_ - packages published to NPM registry and consumable by other packages/applications
-* _applications_ - final deployables that use other packages which are not consumed further
+* _applications_ - final deployables that use other packages and which are not consumed further
 
 This separation determines the _bundlers_ that should be used to change original code into distributed code.
 
-When using _bundlers_ for libraries, we have to be careful, because the libraries package will be consumed by projects using own configurations and own bundlers. That's why we use [tsup][6] = [esbuild][7] + [Rollup][8] for this task.
+When using _bundlers_ for libraries, we have to be careful, because the library packages will be consumed by projects using own configurations and own bundlers. That's why we use [tsup][6] = [esbuild][7] + [Rollup][8] for this task.
 
 When using _bundlers_ for applications, we need to ensure that all dependencies are included (bundled) in most optimal way (chunking, tersing, ...). That's why we use [Webpack][4] for this task (which may be replaced by [Rspack][12] at some point).
 
@@ -34,7 +34,17 @@ When using _bundlers_ for applications, we need to ensure that all dependencies 
 
 We use [Javascript monorepository][3] for better separation of library and application code.
 
-Top level `package.json` declares `workspaces` field and _child_ `package.json` contain specific dependencies and scripts. Common dependencies are declared in parent `package.json`.
+Top level `package.json` declares `workspaces` field and _child_ `package.json` contain specific dependencies and scripts.
+
+We use `yarn` package manager and we should add dependencies to projects in a monorepo (_workspaces_) using:
+```console
+$ yarn workspace artemis-console-plugin add @hawtio/react
+```
+
+instead of:
+```console
+$ cd packages/artemis-console-plugin; yarn add @hawtio/react
+```
 
 ## Yarn package manager management
 
@@ -58,10 +68,19 @@ $ yarn set version 4.9.1 --yarn-path
 ➤ YN0000: Saving the new release in .yarn/releases/yarn-4.9.1.cjs
 ➤ YN0000: Done in 0s 448ms
 ```
+6. To check what's the latest version of yarn run:
+```console
+$ corepack up
+Installing yarn@4.9.2 in the project...
+...
+```
+7. `packageManager` field will be upgraded, but we also have to call proper `yarn set version <version> --yarn-path` to update `.yarnrc.yml`.
 
-With `yarn set version 4.9.1 --yarn-path`:
+With `yarn set version 4.9.2 --yarn-path`:
 * `packageManager` field is updated with selected version
-* `yarnPath` field in `.yarnrc.yml` is updated to point to _downloaded_ version of Yarn which should be stored in SCM - by default it's `.yarn/releases/yarn-4.9.1.cjs` (for version 4.9.1)
+* `yarnPath` field in `.yarnrc.yml` is updated to point to _downloaded_ version of Yarn which should be stored in SCM - by default it's `.yarn/releases/yarn-4.9.2.cjs` (for version 4.9.2)
+* previous version of `.yarn/releases/yarn-*.cjs` will be removed
+* `.yarn/releases/LICENSE-yarn.txt` will also be removed, so remember to restore it (and check if its content needs to be updated to match what appended to `.yarn/releases/yarn-4.9.2.cjs`...)
 
 ----
 [1]: https://github.com/eirslett/frontend-maven-plugin
