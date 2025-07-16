@@ -19,10 +19,8 @@
 
 import JSDOMEnvironment from 'jest-environment-jsdom'
 
-import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
+import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment'
 import type { Config } from '@jest/types'
-
-import { port } from "./jest.config"
 
 export default class ArtemisJSDOMEnvironment extends JSDOMEnvironment {
   private globalConfig: Config.GlobalConfig
@@ -41,43 +39,5 @@ export default class ArtemisJSDOMEnvironment extends JSDOMEnvironment {
     // You can also pass variables from this module to your test suites by assigning them to this.global object
     // – this will make them available in your test suites as global variables.
     await super.setup();
-
-    // remember - `this.global !== global`.
-    // "global" is our global and "this.global" is the global that will be available in tests
-
-    // See https://github.com/jsdom/jsdom/issues/2524#issuecomment-902027138
-    // the below is needed when I do:
-    //     import { setGlobalOrigin } from "undici"
-    // which effectively means that we're "using" node in web (jsdom) environment
-    // this.global.structuredClone = structuredClone
-    // this.global.TextEncoder = TextEncoder
-    // this.global.TextDecoder = TextDecoder
-    // this.global.ReadableStream = ReadableStream
-    // this.global.MessagePort = MessagePort
-    this.global.setImmediate = setImmediate
-    this.global.Response = Response
-
-    // making fetch() use base URL - just as in the browser
-    const originalFetch = global.fetch
-    this.global.fetch = async (req, options?: RequestInit): Promise<Response> => {
-      const originalReq = req
-      if (typeof req === "string") {
-        if (!req.startsWith("http:")) {
-          if (!req.startsWith("/")) {
-            req = "/" + req
-          }
-          req = `http://localhost:${port}/hawtio` + req
-        }
-      } else if (req instanceof URL) {
-        req = new URL(`http://localhost:${port}/hawtio`, req)
-      }
-      // console.debug("[intercepted fetch()]", `${originalReq} -> ${req}`)
-      return originalFetch(req, options)
-    }
-
-    // making Hawtio see proper head/beas/@href attribute
-    const base = this.global.document.createElement("base")
-    base.setAttribute("href", `http://localhost:${port}/hawtio`)
-    this.global.document.head.append(base)
   }
 }

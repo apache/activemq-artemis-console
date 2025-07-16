@@ -17,14 +17,12 @@
 import { beforeAll, describe, expect, test } from "@jest/globals"
 import { artemisService } from "./artemis-service";
 import { SortDirection } from './table/ArtemisTable'
-import { jolokiaService, userService } from '@hawtio/react'
+import { userService } from '@hawtio/react'
 
 beforeAll(async () => {
+  // needed to determine Jolokia URL
   await userService.fetchUser().catch(e => {
     console.error("error fetching user:", e)
-  })
-  await jolokiaService.getJolokia().catch(e => {
-    console.error("error getting Jolokia:", e)
   })
 })
 
@@ -33,10 +31,14 @@ beforeAll(async () => {
  */
 describe("Artemis Service basic tests", () => {
 
-    test("Jolokia instance creation", async () => {
-      expect.assertions(1)
-      let addresses = artemisService.getAddresses(1, 50, { id: "0", order: SortDirection.ASCENDING }, { column: "", operation: "", input: "" })
-      await expect(addresses).resolves.toContain("DLQ");
-    })
+  test("Jolokia instance creation", async () => {
+    expect.assertions(1)
+    let addresses = artemisService.getAddresses(
+        1, 50,
+        { id: "0", order: SortDirection.ASCENDING },
+        { column: "", operation: "", input: "" }
+    )
+    await expect(addresses).resolves.toContain("DLQ");
+  })
 
 })
