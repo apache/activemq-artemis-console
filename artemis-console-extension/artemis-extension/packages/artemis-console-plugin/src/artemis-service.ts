@@ -144,7 +144,7 @@ const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", 
 class ArtemisService {
 
     private brokerObjectName: Promise<string>
-    private brokerInfo: Promise<BrokerInfo>
+    private brokerInfo: Promise<BrokerInfo | null>
 
     constructor() {
         this.brokerObjectName = this.initBrokerObjectName();
@@ -153,16 +153,18 @@ class ArtemisService {
 
     private async initBrokerObjectName(): Promise<string> {
         const config = await configManager.getArtemisconfig();
-        var search = await jolokiaService.search(config.jmx.domain + ":broker=*");
+        var search = await jolokiaService.search(config.jmx.domain + ":broker=*").catch(() => null);
         return search && search[0] ? search[0] : "";
     }
 
-
-
-    async initBrokerInfo(): Promise<BrokerInfo> {
-        return new Promise<BrokerInfo>(async (resolve, reject) => {
+    async initBrokerInfo(): Promise<BrokerInfo | null> {
+        return new Promise<BrokerInfo | null>(async (resolve, reject) => {
             var brokerObjectName = await this.brokerObjectName;
-            var response = await jolokiaService.readAttributes(brokerObjectName);
+            if ("" === brokerObjectName) {
+                resolve(null)
+                return
+            }
+            var response = await jolokiaService.readAttributes(brokerObjectName).catch(e => null);
             if (response) {
                 var name = response.Name as string;
                 var nodeID = response.NodeID as string;
@@ -194,11 +196,11 @@ class ArtemisService {
                 };
                 resolve(brokerInfo);
             }
-            reject("invalid response:" + response);
+            resolve(null)
         });
     }
 
-    async getBrokerInfo(): Promise<BrokerInfo> {
+    async getBrokerInfo(): Promise<BrokerInfo | null> {
         return await this.brokerInfo;
     }
 
@@ -208,9 +210,9 @@ class ArtemisService {
                 var brokerInfo = await this.getBrokerInfo();
                 var brokerObjectName = await this.brokerObjectName;
                 const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
-                brokerInfo.networkTopology =  new BrokerNetworkTopology(JSON.parse(topology));
+                brokerInfo!.networkTopology =  new BrokerNetworkTopology(JSON.parse(topology));
                 var brokerTopology: BrokerTopology = {
-                    broker: brokerInfo,
+                    broker: brokerInfo!,
                     addresses: []
                 }
                 var addresses: string[] = (await this.getAllAddresses(addressFilter));
