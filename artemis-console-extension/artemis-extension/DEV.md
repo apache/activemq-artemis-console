@@ -36,15 +36,51 @@ We use [Javascript monorepository][3] for better separation of library and appli
 
 Top level `package.json` declares `workspaces` field and _child_ `package.json` contain specific dependencies and scripts.
 
-We use `yarn` package manager and we should add dependencies to projects in a monorepo (_workspaces_) using:
+We use `yarn` package manager and we can add dependencies to projects in a monorepo (_workspaces_) using:
 ```console
 $ yarn workspace artemis-console-plugin add @hawtio/react
 ```
 
-instead of:
+or simply:
 ```console
 $ cd packages/artemis-console-plugin; yarn add @hawtio/react
 ```
+
+However the recommended way is to use the `yarn workspace <workspace> add <dependency>` variant. The _classic_ one where we `cd` into a workspace usually works, but sometimes may cause problems with:
+* top level `yarn.lock`
+* nested `node_modules/` being created in given workspace (instead of _hoisting_ the dependency to monorepo root `node_modules/`).
+
+## Project dependencies
+
+[activemq-artemis-console Github repository](https://github.com/apache/activemq-artemis-console/) is a Maven project which ultimately builds a WAR archive to be used in [activemq-artemis](https://github.com/apache/activemq-artemis/).
+
+Focusing on JavaScript only, artemis-extension is a monorepo, which contains:
+* app: Application bundled by `webpack`
+* packages/artemis-console-plugin: Library bundled by `tsup`
+
+Adding Hawtio to the list, we have:
+
+* `react`, `react-dom`, `react-router-dom`: NPM library packages from React
+* `@patternfly/react-core` (and other `@patternfly/react-*` packages): NPM library packages which build on React and provide additional components - they depend on React using `peerDependencies` 
+* `@hawtio/react`: NPM library package that provides React/Patternfly components and own API to build Hawtio applications
+* `packages/artemis-console-plugin`: NPM library package that uses `@hawtio/react`, React itself and Patternfly
+* `app`: Ultimate application that will be packaged into WAR. It is bundled using `webpack` and uses `@hawtio/react` + `packages/artemis-console-plugin` libraries
+
+The most important product of [activemq-artemis-console Github repository](https://github.com/apache/activemq-artemis-console/) is the WAR archive and JavaScript application bundled by `webpack`, but additionally `packages/artemis-console-plugin` package itself should eventually be published to NPM.
+
+There may be existing _applications_ that could use both `@hawtio/react` **and** `packages/artemis-console-plugin` to provide "Hawtio with Artemis support".
+
+That's why it is important to know how to manage dependencies in JavaScript applications. There's some confusion about how to use `dependencies` and `peerDependencies`. I'd like to suggest one rule for determining which one to use:
+
+> Should a dependency version be determined by my `package.json` or rather by other packages that use my library as dependency?
+
+In this case, both `@hawtio/react` and `packages/artemis-console-plugin` are effectively _component libraries_ that work with React (and Patternfly) and ultimately it is the final _application_ that uses React, Patternfly **and** Hawtio + artemis libraries. So `react`, `react-dom`, etc.:
+* should be in `peerDependencies` of `@hawtio/react` and `packages/artemis-console-plugin`
+* should be in `dependencies` of _applications_ bundles with Webpack
+
+`@hawtio/react` usage may be more tricky. However it is definitely a _dependency_ of an application. But because a webpack-bundled application may use both `@hawtio/react` and `packages/artemis-console-plugin`, `packages/artemis-console-plugin` should use `@hawtio/react` as _peer dependency_ to let the application decide on the version...
+
+These are recommendations, not strict rules, but without using _peer dependencies_ it is important to strictly align versions between the packages.
 
 ## Yarn package manager management
 
@@ -80,7 +116,7 @@ With `yarn set version 4.9.2 --yarn-path`:
 * `packageManager` field is updated with selected version
 * `yarnPath` field in `.yarnrc.yml` is updated to point to _downloaded_ version of Yarn which should be stored in SCM - by default it's `.yarn/releases/yarn-4.9.2.cjs` (for version 4.9.2)
 * previous version of `.yarn/releases/yarn-*.cjs` will be removed
-* `.yarn/releases/LICENSE-yarn.txt` will also be removed, so remember to restore it (and check if its content needs to be updated to match what appended to `.yarn/releases/yarn-4.9.2.cjs`...)
+* `.yarn/releases/LICENSE-yarn.txt` will also be removed, so remember to restore it (and check if its content needs to be updated to match the licence information at the end of `.yarn/releases/yarn-4.9.2.cjs` file)
 
 ----
 [1]: https://github.com/eirslett/frontend-maven-plugin

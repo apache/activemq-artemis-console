@@ -15,31 +15,43 @@
  * limitations under the License.
  */
 import { beforeAll, describe, expect, test } from "@jest/globals"
+import fetchMock, { MockResponseInit } from 'jest-fetch-mock'
 import { jolokiaService, userService } from '@hawtio/react'
 import { hawtio } from '@hawtio/react'
 
 beforeAll(async () => {
-    // using a promise like this allows us to use curl for accessing express.js server while beforeAll
-    // waits for promise to get resolved
-    // await new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //         resolve(true)
-    //     }, 100000)
-    // })
-    // needed to determine Jolokia URL
-    await userService.fetchUser().catch(e => {
-        console.error("error fetching user:", e)
-    })
+  // needed to determine Jolokia URL
+  await userService.fetchUser().catch(e => {
+    console.error("error fetching user:", e)
+  })
 })
 
 describe("Jolokia basic tests", () => {
-
-    test("Jolokia version available", async () => {
-        console.info("Hawtio Base path:", hawtio.getBasePath())
-        // expect.assertions(1)
-        const j = await jolokiaService.getJolokia()
-        const v = await j.version()
-        expect(v.protocol).toBe("8.0")
+  beforeEach(() => {
+    fetchMock.mockResponse(async (_: Request): Promise<MockResponseInit | string> => {
+      return {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          status: 200,
+          timestamp: Date.now(),
+          request: { type: "version" },
+          value: {
+            agent: "2.1.0",
+            protocol: "8.1"
+          }
+        }),
+      }
     })
+  })
 
+  test("Jolokia version available", async () => {
+    console.info("Hawtio Base path:", hawtio.getBasePath())
+    // expect.assertions(1)
+    const j = await jolokiaService.getJolokia()
+    const v = await j.version()
+    expect(v.protocol).toBe("8.1")
+  })
 })
