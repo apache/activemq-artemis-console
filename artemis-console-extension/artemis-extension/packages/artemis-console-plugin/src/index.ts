@@ -25,8 +25,15 @@ import { ArtemisHeader } from './ArtemisHeader';
 
 export const artemis: HawtioPlugin = () => {
 
-
   log.info('Loading', artemisPluginName);
+
+  const isActive = async () => {
+    try {
+      return workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain)
+    } catch {
+      return false
+    }
+  }
 
   hawtio.addPlugin({
     id: artemisPluginName,
@@ -34,7 +41,7 @@ export const artemis: HawtioPlugin = () => {
     path: artemisPluginPath,
     component: Artemis,
     order: -2,
-    isActive:  async () => workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain),
+    isActive: isActive,
   })
 
   hawtio.addPlugin({
@@ -43,7 +50,7 @@ export const artemis: HawtioPlugin = () => {
     path: artemisJMXPluginPath,
     component: ArtemisJMX,
     order: -1,
-    isActive:  async () => workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain),
+    isActive: isActive,
   })
 
   hawtio.addPlugin({
@@ -51,7 +58,7 @@ export const artemis: HawtioPlugin = () => {
     title: artemisHeaderPluginName,
     headerItems: [{ component: ArtemisHeader, universal: true }],
     order: 200,
-    isActive: async () => workspace.treeContainsDomainAndProperties((await configManager.getArtemisconfig()).jmx.domain),
+    isActive: isActive,
   })
 
   helpRegistry.add(artemisPluginName, artemisPluginTitle, help, 1)
