@@ -15,53 +15,32 @@
  * limitations under the License.
  */
 import type { JestConfigWithTsJest } from "ts-jest"
-// import path from 'node'
-
-/** This is the only place where express.js port is declared - it can be imported wherever it is needed */
-const port = 3123
 
 const config: JestConfigWithTsJest = {
-  preset: "ts-jest/presets/default-esm",
+  preset: 'ts-jest',
   testEnvironment: './jsdom-test-env.ts',
-  silent: false,
+  silent: true,
 
   // Automatically clear mock calls and instances between every test
-  // clearMocks: true,
-
-  transform: {
-    "^.+.tsx?$": ["ts-jest", {}],
-  },
-
-  testRegex: "(/__tests__/.*|.*\\.(test|spec))\\.[jt]sx?$",
-  // testRegex: "(/__tests__/.*|jolokia-availability\\.(test|spec))\\.[jt]sx?$",
+  clearMocks: true,
 
   moduleNameMapper: {
-    // '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|md)$':
-    //   '<rootDir>/src/__mocks__/fileMock.js',
-   '\\.(css|less)$': '<rootDir>/src/__mocks__/styleMock.js',
-  //  '@hawtiosrc/(.*)': '<rootDir>/src/$1',
-    'react-markdown': '<rootDir>/../../node_modules/react-markdown/react-markdown.min.js',
-    '@patternfly/react-topology': '<rootDir>/src/__mocks__/react-topology.js',
-    // '@patternfly/react-icons': '<rootDir>/src/__mocks__/react-icons.js',
-   'keycloak-js': '<rootDir>/src/__mocks__/keycloak.js',
-   'd3': '<rootDir>/src/__mocks__/d3.js',
-   'monaco-editor': '<rootDir>/src/__mocks__/monacoEditor.js',
-  //  '@monaco-editor/react': path.resolve(__dirname, './src/__mocks__/monacoEditor.js'),
-  //   '@patternfly/react-code-editor': '<rootDir>./src/__mocks__/codeEditorMock.js',
-    oauth4webapi: '<rootDir>/src/__mocks__/oauth4webapi.js',
+    // mocked modules that simply provide necessary, fake module.exports = ...
+    // mock modules that are handled by webpack at application level
+    // '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|md)$': '<rootDir>/src/__mocks__/fileMock.js',
+    '\\.(css)$': '<rootDir>/src/__mocks__/styleMock.js',
+
+    // modules mocking by pointing to other modules/locations
+    // Mind that "import { .. } from 'module-x'" is automatically mocked if there is a src/__mocks__/module-x.js file
+    // icons will be mapped from ESM to CJS - otherwise we'd have to mock a lot of modules
+    '@patternfly/react-icons/dist/esm/icons/(.*)': '<rootDir>/../../node_modules/@patternfly/react-icons/dist/js/icons/$1',
+    // tokens will be mapped from ESM to CJS
+    '@patternfly/react-tokens/dist/esm/(.*)': '<rootDir>/../../node_modules/@patternfly/react-tokens/dist/js/$1',
   },
 
   // The path to a module that runs some code to configure or set up the testing
   // framework before each test
-  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-
-  // transformIgnorePatterns: ['node_modules/'],
-  transformIgnorePatterns: ['node_modules/(?!@patternfly/react-icons/dist/esm/icons)/'],
-
-  coveragePathIgnorePatterns: ['node_modules/'],
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts']
 }
 
 export default config
-export { port }
