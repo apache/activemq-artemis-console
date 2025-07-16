@@ -14,33 +14,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { hawtio, Hawtio,  connect, jmx, keycloak, oidc, rbac, runtime, configManager } from '@hawtio/react'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { artemis } from 'artemis-console-plugin';
-import 'artemis-console-plugin/styles';
 
-// Register builtin plugins
+import { configManager, HawtioInitialization, TaskState } from '@hawtio/react/init'
 
-keycloak();
-oidc();
-connect();
-jmx();
-rbac();
-runtime();
+// Hawtio itself creates and tracks initialization tasks, but we can add our own. 'Loading UI' initialization
+// task nicely controls the initialization phase at _application_ level
+configManager.initItem('Loading UI', TaskState.started, 'config')
 
-// Register the plugin under development
-artemis();
+// Create root for rendering React components. More React components can be rendered in single root.
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+// Basic UI that shows initialization progress without depending on PatternFly.
+// It is imported and rendered in fully synchronous way.
+root.render(<HawtioInitialization verbose={true} />)
 
 // See package.json "replace-version" script for how to replace the version placeholder with a real version
 configManager.addProductInfo('Artemis Console', '__PACKAGE_VERSION_PLACEHOLDER__');
-  
-// Bootstrap Hawtio
-hawtio.bootstrap();
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
-root.render(
-  <React.StrictMode>
-    <Hawtio />
-  </React.StrictMode>,
-);
+// Initialization phase is finished. We could already bootstrap Hawtio, but this is the stage, where we register
+// built-in Hawtio plugins and our examples (custom plugins).
+// From now on, we use dynamic `import()` instead of static `import` and we can import _full_ Hawtio packages:
+// '@hawtio/react' and '@hawtio/react/ui'
+import('@hawtio/react').then(async m => {
+  // The heavier non-UI part of Hawtio was loaded/evaluated, so we have access to built-in plugins
+  // We can register all default (built-in) Hawtio plugins
+  // m.registerPlugins()
+
+  // but we can also choose which built-in plugins to use
+  m.keycloak();
+  m.oidc();
+  m.connect();
+  m.jmx();
+  m.rbac();
+  m.runtime();
+
+  // Register the plugin under development
+  await import('artemis-console-plugin').then(async m => {
+    m.artemis()
+  })
+
+  // hawtio.bootstrap() will wait for all init items to be ready, so we have to finish 'loading'
+  // stage of UI. UI will be rendered after bootstrap() returned promise is resolved
+  configManager.initItem('Loading UI', TaskState.finished, 'config')
+
+  // finally, after we've registered all custom and built-in plugins, we can proceed to the final stage:
+  //  - bootstrap(), which finishes internal configuration, applies branding and loads all registered plugins11111
+  //  - rendering of <Hawtio> React component after bootstrap() finishes
+  m.hawtio.bootstrap().then(() => {
+    import('@hawtio/react/ui').then(m => {
+      root.render(
+          <React.StrictMode>
+            <m.Hawtio />
+          </React.StrictMode>
+      )
+    })
+  })
+})

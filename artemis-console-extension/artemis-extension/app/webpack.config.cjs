@@ -100,22 +100,13 @@ module.exports = (webpackEnv, args) => {
             to: outputPath,
             context: 'public/',
             globOptions: {
-              gitignore: true,
               ignore: ['**/index.html'],
             },
           },
         ],
       }),
       new ModuleFederationPlugin({
-        // The container name corresponds to 'scope' passed to HawtioPlugin
-        name: 'artemisPlugin',
-        filename: 'remoteEntry.js',
-        // The key in exposes corresponds to 'remote' passed to HawtioPlugin
-        // exposes: {
-        //   './plugin': 'artemis-console-plugin',
-        // },
         shared: {
-          ...dependencies,
           'react': {
             singleton: true,
             requiredVersion: dependencies['react'],
@@ -132,6 +123,14 @@ module.exports = (webpackEnv, args) => {
             singleton: true,
             requiredVersion: dependencies['@hawtio/react'],
           },
+          'monaco-editor': {
+            singleton: true,
+            requiredVersion: dependencies['monaco-editor'],
+          },
+          '@patternfly/react-core': {
+              singleton: true,
+              requiredVersion: dependencies['@patternfly/react-core'],
+            },
         }
       }),
       new InvestigationPlugin({})
@@ -220,6 +219,10 @@ module.exports = (webpackEnv, args) => {
       //   path: require.resolve('path-browserify'),
       //   os: require.resolve('os-browserify'),
       // },
+      symlinks: false,
+      alias: {
+        '@thumbmarkjs/thumbmarkjs': path.join(__dirname, '../node_modules/@thumbmarkjs/thumbmarkjs/dist/thumbmark.esm.js'),
+      },
     },
     optimization: {
       minimize: isEnvProduction,
