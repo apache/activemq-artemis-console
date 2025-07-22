@@ -50,7 +50,7 @@ import('@hawtio/react').then(async m => {
   m.rbac();
   m.runtime();
 
-  // Register the plugin under development
+  // Register the plugin under development with await, so hawtio.bootstrap() is aware of this plugin
   await import('artemis-console-plugin').then(async m => {
     m.artemis()
   })
