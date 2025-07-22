@@ -230,12 +230,12 @@ module.exports = (webpackEnv, args) => {
       //   path: require.resolve('path-browserify'),
       //   os: require.resolve('os-browserify'),
       // },
-      symlinks: false,
+      symlinks: true, // with symlinks: false, `webpaack server` doesn't reload on change in the package...
       alias: {
         '@thumbmarkjs/thumbmarkjs': path.join(__dirname, '../node_modules/@thumbmarkjs/thumbmarkjs/dist/thumbmark.esm.js'),
       },
     },
-    optimization: {
+    optimization: isEnvProduction ? {
       minimize: isEnvProduction,
       minimizer: [
         // This is only used in production mode
@@ -310,7 +310,7 @@ module.exports = (webpackEnv, args) => {
         },
       },
       runtimeChunk: 'single',
-    },
+    } : {},
     devServer: {
       static: [
         {

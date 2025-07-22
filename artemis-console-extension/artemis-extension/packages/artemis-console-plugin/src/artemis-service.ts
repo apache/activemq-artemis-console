@@ -141,12 +141,25 @@ const MS_PER_HOUR = 60 * MS_PER_MIN;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
 const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", "embedded"];
 
+/**
+ * Main Artemis service that manages Broker information and topology. Needs properly configured `jolokiaService`
+ * from `@hawtio/react` which may require authenticated user.
+ */
 class ArtemisService {
 
     private brokerObjectName: Promise<string>
     private brokerInfo: Promise<BrokerInfo | null>
 
     constructor() {
+        this.brokerObjectName = Promise.resolve("")
+        this.brokerInfo = Promise.resolve(null)
+    }
+
+    /**
+     * Initialization should be called before registration of Hawtio Artemis plugins in Artemis Extension
+     * _entry point_ (which is the exported `artemis()` function of `HawtioPlugin` type)
+     */
+    initialize() {
         this.brokerObjectName = this.initBrokerObjectName();
         this.brokerInfo = this.initBrokerInfo();
     }
