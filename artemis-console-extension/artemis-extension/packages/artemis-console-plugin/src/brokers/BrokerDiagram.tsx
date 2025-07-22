@@ -57,10 +57,10 @@ import {
   withTargetDrag,
   TopologySideBar
 } from '@patternfly/react-topology';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { artemisService, BrokerInfo, BrokerTopology } from '../artemis-service';
 import { Attributes } from '@hawtio/react';
-import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList, TextInput, Label, SearchInput, Text } from '@patternfly/react-core';
+import { ToolbarItem, Select, SelectOption, Button, MenuToggleElement, MenuToggle, SelectList, SearchInput } from '@patternfly/react-core';
 import { createAddressObjectName, createQueueObjectName } from '../util/jmx';
 import { ArtemisContext } from '../context';
 import { log } from '../globals';
@@ -306,6 +306,13 @@ export const BrokerDiagram: React.FunctionComponent = () => {
   const [ topologyLoaded, setTopologyLoaded ] = React.useState(false);
   const [ addressFilter, setAddressFilter ] = React.useState('');
 
+  const latch = useRef<{ p?: Promise<boolean>, r?: (v: boolean) => void, t: number }>()
+  
+  if (!latch.current) {
+    latch.current = {
+      t: performance.now()
+    }
+  }
 
   const maxAddresses: number = artemisPreferencesService.loadArtemisPreferences().artemisMaxDiagramAddressSize;
 
@@ -343,8 +350,6 @@ export const BrokerDiagram: React.FunctionComponent = () => {
     }
   }, [findAndSelectNode])
 
- 
-
   const controller = React.useMemo(() => {
     const model: Model = {
       nodes: NODES,
@@ -356,8 +361,6 @@ export const BrokerDiagram: React.FunctionComponent = () => {
       }
     };
 
-    
-
     const newController = new Visualization();
     newController.registerLayoutFactory(customLayoutFactory);
     newController.registerComponentFactory(customComponentFactory);
@@ -365,6 +368,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
     newController.addEventListener(SELECTION_EVENT, setSelectedIds);
     newController.addEventListener(GRAPH_LAYOUT_END_EVENT, () => {
       newController.getGraph().fit(80);
+      latch.current?.r?.(true)
     });
 
     newController.fromModel(model, false);
@@ -372,11 +376,14 @@ export const BrokerDiagram: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
+    let backupBrokerNode: NodeModel
+    let brokerEdge: EdgeModel
     if (!topologyLoaded) {
       artemisService.createBrokerTopology(maxAddresses, addressFilter).then(brokerTopology => {
         setTopologyLoaded(true);
         setBrokerTopology(brokerTopology);
       });
+      return
     }
     if (topologyLoaded && brokerTopology) {
       var brokerNode: NodeModel = {
@@ -414,7 +421,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
 
       for (const broker of brokerTopology.broker.networkTopology.brokers) {
         if (brokerTopology.broker.nodeID !== broker.nodeID) {
-          var remoteBrokerNode: NodeModel = {
+          const remoteBrokerNode: NodeModel = {
             id: broker.nodeID,
             type: 'broker',
             label: broker.live,
@@ -432,18 +439,18 @@ export const BrokerDiagram: React.FunctionComponent = () => {
           }
           newBrokerNodes.push(remoteBrokerNode);
           if (viewOptions.showConnectors) {
-            var brokerEdge: EdgeModel = {
+            brokerEdge = {
               id: 'broker-edge-' + brokerTopology.broker.nodeID + '-broker-node-' + broker.nodeID,
               type: 'edge',
               source: brokerTopology.broker.nodeID,
               target: broker.nodeID,
               edgeStyle: EdgeStyle.default
-            };
+            }
             newBrokerEdges.push(brokerEdge);
           }
           if(broker.backup) {
             log.debug("adding backup to this live")
-            var backupBrokerNode: NodeModel = {
+            backupBrokerNode = {
               id: broker.nodeID + "backup",
               type: 'backupBroker',
               label: broker.backup,
@@ -461,19 +468,19 @@ export const BrokerDiagram: React.FunctionComponent = () => {
             }
             newBrokerNodes.push(backupBrokerNode);
             if (viewOptions.showConnectors) {
-              var brokerEdge: EdgeModel = {
+              brokerEdge = {
                 id: 'broker-edge-' + brokerTopology.broker.nodeID + "backup" + '-broker-node-' + broker.nodeID,
                 type: 'edge',
                 source: broker.nodeID,
                 target: broker.nodeID + "backup",
                 edgeStyle: EdgeStyle.default
-              };
+              }
               newBrokerEdges.push(brokerEdge);
             }
           }
         } else if (broker.backup) {
           log.debug("adding backup to this live")
-          var backupBrokerNode: NodeModel = {
+          backupBrokerNode = {
             id: broker.nodeID + "backup",
             type: 'backupBroker',
             label: broker.backup,
@@ -491,13 +498,13 @@ export const BrokerDiagram: React.FunctionComponent = () => {
           }
           newBrokerNodes.push(backupBrokerNode);
           if (viewOptions.showConnectors) {
-            var brokerEdge: EdgeModel = {
+            brokerEdge = {
               id: 'broker-edge-' + brokerTopology.broker.nodeID + "backup" + '-broker-node-' + broker.nodeID,
               type: 'edge',
               source: brokerTopology.broker.nodeID,
               target: broker.nodeID + "backup",
               edgeStyle: EdgeStyle.default
-            };
+            }
             newBrokerEdges.push(brokerEdge);
           }
         }
@@ -518,12 +525,24 @@ export const BrokerDiagram: React.FunctionComponent = () => {
           }
         }
       }
-      controller.fromModel(model, false);
+      // controller.fromModel(model, false);
+      if (latch.current?.p) {
+        latch.current.p!.then(() => {
+          controller.fromModel(model, false)
+        })
+      } else {
+        controller.fromModel(model, false)
+      }
+      if (model.nodes && model.nodes.length > 0) {
+        latch.current!.p = new Promise(resolve => {
+          latch.current!.r = resolve
+        })
+      } else {
+        latch.current!.p = latch.current!.r = undefined
+      }
     }
 
   }, [viewOptions, controller, selectNode, topologyLoaded, brokerTopology])
-
-
 
   const contextToolbar = (
     <><ToolbarItem>
@@ -641,7 +660,6 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
     };
     newBrokerEdges.push(addressEdge);
   }
-  controller.fromModel(model, false);
 }
 
 function addInternalAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean, selectNode: Function) {
@@ -672,7 +690,6 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
     };
     newBrokerEdges.push(addressEdge);
   }
-  controller.fromModel(model, false);
 }
 
 function addQueue(address: string, queue: string, routingType: string,  newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showAddresses: boolean, showConnectors: boolean, selectNode: Function) {
@@ -705,7 +722,6 @@ function addQueue(address: string, queue: string, routingType: string,  newBroke
     };
     newBrokerEdges.push(queueEdge);
   }
-  controller.fromModel(model, false);
 }
 
 function addInternalQueue(address: string, queue: string, routingType: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showInternalAddresses: boolean, showConnectors: boolean, selectNode: Function) {
@@ -738,6 +754,5 @@ function addInternalQueue(address: string, queue: string, routingType: string, n
     };
     newBrokerEdges.push(queueEdge);
   }
-  controller.fromModel(model, false);
 }
 

@@ -218,7 +218,6 @@ class ArtemisService {
                 var addresses: string[] = (await this.getAllAddresses(addressFilter));
                 var max: number = maxAddresses < addresses.length ? maxAddresses: addresses.length;
                 addresses = addresses.slice(0, max);
-                log.info()
                 for (const address of addresses) {
                     var queuesJson: string = await this.getQueuesForAddress(address);
                     var queues: Queue[] = JSON.parse(queuesJson).data;
@@ -404,7 +403,6 @@ class ArtemisService {
         return new Promise<string[]>(async (resolve, reject) => {
             var addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']) as string;
             if (addressesString) {
-
                 var addressArray = addressesString.split(',')
                 if (addressFilter && addressFilter.length > 0) {
                     var filtered = addressArray.filter(function (str) { return str.includes(addressFilter); });
