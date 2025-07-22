@@ -52,6 +52,9 @@ export const ARTEMIS_PREFERENCES_DEFAULT_VALUES: ArtemisOptions = {
 
 export const STORAGE_KEY_ARTEMIS_PREFERENCES = 'artemis.preferences'
 
+/**
+ * Class that handles preferences kept in `localStorage`. No asynchronous processing.
+ */
 class ArtemisPreferencesService implements IArtemisPreferencesService {
   loadArtemisPreferences(): ArtemisOptions {
     return { ...ARTEMIS_PREFERENCES_DEFAULT_VALUES, ...this.loadFromStorage() }
