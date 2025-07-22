@@ -16,7 +16,7 @@
  */
 import React, { FormEvent, useRef, useState } from 'react'
 import * as monacoEditor from 'monaco-editor'
-import { monacoLoader } from '@monaco-editor/react'
+import { loader } from '@monaco-editor/react'
 import xmlFormat from 'xml-formatter'
 
 import {
@@ -46,7 +46,7 @@ import { eventService } from '@hawtio/react'
 import { artemisService } from '../artemis-service'
 import { Message } from './MessageView'
 
-monacoLoader.config({ monacoEditor })
+loader.config({ monacoEditor })
 
 type SendBodyMessageProps = {
   onBodyChange: (body: string) => void
