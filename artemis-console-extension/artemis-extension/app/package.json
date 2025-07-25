@@ -10,17 +10,8 @@
     "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\""
   },
   "dependencies": {
-    "@hawtio/react": "1.9.4",
-    "@patternfly/react-charts": "~7.4.9",
-    "@patternfly/react-code-editor": "~5.4.18",
-    "@patternfly/react-core": "~5.4.14",
-    "@patternfly/react-icons": "~5.4.2",
-    "@patternfly/react-styles": "~5.4.1",
-    "@patternfly/react-table": "~5.4.16",
-    "@patternfly/react-tokens": "~5.4.1",
-    "@patternfly/react-topology": "~5.4.1",
+    "@hawtio/react": "1.9.6",
     "artemis-console-plugin": "1.2.1",
-    "d3": "^7.9.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.30.0"
@@ -33,6 +24,7 @@
     "css-minimizer-webpack-plugin": "^7.0.0",
     "html-webpack-plugin": "^5.6.0",
     "mini-css-extract-plugin": "^2.9.1",
+    "monaco-editor": "^0.52.2",
     "monaco-editor-webpack-plugin": "^7.1.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
