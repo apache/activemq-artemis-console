@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 import React, { FormEvent, useRef, useState } from 'react'
-import * as monacoEditor from 'monaco-editor'
-import { loader } from '@monaco-editor/react'
 import xmlFormat from 'xml-formatter'
 
 import {
@@ -46,7 +44,10 @@ import { eventService } from '@hawtio/react'
 import { artemisService } from '../artemis-service'
 import { Message } from './MessageView'
 
-loader.config({ monacoEditor })
+import * as monacoEditor from 'monaco-editor'
+import { loader } from '@monaco-editor/react'
+
+loader.config({ monaco: monacoEditor })
 
 type SendBodyMessageProps = {
   onBodyChange: (body: string) => void
