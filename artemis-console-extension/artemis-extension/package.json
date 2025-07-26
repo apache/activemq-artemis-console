@@ -20,6 +20,7 @@
     "typescript": "^5.8.3"
   },
   "resolutions": {
+    "@thumbmarkjs/thumbmarkjs": "0.20.5",
     "monaco-editor": "0.52.2"
   },
   "eslintConfig": {
