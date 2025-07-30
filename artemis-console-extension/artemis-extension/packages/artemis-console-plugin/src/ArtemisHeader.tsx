@@ -28,7 +28,7 @@ export const ArtemisHeader: React.FunctionComponent = () => {
 
         artemisService.getBrokerInfo()
         .then((brokerInfo) => {
-           setBrokerHeader(brokerInfo.name);
+           setBrokerHeader(brokerInfo ? brokerInfo.name : '');
         })
         .catch((error: string) => {
             eventService.notify({
