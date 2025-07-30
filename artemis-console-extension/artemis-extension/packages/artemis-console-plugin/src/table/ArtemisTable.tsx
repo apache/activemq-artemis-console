@@ -39,7 +39,7 @@ import {
   MenuToggle,
   SelectList
 } from '@patternfly/react-core';
-import { SortAmountDownIcon } from '@patternfly/react-icons';
+import { SortAmountDownIcon } from '@patternfly/react-icons/dist/esm/icons/sort-amount-down-icon';
 import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table, InnerScrollContainer } from '@patternfly/react-table';
 import { artemisPreferencesService } from '../artemis-preferences-service';
 import {

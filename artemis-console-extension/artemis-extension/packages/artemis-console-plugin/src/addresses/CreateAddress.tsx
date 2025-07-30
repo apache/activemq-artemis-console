@@ -18,7 +18,7 @@ import { ActionGroup, Button, Form, FormGroup, Text, Popover, Radio, TextContent
 import React, { useState } from 'react'
 import { artemisService } from '../artemis-service';
 import { eventService } from '@hawtio/react';
-import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
 export const CreateAddress: React.FunctionComponent = () => {
   const [addressName, setAddressName] = useState('');

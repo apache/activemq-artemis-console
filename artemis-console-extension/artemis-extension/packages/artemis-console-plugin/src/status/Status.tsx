@@ -37,7 +37,9 @@ import {
     MenuToggleElement,
     MenuToggle
 } from "@patternfly/react-core"
-import { EllipsisVIcon, ExclamationCircleIcon, OkIcon } from '@patternfly/react-icons'
+import { EllipsisVIcon } from '@patternfly/react-icons/dist/esm/icons/ellipsis-v-icon'
+import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon'
+import { OkIcon } from '@patternfly/react-icons/dist/esm/icons/ok-icon'
 import { Attributes, eventService, Operations } from '@hawtio/react';
 import React, { useContext, useEffect, useState } from "react";
 import { Acceptors, artemisService, BrokerInfo, ClusterConnections } from "../artemis-service";
