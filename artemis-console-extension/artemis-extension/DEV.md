@@ -11,7 +11,7 @@ Everything besides the `pom.xml` is a [Javascript monorepository][3] containing 
 
 Artemis Console plugin (and application) depends on Hawtio because it is effectively a [Hawtio plugin][9]. That's why the most important dependency is:
 
-    "@hawtio/react": "^1.9.0"
+    "@hawtio/react": "^1.10.0"
 
 To keep compatibility with Hawtio, versions of [Patternfly][10] and [React][11] packages should be aligned.
 
@@ -81,6 +81,64 @@ In this case, both `@hawtio/react` and `packages/artemis-console-plugin` are eff
 `@hawtio/react` usage may be more tricky. However it is definitely a _dependency_ of an application. But because a webpack-bundled application may use both `@hawtio/react` and `packages/artemis-console-plugin`, `packages/artemis-console-plugin` should use `@hawtio/react` as _peer dependency_ to let the application decide on the version...
 
 These are recommendations, not strict rules, but without using _peer dependencies_ it is important to strictly align versions between the packages.
+
+## Version changes in `package.json`
+
+With `yarn` we have a great tool to review updates to versions - both in `devDependencies` and `dependencies` fields.
+
+Here's an example of updates, where we can choose what we want to change and what we should leave:
+
+```console
+$ yarn upgrade-interactive
+ Press <up>/<down> to select packages.            Press <enter> to install.
+ Press <left>/<right> to select versions.         Press <ctrl+c> to abort.
+
+? Pick the packages you want to upgrade.          Current          Range            Latest
+
+   @patternfly/react-charts -------------------- ◉ ^7.4.9 -------                  ◯ ^8.3.0 -------
+   @patternfly/react-code-editor --------------- ◉ ^5.4.18 ------                  ◯ ^6.3.0 -------
+   @patternfly/react-core ---------------------- ◉ ^5.4.14 ------                  ◯ ^6.3.0 -------
+   @patternfly/react-icons --------------------- ◉ ^5.4.2 -------                  ◯ ^6.3.0 -------
+   @patternfly/react-styles -------------------- ◉ ^5.4.1 -------                  ◯ ^6.3.0 -------
+   @patternfly/react-table --------------------- ◉ ^5.4.16 ------                  ◯ ^6.3.0 -------
+   @patternfly/react-tokens -------------------- ◉ ^5.4.1 -------                  ◯ ^6.3.0 -------
+   @patternfly/react-topology ------------------ ◉ ^5.4.1 -------                  ◯ ^6.3.0 -------
+   @swc/core ----------------------------------- ◯ ^1.12.14 ----- ◉ ^1.13.3 ------
+   @testing-library/dom ------------------------ ◯ ^10.4.0 ------ ◉ ^10.4.1 ------
+   @testing-library/jest-dom ------------------- ◯ ^6.6.3 ------- ◉ ^6.6.4 -------
+   @types/node --------------------------------- ◯ ^24.0.14 ----- ◉ ^24.1.0 ------
+   @types/react-dom ---------------------------- ◉ ^18.3.7 ------                  ◯ ^19.1.7 ------
+   @types/react -------------------------------- ◉ ^18.3.23 -----                  ◯ ^19.1.9 ------
+   jest-environment-jsdom ---------------------- ◯ ^30.0.4 ------ ◉ ^30.0.5 ------
+   jest ---------------------------------------- ◯ ^30.0.4 ------ ◉ ^30.0.5 ------
+   react-dom ----------------------------------- ◉ ^18.3.1 ------                  ◯ ^19.1.1 ------
+   react-router-dom ---------------------------- ◉ ^6.30.1 ------                  ◯ ^7.7.1 -------
+   react --------------------------------------- ◉ ^18.3.1 ------                  ◯ ^19.1.1 ------
+ > webpack ------------------------------------- ◯ ^5.100.2 ----- ◉ ^5.101.0 -----
+```
+
+`yarn` highlights which version updates will match specified range and what is the actual latest version. This is very important for major version updates, because we may want to stay at React 18 or Patternfly 5.
+
+However `yarn upgrade-interactive` is not good for updates in `resolutions` fields. However we can use some scripting. Run this command in `artemis-console-extension/artemis-extension` (top-level directory of NPM monorepo):
+
+```console
+$ for d in $(jq -r '.resolutions|keys[]' package.json); do echo "=== $d"; npm view $d versions --json | jq -r '.|last'; done
+=== @babel/runtime
+8.0.0-beta.1
+=== @jolokia.js/simple
+2.2.4
+=== @typescript-eslint/eslint-plugin
+8.38.0
+=== @typescript-eslint/parser
+8.38.0
+=== axios
+1.11.0
+=== braces
+3.0.3
+=== caniuse-lite
+1.0.30001731
+...
+```
 
 ## Yarn package manager management
 
