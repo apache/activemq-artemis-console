@@ -50,7 +50,7 @@ export const Status: React.FunctionComponent = () => {
 
     const [brokerInfo, setBrokerInfo] = useState<BrokerInfo>()
     const [acceptors, setAcceptors] = useState<Acceptors>();
-    const [clusterConnections, setClusterConncetions] = useState<ClusterConnections>()
+    const [clusterConnections, setClusterConnections] = useState<ClusterConnections>()
     const { findAndSelectNode } = useContext(ArtemisContext)
 
     const [showAttributesDialog, setShowAttributesDialog] = useState(false);
@@ -59,7 +59,7 @@ export const Status: React.FunctionComponent = () => {
         const getBrokerInfo = async () => {
             artemisService.getBrokerInfo()
                 .then((brokerInfo) => {
-                    setBrokerInfo(brokerInfo)
+                    setBrokerInfo(brokerInfo ?? undefined)
                 })
                 .catch((error: string) => {
                     eventService.notify({
@@ -92,7 +92,7 @@ export const Status: React.FunctionComponent = () => {
         if (!clusterConnections) {
             artemisService.createClusterConnections()
                 .then((clusterConnections) => {
-                    setClusterConncetions(clusterConnections)
+                    setClusterConnections(clusterConnections)
                 })
                 .catch((error: string) => {
                     eventService.notify({
