@@ -18,7 +18,7 @@ import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, MenuToggle, Men
 import React, { FormEvent, useState } from 'react'
 import { artemisPreferencesService, ArtemisOptions } from './artemis-preferences-service'
 import { Icon, Tooltip } from '@patternfly/react-core'
-import { HelpIcon } from '@patternfly/react-icons'
+import { HelpIcon } from '@patternfly/react-icons/dist/esm/icons/help-icon'
 
 export const ArtemisPreferences: React.FunctionComponent = () => (
   <CardBody>

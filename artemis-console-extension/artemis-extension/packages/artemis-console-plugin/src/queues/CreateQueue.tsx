@@ -16,7 +16,9 @@
  */
 import { ActionGroup, Button, Checkbox, Flex, FlexItem, Form, FormGroup, NumberInput, Radio, TextInput, Title, Text, TextContent, Popover, Tooltip, PageSection } from '@patternfly/react-core';
 import React, { FormEvent, useState } from 'react'
-import { TrashIcon, OutlinedQuestionCircleIcon, InfoCircleIcon } from '@patternfly/react-icons'
+import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon'
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon'
+import { InfoCircleIcon } from '@patternfly/react-icons/dist/esm/icons/info-circle-icon'
 import { artemisService } from '../artemis-service';
 import { eventService, workspace } from '@hawtio/react';
 

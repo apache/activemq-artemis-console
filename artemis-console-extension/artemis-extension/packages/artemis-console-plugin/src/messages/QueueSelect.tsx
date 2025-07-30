@@ -18,7 +18,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInputGroup, TextInputGroupMain, TextInputGroupUtilities } from '@patternfly/react-core';
 import { artemisService } from '../artemis-service';
 import { ActiveSort, Filter, SortDirection } from '../table/ArtemisTable';
-import { TimesIcon } from '@patternfly/react-icons'
+import { TimesIcon } from '@patternfly/react-icons/dist/esm/icons/times-icon'
 
 export type QueueSelectProps = {
   selectQueue: Function
