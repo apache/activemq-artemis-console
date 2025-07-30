@@ -742,14 +742,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hawtio/react@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "@hawtio/react@npm:1.10.0"
+"@hawtio/react@npm:^1.10.1":
+  version: 1.10.1
+  resolution: "@hawtio/react@npm:1.10.1"
   dependencies:
     "@hawtio/camel-model-v4_10": "npm:@hawtio/camel-model@~4.10.6"
     "@hawtio/camel-model-v4_8": "npm:@hawtio/camel-model@~4.8.8"
     "@jolokia.js/simple": "npm:^2.2.4"
-    "@module-federation/utilities": "npm:^3.1.61"
+    "@module-federation/utilities": "npm:^3.1.62"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@thumbmarkjs/thumbmarkjs": "npm:^1.0.0"
     dagre: "npm:^0.8.5"
     dompurify: "npm:^3.2.6"
@@ -776,7 +777,7 @@ __metadata:
     react: ^17 || ^18
     react-dom: ^17 || ^18
     react-router-dom: ^6.30
-  checksum: 10c0/656d0ba27638b77a6baf394ca05be7a00324d2dcc7a7eaa1fd913dbef59d4e59de51326a126cfbd8bed9967494d2e82cbedafd20c9b5d9739a630a7c4755daad
+  checksum: 10c0/7a67fa13b84006c7cabd6103a26f8b72487f0a9fb76a453e23b118a7e17e1e7ef7a084230371c4a013f122de97ce2404f5c8f5e54331e1d578048abd8feae250
   languageName: node
   linkType: hard
 
@@ -1251,7 +1252,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/utilities@npm:^3.1.61":
+"@module-federation/utilities@npm:^3.1.62":
   version: 3.1.62
   resolution: "@module-federation/utilities@npm:3.1.62"
   dependencies:
@@ -3310,7 +3311,8 @@ __metadata:
   resolution: "artemis-console-app@workspace:app"
   dependencies:
     "@hawtio/backend-middleware": "npm:^1.0.6"
-    "@hawtio/react": "npm:^1.10.0"
+    "@hawtio/react": "npm:^1.10.1"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@patternfly/react-charts": "npm:^7.4.9"
     "@patternfly/react-code-editor": "npm:^5.4.18"
     "@patternfly/react-core": "npm:^5.4.14"
@@ -3358,7 +3360,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "artemis-console-plugin@workspace:packages/artemis-console-plugin"
   dependencies:
-    "@hawtio/react": "npm:^1.10.0"
+    "@hawtio/react": "npm:^1.10.1"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@patternfly/react-charts": "npm:^7.4.9"
     "@patternfly/react-code-editor": "npm:^5.4.18"
     "@patternfly/react-core": "npm:^5.4.14"
@@ -3390,7 +3393,8 @@ __metadata:
     webpack: "npm:^5.101.0"
     xml-formatter: "npm:^3.6.6"
   peerDependencies:
-    "@hawtio/react": ^1.9
+    "@hawtio/react": ^1.10
+    "@monaco-editor/react": ^4
     "@patternfly/react-charts": ^7
     "@patternfly/react-code-editor": ^5
     "@patternfly/react-core": ^5

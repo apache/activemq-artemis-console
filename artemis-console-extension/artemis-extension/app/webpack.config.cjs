@@ -129,9 +129,9 @@ module.exports = (webpackEnv, args) => {
             requiredVersion: dependencies['monaco-editor'],
           },
           '@patternfly/react-core': {
-              singleton: true,
-              requiredVersion: dependencies['@patternfly/react-core'],
-            },
+            singleton: true,
+            requiredVersion: dependencies['@patternfly/react-core'],
+          },
         }
       }),
       new MonacoWebpackPlugin({
