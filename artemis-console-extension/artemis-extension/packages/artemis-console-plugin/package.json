@@ -21,8 +21,8 @@
     "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./dist/index.js"
   },
   "dependencies": {
-    "react-split": "~2.0.14",
-    "xml-formatter": "3.6.5"
+    "react-split": "^2.0.14",
+    "xml-formatter": "^3.6.6"
   },
   "devDependencies": {
     "@hawtio/react": "^1.10.0",
