@@ -24,6 +24,7 @@ const TerserPlugin = require("terser-webpack-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 
 const outputPath = path.resolve(__dirname, 'build')
 
@@ -133,6 +134,13 @@ module.exports = (webpackEnv, args) => {
             },
         }
       }),
+      new MonacoWebpackPlugin({
+        // 'html' is required as workaround for 'xml'
+        // https://github.com/microsoft/monaco-editor/issues/1509
+        languages: ['xml', 'json', 'html'],
+        publicPath: '',
+        globalAPI: true
+      }),
       new InvestigationPlugin({})
     ],
     entry: "./src/index.ts",
@@ -213,7 +221,7 @@ module.exports = (webpackEnv, args) => {
     ],
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.cjs', '.jsx'],
-       // To resolve errors for @module-federation/utilities 2.x
+      // To resolve errors for @module-federation/utilities 2.x
       // https://github.com/module-federation/universe/issues/827
       // fallback: {
       //   path: require.resolve('path-browserify'),
