@@ -37,8 +37,9 @@ import {
   Popover,
   TextContent
 } from '@patternfly/react-core'
-import { OutlinedQuestionCircleIcon, InfoCircleIcon } from '@patternfly/react-icons'
-import { TrashIcon } from '@patternfly/react-icons'
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon'
+import { InfoCircleIcon } from '@patternfly/react-icons/dist/esm/icons/info-circle-icon'
+import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon'
 import { CodeEditor, Language } from '@patternfly/react-code-editor'
 import { eventService } from '@hawtio/react'
 import { artemisService } from '../artemis-service'

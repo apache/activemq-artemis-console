@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import React, { useContext, useState } from 'react'
-import { Tabs, Tab, TabTitleText, Button, Modal, ModalVariant, EmptyState, EmptyStateIcon, EmptyStateVariant, PageSection, PageSectionVariants, Title } from '@patternfly/react-core';
+import { Tabs, Tab, TabTitleText, Button, Modal, ModalVariant, PageSection } from '@patternfly/react-core';
 import { Attributes, Chart, MBeanNode, Operations } from '@hawtio/react';
 import { CreateQueue } from '../queues/CreateQueue';
 import { DeleteAddress } from '../addresses/DeleteAddress';
@@ -26,7 +26,6 @@ import { Message, MessageView } from '../messages/MessageView';
 import { DeleteQueue } from '../queues/DeleteQueue';
 import { artemisService } from '../artemis-service';
 import { ArtemisContext } from '../context';
-import { CubesIcon } from '@patternfly/react-icons';
 
 
 
