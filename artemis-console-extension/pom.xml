@@ -51,31 +51,31 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>install node and yarn</id>
+                        <id>install node and corepack</id>
                         <goals>
-                            <goal>install-node-and-yarn</goal>
+                            <goal>install-node-and-corepack</goal>
                         </goals>
                         <configuration>
                             <nodeVersion>${node-version}</nodeVersion>
-                            <yarnVersion>${yarn-version}</yarnVersion>
+                            <corepackVersion>${corepack-version}</corepackVersion>
                         </configuration>
                     </execution>
                     <execution>
                         <id>yarn install</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>corepack</goal>
                         </goals>
                         <configuration>
-                            <arguments>install</arguments>
+                            <arguments>yarn install</arguments>
                         </configuration>
                     </execution>
                     <execution>
                         <id>yarn build</id>
                         <goals>
-                            <goal>yarn</goal>
+                            <goal>corepack</goal>
                         </goals>
                         <configuration>
-                            <arguments>build</arguments>
+                            <arguments>yarn build</arguments>
                         </configuration>
                     </execution>
                 </executions>

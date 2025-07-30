@@ -49,8 +49,9 @@
         <slf4j.version>2.0.17</slf4j.version>
         <log4j.version>2.24.3</log4j.version>
         <jetty-version>11.0.24</jetty-version>
-        <node-version>v22.11.0</node-version>
-        <yarn-version>v1.22.22</yarn-version>
+        <corepack-version>0.34.0</corepack-version>
+        <node-version>v22.17.1</node-version>
+        <yarn-version>v4.9.2</yarn-version>
         <frontend-maven-plugin-version>1.15.1</frontend-maven-plugin-version>
         <project.build.outputTimestamp>2025-06-25T05:17:39Z</project.build.outputTimestamp>
     </properties>
