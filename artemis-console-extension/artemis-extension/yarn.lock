@@ -752,23 +752,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hawtio/react@npm:^1.10.0":
-  version: 1.10.0
-  resolution: "@hawtio/react@npm:1.10.0"
+"@hawtio/react@npm:^1.10.1":
+  version: 1.10.2
+  resolution: "@hawtio/react@npm:1.10.2"
   dependencies:
     "@hawtio/camel-model-v4_10": "npm:@hawtio/camel-model@~4.10.6"
     "@hawtio/camel-model-v4_8": "npm:@hawtio/camel-model@~4.8.8"
-    "@jolokia.js/simple": "npm:^2.2.4"
-    "@module-federation/utilities": "npm:^3.1.61"
-    "@thumbmarkjs/thumbmarkjs": "npm:^1.0.0"
+    "@jolokia.js/simple": "npm:^2.3.0"
+    "@module-federation/utilities": "npm:^3.1.62"
+    "@monaco-editor/react": "npm:^4.6.0"
+    "@thumbmarkjs/thumbmarkjs": "npm:^1.1.1"
     dagre: "npm:^0.8.5"
     dompurify: "npm:^3.2.6"
     eventemitter3: "npm:^5.0.1"
-    jolokia.js: "npm:^2.2.4"
+    jolokia.js: "npm:^2.3.0"
     js-logger: "npm:^1.6.1"
     jwt-decode: "npm:^4.0.0"
     keycloak-js: "npm:^26.2.0"
-    oauth4webapi: "npm:^3.6.0"
+    oauth4webapi: "npm:^3.6.1"
     react-markdown: "npm:^10.1.0"
     react-split: "npm:^2.0.14"
     reactflow: "npm:^11.11.4"
@@ -786,7 +787,7 @@ __metadata:
     react: ^17 || ^18
     react-dom: ^17 || ^18
     react-router-dom: ^6.30
-  checksum: 10c0/656d0ba27638b77a6baf394ca05be7a00324d2dcc7a7eaa1fd913dbef59d4e59de51326a126cfbd8bed9967494d2e82cbedafd20c9b5d9739a630a7c4755daad
+  checksum: 10c0/f4e9708ab7ac46e84ceb276f479705a83d23fc22ee35548e8fe1b5a65a4b0c15cb29c8d41dd5b6f3a6e981e3c988e3d3791b554724e8125fd095a3f2e40e8651
   languageName: node
   linkType: hard
 
@@ -1152,12 +1153,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jolokia.js/simple@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "@jolokia.js/simple@npm:2.2.4"
+"@jolokia.js/simple@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "@jolokia.js/simple@npm:2.3.0"
   dependencies:
-    jolokia.js: "npm:2.2.4"
-  checksum: 10c0/a55a2babfd2c245652c0cf2a94b48e20e4497e75ba01a16aecfed6bc9f5678913007bfebffa2f23243faf42e408266f288718929829aa660d6a184eb9e4d3707
+    jolokia.js: "npm:2.3.0"
+  checksum: 10c0/0065f3a5d857b8aa4a773ff7cbcf4e65528d49624fb35ba8b8100838bf7fcb65e332b69d7a9d92ae35a906b60b3983f29eb3f93aa9039aa028c34bf92f86f396
   languageName: node
   linkType: hard
 
@@ -1261,7 +1262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/utilities@npm:^3.1.61":
+"@module-federation/utilities@npm:^3.1.62":
   version: 3.1.66
   resolution: "@module-federation/utilities@npm:3.1.66"
   dependencies:
@@ -1922,7 +1923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@thumbmarkjs/thumbmarkjs@npm:^1.0.0":
+"@thumbmarkjs/thumbmarkjs@npm:^1.1.1":
   version: 1.1.2
   resolution: "@thumbmarkjs/thumbmarkjs@npm:1.1.2"
   checksum: 10c0/0785e3283fc227e3304040b856d88bfbc7846cd95ade7b3ee6c65b4d692779a52ce0e6631f3b4d0e198f6435306bc331abeeddef9550b40f76e37c85649c5737
@@ -3320,7 +3321,8 @@ __metadata:
   resolution: "artemis-console-app@workspace:app"
   dependencies:
     "@hawtio/backend-middleware": "npm:^1.0.6"
-    "@hawtio/react": "npm:^1.10.0"
+    "@hawtio/react": "npm:^1.10.1"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@patternfly/react-charts": "npm:^7.4.9"
     "@patternfly/react-code-editor": "npm:^5.4.18"
     "@patternfly/react-core": "npm:^5.4.14"
@@ -3368,7 +3370,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "artemis-console-plugin@workspace:packages/artemis-console-plugin"
   dependencies:
-    "@hawtio/react": "npm:^1.10.0"
+    "@hawtio/react": "npm:^1.10.1"
+    "@monaco-editor/react": "npm:^4.6.0"
     "@patternfly/react-charts": "npm:^7.4.9"
     "@patternfly/react-code-editor": "npm:^5.4.18"
     "@patternfly/react-core": "npm:^5.4.14"
@@ -3400,7 +3403,8 @@ __metadata:
     webpack: "npm:^5.101.0"
     xml-formatter: "npm:^3.6.6"
   peerDependencies:
-    "@hawtio/react": ^1.9
+    "@hawtio/react": ^1.10
+    "@monaco-editor/react": ^4
     "@patternfly/react-charts": ^7
     "@patternfly/react-code-editor": ^5
     "@patternfly/react-core": ^5
@@ -7256,10 +7260,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jolokia.js@npm:2.2.4, jolokia.js@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "jolokia.js@npm:2.2.4"
-  checksum: 10c0/d1ef96f7119eafe3ec5e4ccb85542f2f0ec2ec4382691f6c8875d196f519bb04bf2f9a0407a7b633869d62aee8ae94c6cd5ab0f4d12f4600ae0862ac2b128268
+"jolokia.js@npm:2.3.0, jolokia.js@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "jolokia.js@npm:2.3.0"
+  checksum: 10c0/d872f2b24b1a5e24aeabbe435c509afb45d16fe2d09beedcce18344a28e9aa652185e8fee44460688a97b4d02bedeef60aabd95bc305b542446e2edeed4274a3
   languageName: node
   linkType: hard
 
@@ -8492,7 +8496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.6.0":
+"oauth4webapi@npm:^3.6.1":
   version: 3.7.0
   resolution: "oauth4webapi@npm:3.7.0"
   checksum: 10c0/eb357ceade4e26f0acacd2dc9821d4128d85fe803d853cfc80979cbc2862f1a854743b77f923a08f1e81f4fd2b7823d0c3f3ba196a2bf6a1eff421c6a4f1c430
