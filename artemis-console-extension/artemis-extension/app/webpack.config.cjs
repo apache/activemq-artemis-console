@@ -312,6 +312,10 @@ module.exports = (webpackEnv, args) => {
       runtimeChunk: 'single',
     } : {},
     devServer: {
+      hot: !process.env.DISABLE_WS,
+      liveReload: !process.env.DISABLE_WS,
+      // changing to "ws" adds 20+ more modules to webpack-generated bundle
+      webSocketServer: process.env.DISABLE_WS ? false : 'ws',
       static: [
         {
           directory: path.resolve(__dirname, "build"),
