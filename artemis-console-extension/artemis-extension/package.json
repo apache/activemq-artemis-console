@@ -14,8 +14,8 @@
   },
   "resolutions": {
     "@babel/runtime": "7.28.2",
-    "@typescript-eslint/eslint-plugin": "8.38.0",
-    "@typescript-eslint/parser": "8.38.0",
+    "@typescript-eslint/eslint-plugin": "8.39.0",
+    "@typescript-eslint/parser": "8.39.0",
     "axios": "^1.11.0",
     "braces": "3.0.3",
     "caniuse-lite": "1.0.30001731",
