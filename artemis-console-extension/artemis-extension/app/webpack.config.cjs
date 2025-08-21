@@ -221,9 +221,6 @@ module.exports = (webpackEnv, args) => {
     ],
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.cjs', '.jsx'],
-      alias: {
-        '@thumbmarkjs/thumbmarkjs': path.join(__dirname, '../node_modules/@thumbmarkjs/thumbmarkjs/dist/thumbmark.esm.js'),
-      },
       // To resolve errors for @module-federation/utilities 2.x
       // https://github.com/module-federation/universe/issues/827
       // fallback: {
