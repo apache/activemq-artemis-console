@@ -27,3 +27,4 @@ artemis-console-extension/artemis-extension/.yarn/install-state.gz
 !artemis-console-extension/artemis-extension/.yarn/releases
 !artemis-console-extension/artemis-extension/.yarn/sdks
 !artemis-console-extension/artemis-extension/.yarn/versions
+/artemis-console-extension/artemis-extension/.yarn/cache/
