@@ -31,13 +31,7 @@ import {
   Pagination,
   PaginationVariant,
   Text,
-  TextContent,
-  Select,
-  SelectOption,
-  SearchInput,
-  MenuToggleElement,
-  MenuToggle,
-  SelectList
+  TextContent
 } from '@patternfly/react-core';
 import { SortAmountDownIcon } from '@patternfly/react-icons/dist/esm/icons/sort-amount-down-icon';
 import { Thead, Tr, Th, Tbody, Td, IAction, ActionsColumn, Table, InnerScrollContainer } from '@patternfly/react-table';
@@ -46,8 +40,11 @@ import {
   OptionsMenu,
   OptionsMenuItem,
   OptionsMenuItemGroup,
-  OptionsMenuSeparator, OptionsMenuToggle
+  OptionsMenuSeparator,
+  OptionsMenuToggle
 } from '@patternfly/react-core/deprecated'
+
+import { ArtemisFilters } from './ArtemisFilters';
 
 export type Column = {
   id: string
@@ -126,7 +123,7 @@ const operationOptions = [
     if (broker.storageColumnLocation && sessionStorage.getItem(broker.storageColumnLocation + '.filter')) {
       return JSON.parse(sessionStorage.getItem(broker.storageColumnLocation + '.filter') as string);
     }
-    return { 
+    return {
       column: columns[1].id,
       operation: operationOptions[0].id,
       input: ''
@@ -134,12 +131,6 @@ const operationOptions = [
   }
 
   const [filter, setFilter] = useState(() => broker.filter !== undefined ? broker.filter : initialFilter());
-
-  const [filterColumnStatusSelected, setFilterColumnStatusSelected] = useState(columns.find(column => filter.column === column.id)?.name);
-  const [filterColumnOperationSelected, setFilterColumnOperationSelected] = useState(operationOptions.find(operation => operation.id === filter.operation)?.name);
-  const [inputValue, setInputValue] = useState(filter.input);
-  const [filterColumnStatusIsExpanded, setFilterColumnStatusIsExpanded] = useState(false);
-  const [filterColumnOperationIsExpanded, setFilterColumnOperationIsExpanded] = useState(false);
 
   const listData = async () => {
     const data = await broker.getData(page, perPage, activeSort, filter);
@@ -153,7 +144,7 @@ const operationOptions = [
       setColumns(updatedColumns);
       setColumnsLoaded(true);
     }
-  }, [columns, columnsLoaded]);
+  }, [columnsLoaded]);
 
   useEffect(() => {
     listData();
@@ -189,10 +180,6 @@ const operationOptions = [
     setColumns(updatedColumns);
   };
 
-  const onSearchTextChange = (newValue: string) => {
-    setInputValue(newValue);
-  };
-
   const updateColumnStatus = (index: number, column: Column) => {
     const updatedColumns = [...columns];
     updatedColumns[index].visible = !columns[index].visible;
@@ -207,25 +194,6 @@ const operationOptions = [
     setActiveSort(updatedActiveSort)
     sessionStorage.setItem(broker.storageColumnLocation + ".activesort",JSON.stringify(updatedActiveSort));
   }
-
-  const onFilterColumnStatusSelect = (
-    _event?: React.MouseEvent<Element, MouseEvent> | undefined,
-    selection?: string | number | undefined
-  ) => {
-    setFilterColumnStatusSelected(selection as string);
-    setFilterColumnStatusIsExpanded(false);
-  };
-
-  const onFilterColumnOperationSelect = (
-    _event?: React.MouseEvent<Element, MouseEvent> | undefined,
-    selection?: string | number | undefined
-  ) => {
-    const operation = operationOptions.find(operation => operation.name === selection);
-    if (operation) {
-      setFilterColumnOperationSelected(selection as string);
-    }
-    setFilterColumnOperationIsExpanded(false);
-  };
 
   const getRowActions = (row: never, rowIndex: number): IAction[] => {
     if (broker.getRowActions) {
@@ -248,19 +216,6 @@ const operationOptions = [
 
   const getKeyByValue = (producer: never, columnName: string) => {
     return producer[columnName];
-  }
-
-  const applyFilter = () => {
-    setPage(1);
-    const operation = operationOptions.find(operation => operation.name === filterColumnOperationSelected);
-    const column = columns.find(column => column.name === filterColumnStatusSelected);
-    if (operation && column) {
-      var filter = { column: column.id, operation: operation.id, input: inputValue };
-      setFilter(filter);
-      if (broker.storageColumnLocation) {
-        sessionStorage.setItem(broker.storageColumnLocation + '.filter', JSON.stringify(filter));
-      }
-    }
   }
 
   const renderPagination = (variant: PaginationVariant | undefined) => (
@@ -329,16 +284,16 @@ const operationOptions = [
     );
   };
 
-
-  const toolbarItems = (
+  return (
     <React.Fragment>
+
       <Toolbar id="toolbar">
         <ToolbarContent>
           <ToolbarItem key='address-sort'>
             <OptionsMenu
               id="options-menu-multiple-options-example"
               menuItems={[
-                <OptionsMenuItemGroup key="first group" aria-label="Sort column">
+                <OptionsMenuItemGroup key="sort-columns" aria-label="Sort column">
                   {Object.values(broker.allColumns).filter((element) => element.visible).map((column, columnIndex) => (
                     <OptionsMenuItem
                       key={column.id}
@@ -352,7 +307,7 @@ const operationOptions = [
                   ))}
                 </OptionsMenuItemGroup>,
                 <OptionsMenuSeparator key="separator" />,
-                <OptionsMenuItemGroup key="second group" aria-label="Sort direction">
+                <OptionsMenuItemGroup key="sort-direction" aria-label="Sort direction">
                   <OptionsMenuItem
                     onSelect={() => updateActiveSort(activeSort.id, SortDirection.ASCENDING)}
                     isSelected={activeSort.order === SortDirection.ASCENDING}
@@ -383,65 +338,20 @@ const operationOptions = [
               isGrouped
             />
           </ToolbarItem>
-          <ToolbarItem variant="search-filter" key='column-id-select'>
-            <Select
-              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setFilterColumnStatusIsExpanded(prev => !prev)}>
-                    {filterColumnStatusSelected}
-                  </MenuToggle>
-              )}
-              aria-label="Select Input"
-              onSelect={onFilterColumnStatusSelect}
-              selected={filterColumnStatusSelected}
-              isOpen={filterColumnStatusIsExpanded}
-              onOpenChange={(isOpen: boolean) => setFilterColumnStatusIsExpanded(isOpen)}
-            >
-              <SelectList>
-                {columns.filter((element) => element.visible).map((column, index) => (
-                  <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
-                ))}
-              </SelectList>
-            </Select>
-          </ToolbarItem>
-          <ToolbarItem variant="search-filter" key="filter-type">
-            <Select
-              toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
-                  <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setFilterColumnOperationIsExpanded(prev => !prev)}>
-                    {filterColumnOperationSelected}
-                  </MenuToggle>
-              )}
-              aria-label="Select Input"
-              onSelect={onFilterColumnOperationSelect}
-              selected={filterColumnOperationSelected}
-              isOpen={filterColumnOperationIsExpanded}
-              onOpenChange={(isOpen: boolean) => setFilterColumnOperationIsExpanded(isOpen)}
-            >
-              <SelectList>
-                {operationOptions.map((column, _index) => (
-                    <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
-                ))}
-              </SelectList>
-            </Select>
-          </ToolbarItem>
-          <ToolbarItem variant="search-filter" key="search=text">
-            <SearchInput
-              aria-label="search-text"
-              onChange={(_event, value) => onSearchTextChange(value)}
-              value={inputValue}
-              onClear={() => {
-                onSearchTextChange('');
-                applyFilter();
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  applyFilter();
-                }
-              }}
-            />
-          </ToolbarItem>
-          <ToolbarItem key="search-button">
-            <Button onClick={applyFilter} id="table-search-button">Search</Button>
-          </ToolbarItem>
+
+          <ArtemisFilters
+            columns={columns}
+            operationOptions={operationOptions}
+            initialFilter={filter}
+            onApplyFilter={(f) => {
+              setPage(1);
+              setFilter(f);
+              if (broker.storageColumnLocation) {
+                sessionStorage.setItem(broker.storageColumnLocation + '.filter', JSON.stringify(f));
+              }
+            }}
+          />
+
           <ToolbarItem key="column-select">
             <Button variant='link' onClick={handleModalToggle}>Manage Columns</Button>
           </ToolbarItem>
@@ -453,12 +363,7 @@ const operationOptions = [
           }
         </ToolbarContent>
       </Toolbar>
-    </React.Fragment>
-  );
 
-  return (
-    <React.Fragment>
-      {toolbarItems}
       <InnerScrollContainer>
       <Table variant="compact" aria-label="Data Table" id='data-table'>
       <Thead>
@@ -520,5 +425,3 @@ const operationOptions = [
     </React.Fragment>
   );
 };
-
-
