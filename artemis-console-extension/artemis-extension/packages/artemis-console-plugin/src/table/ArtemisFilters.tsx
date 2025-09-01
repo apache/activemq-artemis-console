@@ -27,22 +27,23 @@ export type ArtemisFiltersProps = {
 
 export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operationOptions, initialFilter, onApplyFilter }) => {
   const searchRef = useRef<HTMLInputElement>(null);
+
   const [filterColumn, setFilterColumn] = useState(
-    columns.find(c => c.id === initialFilter.column)?.name
+    columns.find(c => c.id === initialFilter.column)
   );
   const [filterOperation, setFilterOperation] = useState(
-    operationOptions.find(o => o.id === initialFilter.operation)?.name
+    operationOptions.find(o => o.id === initialFilter.operation)
   );
 
   const [columnOpen, setColumnOpen] = useState(false);
   const [operationOpen, setOperationOpen] = useState(false);
 
+  const visibleColumns = columns.filter(c => c.visible);
+
   const applyFilter = () => {
-    const operation = operationOptions.find(operation => operation.name === filterOperation);
-    const column = columns.find(column => column.name === filterColumn);
     const filterValue = searchRef.current?.value ?? "";
-    if (operation && column) {
-      onApplyFilter({ column: column.id, operation: operation.id, input: filterValue });
+    if (filterOperation && filterColumn) {
+      onApplyFilter({ column: filterColumn.id, operation: filterOperation.id, input: filterValue });
     }
   }
 
@@ -52,17 +53,20 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
         <Select
           toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
             <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setColumnOpen(prev => !prev)}>
-              {filterColumn}
+              {filterColumn?.name}
             </MenuToggle>
           )}
           aria-label="Select Input"
           isOpen={columnOpen}
           onOpenChange={setColumnOpen}
-          onSelect={(_e, selection) => { setFilterColumn(selection as string); setColumnOpen(false); }}
-          selected={filterColumn}
+          onSelect={(_e, selection) => {
+            const selectedColumn = columns.find(c => c.name === selection);
+            setFilterColumn(selectedColumn);
+            setColumnOpen(false); }}
+          selected={filterColumn?.name}
         >
           <SelectList>
-            {columns.filter(c => c.visible).map(column => (
+            {visibleColumns.map(column => (
               <SelectOption key={column.id} value={column.name}>{column.name}</SelectOption>
             ))}
           </SelectList>
@@ -73,14 +77,17 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
         <Select
           toggle={(toggleRef: React.Ref<MenuToggleElement>) => (
             <MenuToggle isFullWidth role='menu' ref={toggleRef} onClick={() => setOperationOpen(prev => !prev)}>
-              {filterOperation}
+              {filterOperation?.name}
             </MenuToggle>
           )}
           aria-label="Select Input"
           isOpen={operationOpen}
           onOpenChange={setOperationOpen}
-          onSelect={(_e, selection) => { setFilterOperation(selection as string); setOperationOpen(false); }}
-          selected={filterOperation}
+          onSelect={(_e, selection) => {
+            const selectedOperation = operationOptions.find(o => o.name === selection);
+            setFilterOperation(selectedOperation);
+            setOperationOpen(false); }}
+          selected={filterOperation?.name}
         >
           <SelectList>
             {operationOptions.map(operation => (
