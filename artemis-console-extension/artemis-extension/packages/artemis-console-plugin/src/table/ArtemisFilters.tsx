@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Select, SelectList, SelectOption, MenuToggleElement, MenuToggle, SearchInput, ToolbarItem } from '@patternfly/react-core';
 
 export type ArtemisFiltersProps = {
@@ -26,21 +26,23 @@ export type ArtemisFiltersProps = {
 };
 
 export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operationOptions, initialFilter, onApplyFilter }) => {
+  const searchRef = useRef<HTMLInputElement>(null);
   const [filterColumn, setFilterColumn] = useState(
     columns.find(c => c.id === initialFilter.column)?.name
   );
   const [filterOperation, setFilterOperation] = useState(
     operationOptions.find(o => o.id === initialFilter.operation)?.name
   );
-  const [inputValue, setInputValue] = useState(initialFilter.input);
+
   const [columnOpen, setColumnOpen] = useState(false);
   const [operationOpen, setOperationOpen] = useState(false);
 
   const applyFilter = () => {
     const operation = operationOptions.find(operation => operation.name === filterOperation);
     const column = columns.find(column => column.name === filterColumn);
+    const filterValue = searchRef.current?.value ?? "";
     if (operation && column) {
-      onApplyFilter({ column: column.id, operation: operation.id, input: inputValue });
+      onApplyFilter({ column: column.id, operation: operation.id, input: filterValue });
     }
   }
 
@@ -90,18 +92,14 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
 
       <ToolbarItem variant="search-filter" key="search=text">
         <SearchInput
-          aria-label="Search Text"
-          value={inputValue}
-          onChange={(_event, value) => setInputValue(value)}
-          onClear={() => {
-            setInputValue('');
-            applyFilter();
-          }}
+          ref={searchRef}
+          defaultValue=""
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               applyFilter();
             }
-          }}
+          }
+        }
         />
       </ToolbarItem>
 
