@@ -16,7 +16,7 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Button, Select, SelectList, SelectOption, MenuToggleElement, MenuToggle, SearchInput, ToolbarItem } from '@patternfly/react-core';
+import { Button, Select, SelectList, SelectOption, MenuToggleElement, MenuToggle, TextInput, ToolbarItem } from '@patternfly/react-core';
 
 export type ArtemisFiltersProps = {
   columns: { id: string; name: string; visible: boolean }[];
@@ -98,7 +98,7 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
       </ToolbarItem>
 
       <ToolbarItem variant="search-filter" key="search=text">
-        <SearchInput
+        <TextInput
           ref={searchRef}
           defaultValue=""
           onKeyDown={(e) => {
