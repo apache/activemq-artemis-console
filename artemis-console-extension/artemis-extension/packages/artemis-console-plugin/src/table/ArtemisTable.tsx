@@ -201,9 +201,9 @@ const operationOptions = [
     sessionStorage.setItem(broker.storageColumnLocation + ".activesort",JSON.stringify(updatedActiveSort));
   }
 
-  const getRowActions = (row: never, rowIndex: number): IAction[] => {
+  const getRowActions = (row: never): IAction[] => {
     if (broker.getRowActions) {
-      return broker.getRowActions(row, rowIndex);
+      return broker.getRowActions(row);
     }
     return [];
   };
@@ -433,7 +433,7 @@ const operationOptions = [
                 })}
                 <Td isActionCell>
                   <ActionsColumn
-                    items={getRowActions(row, rowIndex)}
+                    items={getRowActions(row)}
                     popperProps={{ position: 'right', appendTo: () => (document.getElementById('root') as HTMLElement) }}
                   />
                 </Td>
