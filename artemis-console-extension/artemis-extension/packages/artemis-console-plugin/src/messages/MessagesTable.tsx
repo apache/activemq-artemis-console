@@ -134,7 +134,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     setFilter(inputValue);
   };
 
-  const getRowActions = (row: any, rowIndex: number): IAction[] => {
+  const getRowActions = (row: any): IAction[] => {
     return [
       {
         title: 'Delete',
