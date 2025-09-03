@@ -99,6 +99,7 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
 
       <ToolbarItem variant="search-filter" key="search=text">
         <TextInput
+          aria-label="Search"
           ref={searchRef}
           defaultValue=""
           onKeyDown={(e) => {
