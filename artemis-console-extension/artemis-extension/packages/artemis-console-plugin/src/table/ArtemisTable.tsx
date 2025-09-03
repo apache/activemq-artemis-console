@@ -120,6 +120,7 @@ const operationOptions = [
   const [page, setPage] = useState(1);
   const [isCompact, setIsCompact] = useState(false);
   const [perPage, setPerPage] = useState(10);
+  const [perPageOption, setPerPageOption] = useState(1);
   const pageSize = artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation);
 
   const rootElement = document.getElementById('root') as HTMLElement;
@@ -220,7 +221,8 @@ const operationOptions = [
     setPage(newPage);
   };
 
-  const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number, newPage: number) => {
+  const handlePerPageSelect = (_event: React.MouseEvent | React.KeyboardEvent | MouseEvent, newPerPage: number) => {
+    setPerPageOption(newPerPage);
     if(broker.storageColumnLocation) {
       artemisPreferencesService.saveTablePageSize(broker.storageColumnLocation, newPerPage)
     }
@@ -261,7 +263,7 @@ const operationOptions = [
     <Pagination
       itemCount={resultsSize}
       page={page}
-      perPage={perPage}
+      perPage={perPageOption}
       onSetPage={handleSetPage}
       onPerPageSelect={handlePerPageSelect}
       isCompact={isCompact}
