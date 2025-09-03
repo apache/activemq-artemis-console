@@ -122,6 +122,14 @@ const operationOptions = [
   const [perPage, setPerPage] = useState(10);
   const pageSize = artemisPreferencesService.loadTablePageSize(broker.storageColumnLocation);
 
+  const rootElement = document.getElementById('root') as HTMLElement;
+  const popperProps = {
+    position: 'right' as const,
+    appendTo: rootElement,
+  };
+
+  const visibleColumns = columns.filter((column) => column.visible);
+
   const initialFilter = () =>  {
     if (broker.storageColumnLocation && sessionStorage.getItem(broker.storageColumnLocation + '.filter')) {
       return JSON.parse(sessionStorage.getItem(broker.storageColumnLocation + '.filter') as string);
@@ -229,6 +237,17 @@ const operationOptions = [
   const getKeyByValue = (producer: never, columnName: string) => {
     return producer[columnName];
   }
+
+  const handleClick = (column: Column, row: any) => () => {
+    if (column.filter) {
+      const filter = column.filter(row);
+      if (broker.navigate) {
+        broker.navigate(column.filterTab, filter);
+      }
+    } else if (column.link) {
+      column.link(row);
+    }
+  };
 
   const pageSizeOptions = [
     { title: '10 per page', value: 10 },
@@ -391,8 +410,7 @@ const operationOptions = [
       <Table variant="compact" aria-label="Data Table" id='data-table'>
       <Thead>
         <Tr>
-          {columns.map((column, id) => {
-            if (!column.visible) return null;
+          {visibleColumns.map((column, id) => {
 
             const isSorted = column.id === activeSort.id;
             const direction = isSorted ? activeSort.order : undefined;
@@ -419,26 +437,21 @@ const operationOptions = [
         <Tbody>
           {rows.map((row, rowIndex) => (
             <Tr key={rowIndex}>
-              <>
-               {columns.filter((column) => column.visible).map((column, id) => {
-                  const key = getKeyByValue(row, column.id)
-                  if(column.filter) {
-                    const filter = column.filter(row);
-                    return <Td key={id}><Link to="" onClick={() => {if (broker.navigate) { broker.navigate(column.filterTab, filter)}}}>{key}</Link></Td>
-                  } else if (column.link) {
-                    return <Td key={id}><Link to="" onClick={() => {if (column.link) column.link(row)}}>{key}</Link></Td>
-                  } else {
-                    return <Td key={id}>{key}</Td>
-                  }
-                })}
-                <Td isActionCell>
-                  <ActionsColumn
-                    items={getRowActions(row)}
-                    popperProps={{ position: 'right', appendTo: () => (document.getElementById('root') as HTMLElement) }}
-                  />
-                </Td>
-              </>
-            </Tr>
+              {visibleColumns.map((column, id) => {
+                const key = getKeyByValue(row, column.id)
+                if(column.filter || column.link) {
+                  return <Td key={id}><Link to="" onClick={handleClick(column, row)}>{key}</Link></Td>
+                } else {
+                  return <Td key={id}>{key}</Td>
+                }
+              })}
+              <Td isActionCell>
+                <ActionsColumn
+                  items={getRowActions(row)}
+                  popperProps={popperProps}
+                />
+              </Td>
+          </Tr>
           ))}
         </Tbody>
       </Table>
