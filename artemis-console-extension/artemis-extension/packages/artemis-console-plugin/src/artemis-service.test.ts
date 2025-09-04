@@ -27,7 +27,7 @@ beforeAll(async () => {
 })
 
 /**
- * A set of tests that run against a running broker instance to ts=est the integration API
+ * A set of tests that run against a running broker instance to test the integration API
  */
 describe("Artemis Service basic tests", () => {
 
