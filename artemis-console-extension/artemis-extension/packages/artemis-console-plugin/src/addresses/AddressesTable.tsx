@@ -93,7 +93,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
     }
   }
 
-  const getRowActions = (row: any, rowIndex: number): IAction[] => {
+  const getRowActions = (row: any): IAction[] => {
     var actions: IAction[] = [
       {
         title: 'Show in Artemis JMX',

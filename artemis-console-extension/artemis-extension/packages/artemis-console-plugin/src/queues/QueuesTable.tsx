@@ -27,6 +27,13 @@ import { createQueueObjectName } from '../util/jmx';
 import { useNavigate } from 'react-router-dom';
 import { columnStorage } from '../artemis-preferences-service';
 
+export type queuePermissions = {
+  canSend: boolean;
+  canBrowse: boolean;
+  canPurge: boolean;
+  canDelete: boolean;
+}
+
 export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   const getAddressFilter = (row: any) => {
     var filter: Filter = {
@@ -160,99 +167,112 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
       });
   };
 
-  const getRowActions = (row: any, rowIndex: number): IAction[] => {
-    var actions: IAction[] =  [
-      {
-        title: 'Show in Artemis JMX',
-        onClick: async () => {
-          setAddress(row.name);
-          const brokerObjectName = await artemisService.getBrokerObjectName();
-          const queueObjectName = createQueueObjectName(brokerObjectName,row.address, row.routingType,  row.name);
-          findAndSelectNode(queueObjectName, row.name);
-          routenavigate('/treeartemisJMX')
-        }
-      },
-      {
-        title: 'Attributes',
-        onClick: async () => {
-          setAddress(row.name);
-          const brokerObjectName = await artemisService.getBrokerObjectName();
-          const queueObjectName = createQueueObjectName(brokerObjectName,row.address, row.routingType,  row.name);
-          findAndSelectNode(queueObjectName, row.name);
-          setShowAttributesDialog(true);
-        }
-      },
-      {
-        title: 'Operations',
-        onClick: async () => {
-          setAddress(row.name);
-          const brokerObjectName = await artemisService.getBrokerObjectName();
-          const queueObjectName = createQueueObjectName(brokerObjectName,row.address, row.routingType,  row.name);
-          findAndSelectNode(queueObjectName, row.name);
-          setShowOperationsDialog(true);
-        }
-      }
-    ]
-
-
-    if (canDeleteQueue) {
-      actions.push(
-        {
-          title: 'Delete',
-          onClick: () => {
-            setQueue(row.name);
-            setShowDeleteDialog(true);
-          }
-        }
-      );
+  const showInJmxAction = (rowName: string, rowAddress: string, rowRoutingType: string): IAction => ({
+    title: "Show in Artemis JMX",
+    onClick: async () => {
+      setAddress(rowName);
+      const brokerObjectName = await artemisService.getBrokerObjectName();
+      const queueObjectName = createQueueObjectName(brokerObjectName, rowAddress, rowRoutingType, rowName);
+      findAndSelectNode(queueObjectName, rowName);
+      routenavigate("/treeartemisJMX");
     }
+  });
 
-    var canSendMessage = artemisService.canSendMessageToQueue(brokerNode, row.name);
-    if (canSendMessage) {
-      actions.push(
-        {
-          title: 'Send Message',
-          onClick: () => {
-            setQueue(row.name);
-            setAddress(row.address);
-            setRoutingType(row.routingType)
-            setShowSendDialog(true);
-          }
-
-        }
+  const attributesAction = (rowName: string, rowAddress: string, rowRoutingType: string) => ({
+    title: "Attributes",
+    onClick: async () => {
+      setAddress(rowName);
+      const brokerObjectName = await artemisService.getBrokerObjectName();
+      const queueObjectName = createQueueObjectName(
+        brokerObjectName,
+        rowAddress,
+        rowRoutingType,
+        rowName
       );
+      findAndSelectNode(queueObjectName, rowName);
+      setShowAttributesDialog(true);
     }
+  });
 
-    var canPurgeQueue = artemisService.canPurgeQueue(brokerNode, row.name);
-    if (canPurgeQueue) {
-      actions.push(
-        {
-          title: 'Purge',
-          onClick: () => {
-            setQueue(row.name);
-            setQueueToPurgeAddress(row.address);
-            setQueueToPurgeRoutingType(row.routingType);
-            setShowPurgeDialog(true);
-          }
-        }
+  const operationsAction = (rowName: string, rowAddress: string, rowRoutingType: string): IAction => ({
+    title: "Operations",
+    onClick: async () => {
+      setAddress(rowName);
+      const brokerObjectName = await artemisService.getBrokerObjectName();
+      const queueObjectName = createQueueObjectName(
+        brokerObjectName,
+        rowAddress,
+        rowRoutingType,
+        rowName
       );
+      findAndSelectNode(queueObjectName, rowName);
+      setShowOperationsDialog(true);
     }
+  });
 
-    var canBrowseQueue = artemisService.canBrowseQueue(brokerNode, row.name);
-    if (canBrowseQueue) {
-      actions.push(
-        {
-          title: 'Browse Messages',
-          onClick: () => {
-            navigate.selectQueue(row.name, row.address, row.routingType);
-          }
-
-        }
-      );
+  const deleteAction = (rowname: string): IAction => ({
+    title: "Delete",
+    onClick: () => {
+      setQueue(rowname);
+      setShowDeleteDialog(true);
     }
+  });
 
+  const sendMessageAction = (rowName: string, rowAddress: string, rowRoutingType: string): IAction => ({
+    title: "Send Message",
+    onClick: () => {
+      setQueue(rowName);
+      setAddress(rowAddress);
+      setRoutingType(rowRoutingType);
+      setShowSendDialog(true);
+    }
+  });
+
+  const purgeAction = (rowName: string, rowAddress: string, rowRoutingType: string): IAction => ({
+    title: "Purge",
+    onClick: () => {
+      setQueue(rowName);
+      setQueueToPurgeAddress(rowAddress);
+      setQueueToPurgeRoutingType(rowRoutingType);
+      setShowPurgeDialog(true);
+    }
+  });
+
+  const browseAction = (rowName: string, rowAddress: string, rowRoutingType: string): IAction => ({
+    title: "Browse Messages",
+    onClick: () => {
+      navigate.selectQueue(rowName, rowAddress, rowRoutingType);
+    }
+  });
+
+  const permissions = artemisService.getQueuePermissions(brokerNode);
+
+  const getRowActions = (row: any): IAction[] => {
+    const rowName = row.name;
+    const rowAddress = row.address;
+    const rowRoutingType = row.routingType;
+    const rowPerms = permissions[rowName];
+    const actions: IAction[] = [
+      showInJmxAction(rowName, rowAddress, rowRoutingType),
+      attributesAction(rowName, rowAddress, rowRoutingType),
+      operationsAction(rowName, rowAddress, rowRoutingType)
+    ];
+
+  if (rowPerms?.canSend) {
+    actions.push(sendMessageAction(rowName, rowAddress, rowRoutingType));
+  }
+  if (rowPerms?.canPurge) {
+    actions.push(purgeAction(rowName, rowAddress, rowRoutingType));
+  }
+  if (rowPerms?.canBrowse) {
+    actions.push(browseAction(rowName, rowAddress, rowRoutingType));
+  }
+  if (rowPerms?.canDelete) {
+    actions.push(deleteAction(rowName));
+  }
 
     return actions;
+
   };
 
   return (
