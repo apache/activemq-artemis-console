@@ -174,6 +174,13 @@ module.exports = (webpackEnv, args) => {
               jsc: {
                 parser: {
                   syntax: 'typescript',
+                  tsx: true,
+                },
+                transform: {
+                  react: {
+                  runtime: 'automatic', // <- enables new JSX transform
+                  importSource: 'react',
+                  },
                 },
               },
             },
@@ -211,7 +218,7 @@ module.exports = (webpackEnv, args) => {
         {
           test: /\.md$/i,
           type: 'asset/source',
-        },
+        }
       ]
     },
     ignoreWarnings: [
@@ -221,14 +228,8 @@ module.exports = (webpackEnv, args) => {
     ],
     resolve: {
       extensions: ['.ts', '.tsx', '.js', '.cjs', '.jsx'],
-      // To resolve errors for @module-federation/utilities 2.x
-      // https://github.com/module-federation/universe/issues/827
-      // fallback: {
-      //   path: require.resolve('path-browserify'),
-      //   os: require.resolve('os-browserify'),
-      // },
-      symlinks: true, // with symlinks: false, `webpaack server` doesn't reload on change in the package...
       alias: {
+        'artemis-console-plugin': path.resolve(__dirname, '../packages/artemis-console-plugin/src'),
         '@thumbmarkjs/thumbmarkjs': path.join(__dirname, '../node_modules/@thumbmarkjs/thumbmarkjs/dist/thumbmark.esm.js'),
       },
     },
@@ -329,6 +330,10 @@ module.exports = (webpackEnv, args) => {
         },
         writeToDisk: true
       },
+      watchFiles: [
+        path.resolve(__dirname, 'src/**/*'),
+        path.resolve(__dirname, '../packages/artemis-console-plugin/**/*'),
+      ],
       setupMiddlewares: (middlewares, devServer) => {
           // Enabling branding in dev mode
           devServer.app.use((req, _, next) => {
