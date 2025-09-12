@@ -124,6 +124,7 @@ const DELETE_ADDRESS_SIG = "deleteAddress(java.lang.String)";
 const DELETE_MESSAGE_SIG = "removeMessage(long)";
 const MOVE_MESSAGE_SIG = "moveMessage(long,java.lang.String)";
 const COPY_MESSAGE_SIG = "copyMessage(long,java.lang.String)";
+const RETRY_MESSAGE_SIG = "retryMessage(long)";
 const CREATE_QUEUE_SIG = "createQueue(java.lang.String,boolean)"
 const CREATE_ADDRESS_SIG = "createAddress(java.lang.String,java.lang.String)"
 const COUNT_MESSAGES_SIG = "countMessages()";
@@ -341,6 +342,10 @@ class ArtemisService {
         return jolokiaService.execute(mbean, COPY_MESSAGE_SIG, [id, targetQueue])
     }
 
+     async retryMessage(id: number, address: string, routingType: string, queue: string) {
+        const mbean = createQueueObjectName(await this.getBrokerObjectName(), address, routingType, queue);
+        return jolokiaService.execute(mbean, RETRY_MESSAGE_SIG, [id])
+    }
 
     async createQueue(queueConfiguration: string) {
         return await jolokiaService.execute(await this.getBrokerObjectName(), CREATE_QUEUE_SIG, [queueConfiguration, false]).then().catch() as string;
