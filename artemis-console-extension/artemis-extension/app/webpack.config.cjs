@@ -383,8 +383,7 @@ module.exports = (webpackEnv, args) => {
             name: 'hawtio-backend',
             path: '/console/proxy',
             middleware: hawtioBackend({
-              // Uncomment it if you want to see debug log for Hawtio backend
-              logLevel: 'debug',
+              logLevel: 'info',
             }),
           })
 
