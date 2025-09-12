@@ -19,6 +19,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { hawtioBackend } = require('@hawtio/backend-middleware')
 const { dependencies } = require('./package.json')
 const path = require("path")
+const fs = require("fs")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
@@ -344,7 +345,9 @@ module.exports = (webpackEnv, args) => {
           const username = 'developer'
           const proxyEnabled = true
           const plugin = []
-          const hawtconfig = {}
+          const hawtconfig = JSON.parse(
+            fs.readFileSync(path.resolve(__dirname, 'public/hawtconfig.json'), 'utf-8')
+          )
 
           // Hawtio backend API mock
           let login = true
@@ -366,8 +369,10 @@ module.exports = (webpackEnv, args) => {
           devServer.app.get('/console/proxy/enabled', (_, res) => res.send(String(proxyEnabled)))
           devServer.app.get('/console/plugin', (_, res) => res.send(JSON.stringify(plugin)))
 
-          // hawtconfig.json mock
-          devServer.app.get('/console/hawtconfig.json', (_, res) => res.send(JSON.stringify(hawtconfig)))
+          devServer.app.get('/console/hawtconfig.json', (_, res) => {
+            res.type('application/json');
+            res.send(JSON.stringify(hawtconfig));
+          })
 
           middlewares.push({
             name: 'hawtio-backend',
