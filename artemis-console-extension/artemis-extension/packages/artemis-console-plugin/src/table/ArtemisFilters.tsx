@@ -101,7 +101,7 @@ export const ArtemisFilters: React.FC<ArtemisFiltersProps> = ({ columns, operati
         <TextInput
           aria-label="Search"
           ref={searchRef}
-          defaultValue=""
+          defaultValue={initialFilter.input}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               applyFilter();
