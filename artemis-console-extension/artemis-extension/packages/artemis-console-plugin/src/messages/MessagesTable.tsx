@@ -75,6 +75,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const [showDeleteMessagesModal, setShowDeleteMessagesModal] = useState(false);
   const [showMoveMessagesModal, setShowMoveMessagesModal] = useState(false);
   const [showCopyMessagesModal, setShowCopyMessagesModal] = useState(false);
+  const [showRetryMessagesModal, setShowRetryMessagesModal] = useState(false);
   const [showResendModal, setShowResendModal] = useState(false);
   const [ resendMessage, setResendMessage] = useState<Message | undefined>();
 
@@ -213,6 +214,8 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
 
   const doesCopyMessagemethodExist = artemisService.doesMethodExist(brokerNode, props.queue, "copyMessage");
 
+  const isRetryQueue = props.queue.match(artemisPreferencesService.loadArtemisPreferences().artemisDLQ) || props.queue.match(artemisPreferencesService.loadArtemisPreferences().artemisExpiryQueue);
+
   if(!doesCopyMessagemethodExist) {
     log.warn("Copy button method not available in this version of Artemis");
     
@@ -318,6 +321,35 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
     setSelectedMessages([]);
   }
 
+  const handleRetryMessages = () => {
+
+    const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
+    var results: Promise<unknown>[] = [];
+    for (let i = 0; i < selectedMessages.length; i++) {
+      var promise: Promise<unknown> = artemisService.retryMessage(selectedMessages[i], props.address, props.routingType, props.queue);
+      results.push(promise);
+    };
+    Promise.allSettled(results)
+      .then((results) => {
+        const rejectedReasons = results.filter(isRejected).map(p => p.reason);
+
+        if (rejectedReasons.length > 0) {
+          eventService.notify({
+            type: 'warning',
+            message: "not all messages retried: errors " + rejectedReasons.toString(),
+          })
+        } else {
+          eventService.notify({
+            type: 'success',
+            message: "Messages Successfully Retried [" + selectedMessages + "]",
+          })
+        }
+      });
+
+    setShowRetryMessagesModal(false);
+    setSelectedMessages([]);
+  }
+
   return (
     <React.Fragment>
       <Toolbar id="toolbar">
@@ -350,6 +382,11 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           <ToolbarItem>
             <Button onClick={() => setShowCopyMessagesModal(true)} isDisabled={!doesCopyMessagemethodExist} >Copy</Button>
           </ToolbarItem>
+          { isRetryQueue &&
+            <ToolbarItem>
+              <Button onClick={() => setShowRetryMessagesModal(true)}>Retry</Button>
+            </ToolbarItem>
+          }
           <ToolbarItem>
             <Button variant='link' onClick={handleColumnsModalToggle} >Manage Columns</Button>
           </ToolbarItem>
@@ -503,6 +540,33 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             This operation cannot be undone so please be careful.
           </Text>
           <QueueSelectInput selectQueue={setSelectedTargetQueue}/>
+        </TextContent>
+      </Modal>
+      <Modal
+        aria-label='retry-messagse-modal'
+        variant={ModalVariant.medium}
+        isOpen={showRetryMessagesModal}
+        actions={[
+          <Button key="cancel" variant="secondary" onClick={() => setShowRetryMessagesModal(false)}>
+            Cancel
+          </Button>,
+          <Button key="copy" variant="primary" onClick={handleRetryMessages}>
+            Confirm
+          </Button>
+        ]}>
+        <TextContent>
+          <Text component="h2">
+            Confirm Retry Message(s)
+          </Text>
+          <Text component="p">
+            <Icon isInline status='warning'>
+              <ExclamationCircleIcon />
+            </Icon>
+            You are about to retry messages {selectedMessages.toString()}
+          </Text>
+          <Text component="p">
+            This operation cannot be undone so please be careful.
+          </Text>
         </TextContent>
       </Modal>
       <Modal
