@@ -142,6 +142,10 @@ const operationOptions = [
     }
   }
 
+  if (broker.filter) {
+    sessionStorage.setItem(broker.storageColumnLocation + '.filter', JSON.stringify(broker.filter));
+  }
+
   const [filter, setFilter] = useState(() => broker.filter !== undefined ? broker.filter : initialFilter());
 
   const listData = async () => {
