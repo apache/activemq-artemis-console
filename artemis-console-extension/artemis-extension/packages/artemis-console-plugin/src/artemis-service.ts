@@ -155,11 +155,9 @@ const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", 
 class ArtemisService {
 
     private brokerObjectName: Promise<string>
-    private brokerInfo: Promise<BrokerInfo | null>
 
     constructor() {
         this.brokerObjectName = Promise.resolve("")
-        this.brokerInfo = Promise.resolve(null)
     }
 
     /**
@@ -168,7 +166,6 @@ class ArtemisService {
      */
     initialize() {
         this.brokerObjectName = this.initBrokerObjectName();
-        this.brokerInfo = this.initBrokerInfo();
     }
 
     private async initBrokerObjectName(): Promise<string> {
@@ -177,7 +174,7 @@ class ArtemisService {
         return search && search[0] ? search[0] : "";
     }
 
-    async initBrokerInfo(): Promise<BrokerInfo | null> {
+    async getBrokerInfo(): Promise<BrokerInfo | null> {
         return new Promise<BrokerInfo | null>(async (resolve, reject) => {
             var brokerObjectName = await this.brokerObjectName;
             if ("" === brokerObjectName) {
@@ -220,9 +217,6 @@ class ArtemisService {
         });
     }
 
-    async getBrokerInfo(): Promise<BrokerInfo | null> {
-        return await this.brokerInfo;
-    }
 
     async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology> {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
