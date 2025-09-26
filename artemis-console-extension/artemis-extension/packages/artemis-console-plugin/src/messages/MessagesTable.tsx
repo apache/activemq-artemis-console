@@ -374,17 +374,17 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
             <Button onClick={applyFilter}>Filter</Button>
           </ToolbarItem>
           <ToolbarItem>
-            <Button onClick={() => setShowDeleteMessagesModal(true)}>Delete</Button>
+            <Button isDisabled={selectedMessages.length === 0} onClick={() => setShowDeleteMessagesModal(true)}>Delete</Button>
           </ToolbarItem>
           <ToolbarItem>
-            <Button onClick={() => setShowMoveMessagesModal(true)}>Move</Button>
+            <Button isDisabled={selectedMessages.length === 0} onClick={() => setShowMoveMessagesModal(true)}>Move</Button>
           </ToolbarItem>
           <ToolbarItem>
-            <Button onClick={() => setShowCopyMessagesModal(true)} isDisabled={!doesCopyMessagemethodExist} >Copy</Button>
+            <Button onClick={() => setShowCopyMessagesModal(true)} isDisabled={!doesCopyMessagemethodExist || selectedMessages.length === 0}>Copy</Button>
           </ToolbarItem>
           { isRetryQueue &&
             <ToolbarItem>
-              <Button onClick={() => setShowRetryMessagesModal(true)}>Retry</Button>
+              <Button isDisabled={selectedMessages.length === 0} onClick={() => setShowRetryMessagesModal(true)}>Retry</Button>
             </ToolbarItem>
           }
           <ToolbarItem>
