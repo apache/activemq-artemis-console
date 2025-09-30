@@ -328,5 +328,6 @@ background-color: var(--artemis-global--primary-color--300);
   --pf-v5-global--link--Color--light: var(--artemis-global--primary-color--300);;
   --pf-v5-global--link--Color--light--hover: var(--artemis-global--primary-color--400);
   /** icon inside broker diagram */
-  --pf-v5-topology__node--Color: var(--artemis-global--primary-color--100)
+  --pf-v5-topology__node--Color: var(--artemis-global--primary-color--100);
+  --pf-v5-c-page__sidebar--Width: 10em;
 }
