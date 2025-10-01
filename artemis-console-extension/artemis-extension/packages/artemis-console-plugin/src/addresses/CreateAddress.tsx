@@ -14,71 +14,95 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActionGroup, Button, Form, FormGroup, Text, Popover, Radio, TextContent, TextInput, Title } from '@patternfly/react-core';
-import React, { useState } from 'react'
-import { artemisService } from '../artemis-service';
-import { eventService } from '@hawtio/react';
-import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
+import {
+    ActionGroup,
+    Button,
+    Form,
+    FormGroup,
+    Text,
+    Popover,
+    Radio,
+    TextContent,
+    TextInput,
+    Title
+} from '@patternfly/react-core';
+import React, {useState} from 'react'
+import {artemisService} from '../artemis-service';
+import {eventService} from '@hawtio/react';
+import {OutlinedQuestionCircleIcon} from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
-export const CreateAddress: React.FunctionComponent = () => {
-  const [addressName, setAddressName] = useState('');
-  const [routingType, setRoutingType] = useState('');
+interface CreateAddressProps {
+    reload: Function
+}
 
-  const handleQueueNameChange = (_event: React.FormEvent<HTMLInputElement>, name: string) => {
-    setAddressName(name);
-  };
+export const CreateAddress: React.FunctionComponent<CreateAddressProps> = (createAddressProps) => {
+    const [addressName, setAddressName] = useState('');
+    const [routingType, setRoutingType] = useState('');
 
-  const handleQueueRoutingTypeChange = (name: string) => {
-    setRoutingType(name);
-  };
+    const handleQueueNameChange = (_event: React.FormEvent<HTMLInputElement>, name: string) => {
+        setAddressName(name);
+    };
 
-  const handleCreateAddress = () => {
-    artemisService.createAddress(addressName, routingType)
-      .then(() => {
-        eventService.notify({
-          type: 'success',
-          message: "Address Succcesfully Created",
-        })
-      })
-      .catch((error: string) => {
-        eventService.notify({
-          type: 'warning',
-          message: error,
-        })
-      })
-  };
+    const handleQueueRoutingTypeChange = (name: string) => {
+        setRoutingType(name);
+    };
 
-  const Hint = () => (
-    <TextContent>
-        <Text component='p'>
-        Use this page to create a new address on the broker. If you want the address to support JMS-like queues, that is point-to-point messaging, choose Anycast. If you want the  address to support JMS-like topic subscriptions, that is publish-subscribe messaging, choose Multicast.
-        </Text>
-    </TextContent>
-)
+    const handleCreateAddress = () => {
+        artemisService.createAddress(addressName, routingType)
+            .then(() => {
+                if (createAddressProps !== undefined) {
+                    createAddressProps.reload();
+                }
+                eventService.notify({
+                    type: 'success',
+                    message: "Address Succcesfully Created",
+                })
+            })
+            .catch((error: string) => {
+                eventService.notify({
+                    type: 'warning',
+                    message: error,
+                })
+            })
+    };
 
-  return (
-    <>
-    <Title headingLevel="h2">Create Address{' '}<Popover bodyContent={Hint}><OutlinedQuestionCircleIcon /></Popover></Title>
-      <br/>
-      <Form>
-        <FormGroup label="Address Name">
-          <TextInput
-            isRequired
-            type="text"
-            id="address-name"
-            name="address-name"
-            value={addressName}
-            onChange={handleQueueNameChange} />
-        </FormGroup>
-        <FormGroup role="radiogroup" isInline fieldId="routing-type" label="Routing Type">
-          <Radio name="basic-inline-radio" label="Anycast" id="ANYCAST" onChange={() => handleQueueRoutingTypeChange("ANYCAST")} />
-          <Radio name="basic-inline-radio" label="Multicast" id="MULTICAST" onChange={() => handleQueueRoutingTypeChange("MULTICAST")} />
-        </FormGroup>
+    const Hint = () => (
+        <TextContent>
+            <Text component='p'>
+                Use this page to create a new address on the broker. If you want the address to support JMS-like queues,
+                that is point-to-point messaging, choose Anycast. If you want the address to support JMS-like topic
+                subscriptions, that is publish-subscribe messaging, choose Multicast.
+            </Text>
+        </TextContent>
+    )
 
-        <ActionGroup>
-          <Button variant="primary" onClick={() => handleCreateAddress()} isDisabled={addressName.length === 0 || routingType.length === 0}>Create Address</Button>
-        </ActionGroup>
-      </Form>
-      </>
-  )
+    return (
+        <>
+            <Title headingLevel="h2">Create Address{' '}<Popover
+                bodyContent={Hint}><OutlinedQuestionCircleIcon/></Popover></Title>
+            <br/>
+            <Form>
+                <FormGroup label="Address Name">
+                    <TextInput
+                        isRequired
+                        type="text"
+                        id="address-name"
+                        name="address-name"
+                        value={addressName}
+                        onChange={handleQueueNameChange}/>
+                </FormGroup>
+                <FormGroup role="radiogroup" isInline fieldId="routing-type" label="Routing Type">
+                    <Radio name="basic-inline-radio" label="Anycast" id="ANYCAST"
+                           onChange={() => handleQueueRoutingTypeChange("ANYCAST")}/>
+                    <Radio name="basic-inline-radio" label="Multicast" id="MULTICAST"
+                           onChange={() => handleQueueRoutingTypeChange("MULTICAST")}/>
+                </FormGroup>
+
+                <ActionGroup>
+                    <Button variant="primary" onClick={() => handleCreateAddress()}
+                            isDisabled={addressName.length === 0 || routingType.length === 0}>Create Address</Button>
+                </ActionGroup>
+            </Form>
+        </>
+    )
 }
