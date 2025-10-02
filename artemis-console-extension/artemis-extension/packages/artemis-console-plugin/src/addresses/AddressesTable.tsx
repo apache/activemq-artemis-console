@@ -81,6 +81,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
   const [showCreateAddressDialog, setShowCreateAddressDialog] = useState(false);
   const [showSendDialog, setShowSendDialog] = useState(false);
   const [address, setAddress] = useState("");
+  const [loadData, setLoadData] = useState(0);
   const canCreateQueue = artemisService.canCreateQueue(brokerNode);
   const canDeleteAddress = artemisService.canDeleteAddress(brokerNode);
   const canCreateAddress = artemisService.canCreateAddress(brokerNode);
@@ -163,12 +164,16 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
     return actions;
   };
 
+  const reload = () => {
+    setLoadData(loadData + 1);
+  }
 
   const handleDeleteAddress = () => {
     artemisService.deleteAddress(address)
       .then(() => {
         setShowDeleteDialog(false);
         workspace.refreshTree();
+        reload();
         eventService.notify({
           type: 'success',
           message: "Address Successfully Deleted",
@@ -185,7 +190,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
 
   return (
     <ArtemisContext.Provider value={{ tree, selectedNode, brokerNode, setSelectedNode, findAndSelectNode }}>
-      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} storageColumnLocation={columnStorage.addresses}  toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
+      <ArtemisTable getRowActions={getRowActions} allColumns={allColumns} getData={listAddresses} loadData={loadData} storageColumnLocation={columnStorage.addresses}  toolbarActions={[createAction]} navigate={navigate.search} filter={navigate.filter}/>
       <Modal
         aria-label='create-queue-modal'
         variant={ModalVariant.medium}
@@ -261,7 +266,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
             Close
           </Button>
         ]}>
-        <CreateAddress/>
+        <CreateAddress reload={reload}/>
       </Modal>
       <Modal
         aria-label='send-modal'

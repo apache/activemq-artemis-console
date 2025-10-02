@@ -45,6 +45,8 @@ import {
 } from '@patternfly/react-core/deprecated'
 
 import { ArtemisFilters } from './ArtemisFilters';
+import {Simulate} from "react-dom/test-utils";
+import loadedData = Simulate.loadedData;
 
 export type Column = {
   id: string
@@ -167,7 +169,7 @@ const operationOptions = [
 
   useEffect(() => {
     listData();
-  }, [page, perPage, activeSort, filter]);
+  }, [page, perPage, activeSort, filter, broker.loadData]);
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
