@@ -44,6 +44,14 @@
             <groupId>io.hawt</groupId>
             <artifactId>hawtio-system</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jolokia.integration</groupId>
+            <artifactId>jolokia-integration-artemis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jolokia</groupId>
+            <artifactId>jolokia-server-detector</artifactId>
+        </dependency>
 
         <!-- Servlet API is provided by the container -->
         <dependency>
