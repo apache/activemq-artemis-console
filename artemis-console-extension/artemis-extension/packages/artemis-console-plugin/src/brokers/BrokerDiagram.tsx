@@ -386,7 +386,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
       return
     }
     if (topologyLoaded && brokerTopology) {
-      var brokerNode: NodeModel = {
+      const brokerNode: NodeModel = {
         id: brokerTopology.broker.nodeID,
         type: 'broker',
         label: brokerTopology.broker.name,
@@ -405,8 +405,8 @@ export const BrokerDiagram: React.FunctionComponent = () => {
           selectNode: selectNode
         }
       }
-      var newBrokerNodes: NodeModel[] = [];
-      var newBrokerEdges: EdgeModel[] = [];
+      const newBrokerNodes: NodeModel[] = [];
+      const newBrokerEdges: EdgeModel[] = [];
       newBrokerNodes.push(brokerNode);
 
       const model: Model = {
@@ -511,7 +511,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
       }
 
       for (const address of brokerTopology.addresses) {
-        var internalAddress: boolean = isInternalName(address.name);
+        const internalAddress: boolean = isInternalName(address.name);
         if(internalAddress && viewOptions.showInternalAddresses) {
           addInternalAddress(address.name, newBrokerNodes, brokerTopology.broker, newBrokerEdges, controller, model, viewOptions.showConnectors, selectNode);
         } else if (!internalAddress && viewOptions.showAddresses) {
@@ -633,7 +633,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
 };
 
 function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean, selectNode: Function) {
-  var addressNode: NodeModel = {
+  const addressNode: NodeModel = {
     id: 'address-node-' + address,
     type: 'resource',
     label: address,
@@ -651,7 +651,7 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
   };
   newBrokerNodes.push(addressNode);
   if (showConnectors) {
-    var addressEdge: EdgeModel = {
+    const addressEdge: EdgeModel = {
       id: 'address-edge-' + brokerInfo.nodeID + '-address-node-' + address,
       type: 'edge',
       source: brokerInfo.nodeID,
@@ -663,7 +663,7 @@ function addAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: Br
 }
 
 function addInternalAddress(address: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showConnectors: boolean, selectNode: Function) {
-  var addressNode: NodeModel = {
+  const addressNode: NodeModel = {
     id: 'address-node-' + address,
     type: 'resource',
     label: address,
@@ -681,7 +681,7 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
   };
   newBrokerNodes.push(addressNode);
   if (showConnectors) {
-    var addressEdge: EdgeModel = {
+    const addressEdge: EdgeModel = {
       id: 'address-edge-' + brokerInfo.nodeID + '-address-node-' + address,
       type: 'edge',
       source: brokerInfo.nodeID,
@@ -693,7 +693,7 @@ function addInternalAddress(address: string, newBrokerNodes: NodeModel[], broker
 }
 
 function addQueue(address: string, queue: string, routingType: string,  newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showAddresses: boolean, showConnectors: boolean, selectNode: Function) {
-  var queueNode: NodeModel = {
+  const queueNode: NodeModel = {
     id: 'queue-node-' + queue,
     type: 'resource',
     label: queue,
@@ -713,7 +713,7 @@ function addQueue(address: string, queue: string, routingType: string,  newBroke
   };
   newBrokerNodes.push(queueNode);
   if (showAddresses && showConnectors) {
-    var queueEdge: EdgeModel = {
+    const queueEdge: EdgeModel = {
       id: 'queue-edge-address-node' + address + '-queue-node-' + queue,
       type: 'edge',
       source: 'address-node-' + address,
@@ -725,7 +725,7 @@ function addQueue(address: string, queue: string, routingType: string,  newBroke
 }
 
 function addInternalQueue(address: string, queue: string, routingType: string, newBrokerNodes: NodeModel[], brokerInfo: BrokerInfo, newBrokerEdges: EdgeModel[], controller: Visualization, model: Model, showInternalAddresses: boolean, showConnectors: boolean, selectNode: Function) {
-  var queueNode: NodeModel = {
+  const queueNode: NodeModel = {
     id: 'queue-node-' + queue,
     type: 'resource',
     label: queue,
@@ -745,7 +745,7 @@ function addInternalQueue(address: string, queue: string, routingType: string, n
   };
   newBrokerNodes.push(queueNode);
   if (showInternalAddresses && showConnectors) {
-    var queueEdge: EdgeModel = {
+    const queueEdge: EdgeModel = {
       id: 'queue-edge-address-node' + address + '-queue-node-' + queue,
       type: 'edge',
       source: 'address-node-' + address,

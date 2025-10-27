@@ -43,7 +43,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
     };
 
     const handleCreateQueue = () => {
-        var queueConfiguration: any = {
+        const queueConfiguration: any = {
             "name": queueName,
             "address": props.address,
             "filter-string": filter,

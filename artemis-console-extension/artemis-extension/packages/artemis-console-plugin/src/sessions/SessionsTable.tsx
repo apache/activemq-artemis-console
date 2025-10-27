@@ -25,7 +25,7 @@ import { columnStorage } from '../artemis-preferences-service';
 
 export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {  
   const getConnectionFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'connectionID',
       operation: 'EQUALS',
       input: row.connectionID
@@ -34,7 +34,7 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
   }
 
   const getConsumerFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'session',
       operation: 'EQUALS',
       input: row.id
@@ -43,7 +43,7 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
   }
 
   const getProducerFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'session',
       operation: 'EQUALS',
       input: row.id

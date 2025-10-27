@@ -57,7 +57,7 @@ export const ArtemisJMXTabs: React.FunctionComponent = () => {
   const isAddress = isAnAddress(selectedNode)
   const isAQueue = isQueue(selectedNode);
 
-  var prop = selectedNode.getProperty("routing-type");
+  let prop = selectedNode.getProperty("routing-type");
   const routingType: string  = prop === undefined?'':prop;
   prop = selectedNode.getProperty("address");
   const address: string | undefined = prop === undefined?'':prop;

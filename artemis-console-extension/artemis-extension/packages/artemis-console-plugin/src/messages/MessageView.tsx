@@ -62,26 +62,27 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
 
   const updateBodyText = (currentMessage: Message): void =>  {
     log.debug("loading message:" + currentMessage);
-        var body: string = "";
+    let body: string = "";
+    let lenTxt: string = "";
     if (currentMessage.text) {
        body = currentMessage.text;
-        var lenTxt = "" + body.length;
+        lenTxt = "" + body.length;
         setMessageTextMode("text (" + lenTxt + " chars)");
         setMessageBody(body);
     } else if (currentMessage.BodyPreview) {
-        var code = Number(localStorage["ArtemisBrowseBytesMessages"] || "1");
+        const code = Number(localStorage["ArtemisBrowseBytesMessages"] || "1");
         setMessageTextMode("bytes (turned off)");
-        var len = 0;
+        let len = 0;
         if (code !== 99) {
-            var bytesArr: string[] = [];
-            var textArr: string[] = [];
+            const bytesArr: string[] = [];
+            const textArr: string[] = [];
             currentMessage.BodyPreview.forEach(function(b: number) {
                 if (code === 1 || code === 2 || code === 16) {
                     // text
                     textArr.push(String.fromCharCode(b));
                 }
                 if (code === 1 || code === 4) {
-                    var unsignedByte = b & 0xff;
+                    const unsignedByte = b & 0xff;
 
                     if (unsignedByte < 16) {
                         // hex and must be 2 digit so they space out evenly
@@ -91,12 +92,12 @@ export const MessageView: React.FunctionComponent<MessageProps> = props => {
                     }
                 } else {
                     // just show as is without spacing out, as that is usually more used for hex than decimal
-                    var s = b.toString(10);
+                    const s = b.toString(10);
                     bytesArr.push(s);
                 }
             });
-            var bytesData = bytesArr.join(" ");
-            var textData = textArr.join("");
+            const bytesData = bytesArr.join(" ");
+            const textData = textArr.join("");
             if (code === 1 || code === 2) {
                 // bytes and text
                 len = currentMessage.BodyPreview.length;

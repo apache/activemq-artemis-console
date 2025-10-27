@@ -25,7 +25,7 @@ import { columnStorage } from '../artemis-preferences-service';
 
 export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) => {
   const getSessionFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'connectionID',
       operation: 'EQUALS',
       input: row.connectionID

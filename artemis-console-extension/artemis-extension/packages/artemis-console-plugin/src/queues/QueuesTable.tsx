@@ -36,7 +36,7 @@ export type queuePermissions = {
 
 export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   const getAddressFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'name',
       operation: 'EQUALS',
       input: row.address
@@ -45,7 +45,7 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   }
 
   const getConsumersFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'queue',
       operation: 'EQUALS',
       input: row.name

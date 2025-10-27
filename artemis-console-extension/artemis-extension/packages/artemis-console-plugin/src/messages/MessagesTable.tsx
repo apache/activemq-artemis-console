@@ -92,8 +92,6 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
           message: error,
         })
       })
-      var data = await listMessages();
-      
     }
     const listMessages = async (): Promise<any> => {
       const brokerObjectname = await artemisService.getBrokerObjectName();
@@ -195,7 +193,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   }
 
   const onSelectMessage = (id: number, inex: number, selected: boolean) => {
-    var updatedSelectedMessages: number[] = [];
+    let updatedSelectedMessages: number[] = [];
     if (selected) {
       selectedMessages.forEach((id) => updatedSelectedMessages.push(id));
       updatedSelectedMessages.push(id);
@@ -223,7 +221,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
 
   const selectAllMessages = (isSelecting: boolean) => {
     if(isSelecting) {
-        var updatedSelectedMessages: number[] = rows.map((row: any, index) => {
+        const updatedSelectedMessages: number[] = rows.map((row: any, index) => {
           return Number(row.messageID);
       })
      setSelectedMessages(updatedSelectedMessages);
@@ -237,9 +235,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const handleDeleteMessages = () => {
 
     const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
-    var results: Promise<unknown>[] = [];
+    const results: Promise<unknown>[] = [];
     for (let i = 0; i < selectedMessages.length; i++) {
-      var promise: Promise<unknown> = artemisService.deleteMessage(selectedMessages[i], props.address, props.routingType, props.queue);
+      const promise: Promise<unknown> = artemisService.deleteMessage(selectedMessages[i], props.address, props.routingType, props.queue);
       results.push(promise);
     };
     Promise.allSettled(results)
@@ -266,9 +264,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const handleMoveMessages = () => {
 
     const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
-    var results: Promise<unknown>[] = [];
+    const results: Promise<unknown>[] = [];
     for (let i = 0; i < selectedMessages.length; i++) {
-      var promise: Promise<unknown> = artemisService.moveMessage(selectedMessages[i], selectedTargetQueue, props.address, props.routingType, props.queue);
+      const promise: Promise<unknown> = artemisService.moveMessage(selectedMessages[i], selectedTargetQueue, props.address, props.routingType, props.queue);
       results.push(promise);
     };
     Promise.allSettled(results)
@@ -295,9 +293,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const handleCopyMessages = () => {
 
     const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
-    var results: Promise<unknown>[] = [];
+    const results: Promise<unknown>[] = [];
     for (let i = 0; i < selectedMessages.length; i++) {
-      var promise: Promise<unknown> = artemisService.copyMessage(selectedMessages[i], selectedTargetQueue, props.address, props.routingType, props.queue);
+      const promise: Promise<unknown> = artemisService.copyMessage(selectedMessages[i], selectedTargetQueue, props.address, props.routingType, props.queue);
       results.push(promise);
     };
     Promise.allSettled(results)
@@ -324,9 +322,9 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
   const handleRetryMessages = () => {
 
     const isRejected = <T,>(p: PromiseSettledResult<T>): p is PromiseRejectedResult => p.status === 'rejected';
-    var results: Promise<unknown>[] = [];
+    const results: Promise<unknown>[] = [];
     for (let i = 0; i < selectedMessages.length; i++) {
-      var promise: Promise<unknown> = artemisService.retryMessage(selectedMessages[i], props.address, props.routingType, props.queue);
+      const promise: Promise<unknown> = artemisService.retryMessage(selectedMessages[i], props.address, props.routingType, props.queue);
       results.push(promise);
     };
     Promise.allSettled(results)
