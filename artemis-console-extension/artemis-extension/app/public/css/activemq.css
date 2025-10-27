@@ -194,7 +194,6 @@ svg.pf-v5-svg {
 .pf-v5-c-button.pf-m-primary.pf-m-hover, .pf-v5-c-button.pf-m-primary:hover {
   background-color: var(--artemis-global--primary-color--100);
   background-image: linear-gradient(to bottom,var(--artemis-global--primary-color--100) 0,#B24E78 100%);
-  background: var(--artemis-global--primary-color-dark);
   border-color: var(--artemis-global--primary-color--100);
 }
 
@@ -251,7 +250,6 @@ tbody>tr:hover {
 .btn-primary.visited{
   background-color: var(--artemis-global--primary-color--100);
   background-image: linear-gradient(to bottom,var(--artemis-global--primary-color--100) 0,var(--artemis-global--primary-color--100) 100%);
-  background: var(--artemis-global--primary-color-dark);
   border-color: var(--artemis-global--primary-color--100);
 }
 
