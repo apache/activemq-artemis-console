@@ -432,7 +432,7 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
                 )}
                 <Td isActionCell>
                   <ActionsColumn
-                    items={getRowActions(row, rowIndex)}
+                    items={getRowActions(row)}
                     popperProps={{ position: 'right', appendTo: () => (document.getElementById('root') as HTMLElement) }}
                   />
                 </Td>
