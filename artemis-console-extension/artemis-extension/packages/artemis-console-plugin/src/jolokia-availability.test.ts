@@ -16,8 +16,7 @@
  */
 import { beforeAll, describe, expect, test } from "@jest/globals"
 import fetchMock, { MockResponseInit } from 'jest-fetch-mock'
-import { jolokiaService, userService } from '@hawtio/react'
-import { hawtio } from '@hawtio/react'
+import { hawtio, jolokiaService, userService } from '@hawtio/react'
 
 beforeAll(async () => {
   // needed to determine Jolokia URL

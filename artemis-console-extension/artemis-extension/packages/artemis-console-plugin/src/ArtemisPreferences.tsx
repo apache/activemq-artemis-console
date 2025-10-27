@@ -14,10 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInput } from '@patternfly/react-core'
+import { CardBody, Flex, FlexItem, Form, FormGroup, FormSection, Icon, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption, TextInput, Tooltip } from '@patternfly/react-core'
 import React, { FormEvent, useState } from 'react'
 import { artemisPreferencesService, ArtemisOptions } from './artemis-preferences-service'
-import { Icon, Tooltip } from '@patternfly/react-core'
 import { HelpIcon } from '@patternfly/react-icons/dist/esm/icons/help-icon'
 
 export const ArtemisPreferences: React.FunctionComponent = () => (
