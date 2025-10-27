@@ -53,7 +53,7 @@ export function useArtemisTree() {
                     tvd.defaultExpanded = true
                 })
             }
-            var subTree: MBeanTree = MBeanTree.createFromNodes(artemisPluginName, [rootNode])
+            const subTree: MBeanTree = MBeanTree.createFromNodes(artemisPluginName, [rootNode])
             setTree(subTree)
 
         } else {
@@ -91,7 +91,7 @@ export function useArtemisTree() {
     }, [])
 
     const findAndSelectNode = (objectName: string, name: string) => {
-        var node: MBeanNode | null = tree.find(node => { 
+        let node: MBeanNode | null = tree.find(node => { 
             return node.objectName === objectName 
         });
         if (!node) {

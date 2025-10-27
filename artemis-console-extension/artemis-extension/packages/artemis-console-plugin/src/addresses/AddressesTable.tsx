@@ -32,7 +32,7 @@ import { columnStorage } from '../artemis-preferences-service';
 
 export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
   const getQueueFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'address',
       operation: 'EQUALS',
       input: row.name
@@ -95,7 +95,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
   }
 
   const getRowActions = (row: any): IAction[] => {
-    var actions: IAction[] = [
+    const actions: IAction[] = [
       {
         title: 'Show in Artemis JMX',
         onClick: async () => {
@@ -140,7 +140,7 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
       );
     }
 
-    var canSendMessage = artemisService.canSendMessageToAddress(brokerNode, row.name);
+    const canSendMessage = artemisService.canSendMessageToAddress(brokerNode, row.name);
     if (canSendMessage) {
       actions.push(
         {

@@ -22,7 +22,7 @@ import { columnStorage } from '../artemis-preferences-service';
 
 export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
   const getSessionFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'id',
       operation: 'EQUALS',
       input: row.session
@@ -31,7 +31,7 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
   }
 
   const getAddressFilter = (row: any) => {
-    var filter: Filter = {
+    const filter: Filter = {
       column: 'name',
       operation: 'EQUALS',
       input: row.address

@@ -39,12 +39,12 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
 
     useEffect(() => {
       const listData = async () => {
-        var activeSort:ActiveSort  = {
+        const activeSort:ActiveSort  = {
           id: 'name',
           order: SortDirection.ASCENDING
         }
-        var data: any = await artemisService.getQueues(1, 10, activeSort, filter);
-        var queues = JSON.parse(data).data
+        const data: any = await artemisService.getQueues(1, 10, activeSort, filter);
+        const queues = JSON.parse(data).data
         if (queues.length > 0) {
           setQueues(queues);
         } else {
@@ -69,7 +69,7 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
 
     const handleSelectQueueChange = (_event: React.MouseEvent<Element, MouseEvent> | undefined, value: string | number | undefined) => {
       setIsOpen(false);
-      var queueName: string = value as string;
+      const queueName: string = value as string;
       setSelected(queueName);
       setFilterText(queueName)
       queueSelectProps.selectQueue(queueName);
@@ -99,7 +99,7 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
     const customFilter = (_event: FormEvent<HTMLInputElement>, value: string) => {
       setFilterText(value)
 
-      var newFilter: Filter = {
+      const newFilter: Filter = {
         column: 'name',
         operation: 'CONTAINS',
         input: value

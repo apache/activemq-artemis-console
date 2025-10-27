@@ -47,7 +47,7 @@ export class BrokerNetworkTopology {
     }
 
     getBackupCount(): number {
-        var backups: number = 0;
+        let backups: number = 0;
         this.brokers.forEach((broker) => {
             if (broker.backup) {
                 backups = backups + 1;
@@ -171,36 +171,36 @@ class ArtemisService {
 
     private async initBrokerObjectName(): Promise<string> {
         const config = await configManager.getArtemisconfig();
-        var search = await jolokiaService.search(config.jmx.domain + ":broker=*").catch(() => null);
+        const search = await jolokiaService.search(config.jmx.domain + ":broker=*").catch(() => null);
         return search && search[0] ? search[0] : "";
     }
 
     async getBrokerInfo(): Promise<BrokerInfo | null> {
         return new Promise<BrokerInfo | null>(async (resolve, reject) => {
-            var brokerObjectName = await this.brokerObjectName;
+            const brokerObjectName = await this.brokerObjectName;
             if ("" === brokerObjectName) {
                 resolve(null)
                 return
             }
-            var response = await jolokiaService.readAttributes(brokerObjectName).catch(e => null);
+            const response = await jolokiaService.readAttributes(brokerObjectName).catch(e => null);
             if (response) {
-                var name = response.Name as string;
-                var nodeID = response.NodeID as string;
-                var version = response.Version as string;
-                var started = "" + response.Started as string;
-                var globalMaxSize = response.GlobalMaxSize as number;
-                var addressMemoryUsage = response.AddressMemoryUsage as number;
-                var uptime = response.Uptime as string;
-                var used = 0;
-                var haPolicy = response.HAPolicy as string;
-                var addressMemoryUsageMB = 0;
-                var globalMaxSizeMB = globalMaxSize / 1048576;
+                const name = response.Name as string;
+                const nodeID = response.NodeID as string;
+                const version = response.Version as string;
+                const started = "" + response.Started as string;
+                const globalMaxSize = response.GlobalMaxSize as number;
+                const addressMemoryUsage = response.AddressMemoryUsage as number;
+                const uptime = response.Uptime as string;
+                const haPolicy = response.HAPolicy as string;
+                const globalMaxSizeMB = globalMaxSize / 1048576;
+                let used = 0;
+                let addressMemoryUsageMB = 0;
                 if (addressMemoryUsage > 0) {
                     addressMemoryUsageMB = addressMemoryUsage / 1048576;
                     used = addressMemoryUsageMB / globalMaxSizeMB * 100
                 }
                 const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
-                var brokerInfo: BrokerInfo = {
+                const brokerInfo: BrokerInfo = {
                     name: name, objectName: brokerObjectName,
                     nodeID: nodeID,
                     version: version,
@@ -222,20 +222,20 @@ class ArtemisService {
     async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology> {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
             try {
-                var brokerInfo = await this.getBrokerInfo();
-                var brokerObjectName = await this.brokerObjectName;
+                const brokerInfo = await this.getBrokerInfo();
+                const brokerObjectName = await this.brokerObjectName;
                 const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
                 brokerInfo!.networkTopology =  new BrokerNetworkTopology(JSON.parse(topology));
-                var brokerTopology: BrokerTopology = {
+                const brokerTopology: BrokerTopology = {
                     broker: brokerInfo!,
                     addresses: []
                 }
-                var addresses: string[] = (await this.getAllAddresses(addressFilter));
-                var max: number = maxAddresses < addresses.length ? maxAddresses: addresses.length;
+                let addresses: string[] = (await this.getAllAddresses(addressFilter));
+                const max: number = maxAddresses < addresses.length ? maxAddresses: addresses.length;
                 addresses = addresses.slice(0, max);
                 for (const address of addresses) {
-                    var queuesJson: string = await this.getQueuesForAddress(address);
-                    var queues: Queue[] = JSON.parse(queuesJson).data;
+                    const queuesJson: string = await this.getQueuesForAddress(address);
+                    const queues: Queue[] = JSON.parse(queuesJson).data;
                     brokerTopology.addresses.push({
                         name: address,
                         queues: queues
@@ -252,15 +252,15 @@ class ArtemisService {
 
     async createAcceptors(): Promise<Acceptors> {
         return new Promise<Acceptors>(async (resolve, reject) => {
-            var brokerObjectName = await this.brokerObjectName;
+            const brokerObjectName = await this.brokerObjectName;
             const acceptorSearch = brokerObjectName + ",component=acceptors,name=*";
 
-            var search = await jolokiaService.search(acceptorSearch);
+            const search = await jolokiaService.search(acceptorSearch);
             if (search) {
                 const acceptors: Acceptors = {
                     acceptors: []
                 };
-                for (var key in search) {
+                for (const key in search) {
                     const acceptor: Acceptor = await jolokiaService.readAttributes(search[key]) as Acceptor;
                     acceptors.acceptors.push(acceptor);
                 }
@@ -272,15 +272,15 @@ class ArtemisService {
 
     async createClusterConnections(): Promise<ClusterConnections> {
         return new Promise<ClusterConnections>(async (resolve, reject) => {
-            var brokerObjectName = await this.brokerObjectName;
+            const brokerObjectName = await this.brokerObjectName;
             const clusterConnectionSearch = brokerObjectName + ",component=cluster-connections,name=*";
 
-            var search = await jolokiaService.search(clusterConnectionSearch);
+            const search = await jolokiaService.search(clusterConnectionSearch);
             if (search) {
                 const clusterConnections: ClusterConnections = {
                     clusterConnections: []
                 };
-                for (var key in search) {
+                for (const key in search) {
                     const clusterConnection: ClusterConnection = await jolokiaService.readAttributes(search[key]) as ClusterConnection;
                     clusterConnections.clusterConnections.push(clusterConnection);
                 }
@@ -301,12 +301,12 @@ class ArtemisService {
     }
 
     async doSendMessage(mbean: string, body: string, theHeaders: { name: string; value: string }[], durable: boolean, createMessageId: boolean, useCurrentlogon: boolean, username: string, password: string) {
-        var type = 3;
-        var user = useCurrentlogon ? null : username;
-        var pwd = useCurrentlogon ? null : password;
-        var headers: { [id: string]: string; } = {};
+        const type = 3;
+        const user = useCurrentlogon ? null : username;
+        const pwd = useCurrentlogon ? null : password;
+        const headers: { [id: string]: string; } = {};
         theHeaders.forEach(function (object) {
-            var key = object.name;
+            const key = object.name;
             if (key) {
                 headers[key] = object.value;
             }
@@ -350,7 +350,7 @@ class ArtemisService {
     }
 
     async getMessages(mBean: string, page: number, perPage: number, filter: string) {
-        var count: number;
+        let count: number;
         if (filter && filter.length > 0) {
             count = await jolokiaService.execute(mBean, COUNT_MESSAGES_SIG2, [filter]) as number;
         } else {
@@ -364,7 +364,7 @@ class ArtemisService {
     }
 
     async getProducers(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var producerFilter = {
+        const producerFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -375,7 +375,7 @@ class ArtemisService {
     }
 
     async getConsumers(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var consumerFilter = {
+        const consumerFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -386,7 +386,7 @@ class ArtemisService {
     }
 
     async getConnections(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var connectionsFilter = {
+        const connectionsFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -397,7 +397,7 @@ class ArtemisService {
     }
 
     async getSessions(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var sessionsFilter = {
+        const sessionsFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -408,7 +408,7 @@ class ArtemisService {
     }
 
     async getAddresses(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var addressesFilter = {
+        const addressesFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -420,11 +420,11 @@ class ArtemisService {
 
     async getAllAddresses(addressFilter: string): Promise<string[]> {     
         return new Promise<string[]>(async (resolve, reject) => {
-            var addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']) as string;
+            const addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']) as string;
             if (addressesString) {
-                var addressArray = addressesString.split(',')
+                const addressArray = addressesString.split(',')
                 if (addressFilter && addressFilter.length > 0) {
-                    var filtered = addressArray.filter(function (str) { return str.includes(addressFilter); });
+                    const filtered = addressArray.filter(function (str) { return str.includes(addressFilter); });
                     resolve(filtered);   
                 } else {
                     resolve(addressArray);
@@ -435,7 +435,7 @@ class ArtemisService {
     }
 
     async getQueues(page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<string> {
-        var queuesFilter = {
+        const queuesFilter = {
             field: filter.input !== '' ? filter.column : '',
             operation: filter.input !== '' ? filter.operation : '',
             value: filter.input,
@@ -446,7 +446,7 @@ class ArtemisService {
     }
 
     async getQueuesForAddress(address: string): Promise<string> {
-        var queuesFilter = {
+        const queuesFilter = {
             field: 'address',
             operation: 'EQUALS',
             value: address
@@ -459,7 +459,7 @@ class ArtemisService {
     }
 
     async purgeQueue(name: string, address: string, routingType: string) {
-        var queueMBean: string = createQueueObjectName(await this.getBrokerObjectName(), address, routingType, name);
+        const queueMBean: string = createQueueObjectName(await this.getBrokerObjectName(), address, routingType, name);
         return jolokiaService.execute(queueMBean, REMOVE_ALL_MESSAGES_SIG);
     }
 
@@ -498,14 +498,14 @@ class ArtemisService {
             return this.formatPersistentSize(size);
         }
         if (columnID === "originalQueue" && message["StringProperties"]) {
-            var originalQueue = message["StringProperties"]._AMQ_ORIG_QUEUE != null ? message["StringProperties"]._AMQ_ORIG_QUEUE : message["StringProperties"]["extraProperties._AMQ_ORIG_QUEUE"]
+            const originalQueue = message["StringProperties"]._AMQ_ORIG_QUEUE != null ? message["StringProperties"]._AMQ_ORIG_QUEUE : message["StringProperties"]["extraProperties._AMQ_ORIG_QUEUE"]
             return originalQueue ? originalQueue : "";
         }
         return message[columnID] ? "" + message[columnID] : "";
     }
 
     formatType = (message: Message) => {
-        var typeLabels = ["default", "1", "object", "text", "bytes", "map", "stream", "embedded"];
+        const typeLabels = ["default", "1", "object", "text", "bytes", "map", "stream", "embedded"];
         return message.type + " (" + typeLabels[message.type] + ")";
     }
 
@@ -516,13 +516,13 @@ class ArtemisService {
         if (timestamp === 0) {
             return "never";
         }
-        var expiresIn = timestamp - Date.now();
+        const expiresIn = timestamp - Date.now();
         if (Math.abs(expiresIn) < MS_PER_DAY) {
-            var duration = expiresIn < 0 ? -expiresIn : expiresIn;
-            var hours = this.pad2(Math.floor((duration / MS_PER_HOUR) % 24));
-            var mins = this.pad2(Math.floor((duration / MS_PER_MIN) % 60));
-            var secs = this.pad2(Math.floor((duration / MS_PER_SEC) % 60));
-            var ret;
+            const duration = expiresIn < 0 ? -expiresIn : expiresIn;
+            const hours = this.pad2(Math.floor((duration / MS_PER_HOUR) % 24));
+            const mins = this.pad2(Math.floor((duration / MS_PER_MIN) % 60));
+            const secs = this.pad2(Math.floor((duration / MS_PER_SEC) % 60));
+            let ret;
             if (expiresIn < 0) {
                 // "HH:mm:ss ago"
                 ret = hours + ":" + mins + ":" + secs + " ago";
@@ -555,7 +555,7 @@ class ArtemisService {
         if (timestamp === 0) {
             return "N/A";
         }
-        var d = new Date(timestamp);
+        const d = new Date(timestamp);
         // "yyyy-MM-dd HH:mm:ss"
         //add 1 to month as getmonth returns the position not the actual month
         return d.getFullYear() + "-" + this.pad2(d.getMonth() + 1) + "-" + this.pad2(d.getDate()) + " " + this.pad2(d.getHours()) + ":" + this.pad2(d.getMinutes()) + ":" + this.pad2(d.getSeconds());
@@ -577,7 +577,7 @@ class ArtemisService {
 
     canSendMessageToAddress = (broker: MBeanNode | undefined, address: string): boolean => {
         if(broker) {
-            var addressMBean = broker.parent?.find(node => { 
+            const addressMBean = broker.parent?.find(node => { 
                 return node.propertyList?.get('component') === 'addresses' && node.propertyList?.get('subcomponent') === undefined && node.name === address 
             })
             return this.checkCanSendMessageToAddress(addressMBean as MBeanNode);
@@ -599,7 +599,7 @@ class ArtemisService {
 
     canPurgeQueue = (broker: MBeanNode | undefined, queue: string): boolean => {
         if(broker) {
-            var queueMBean = broker.parent?.find(node => { 
+            const queueMBean = broker.parent?.find(node => { 
                 return node.propertyList?.get('subcomponent') === 'queues' && node.name === queue 
             })
             return (this.DEBUG_PRIVS && queueMBean?.hasInvokeRights(REMOVE_ALL_MESSAGES_SIG)) ?? false;
@@ -609,7 +609,7 @@ class ArtemisService {
 
     canSendMessageToQueue = (broker: MBeanNode | undefined, queue: string): boolean => {
         if(broker) {
-            var queueMBean = broker.parent?.find(node => { 
+            const queueMBean = broker.parent?.find(node => { 
                 return node.propertyList?.get('subcomponent') === 'queues' && node.name === queue 
             })
             return this.checkCanSendMessageToQueue(queueMBean as MBeanNode);
@@ -623,7 +623,7 @@ class ArtemisService {
 
     canBrowseQueue = (broker: MBeanNode | undefined, queue: string): boolean => {
         if(broker) {
-            var queueMBean = broker.parent?.find(node => { 
+            const queueMBean = broker.parent?.find(node => { 
                 return node.propertyList?.get('subcomponent') === 'queues' && node.name === queue 
             })
             return this.checkCanBrowseQueue(queueMBean as MBeanNode);
@@ -668,7 +668,7 @@ class ArtemisService {
 
     doesMethodExist = (broker: MBeanNode | undefined, queue: string, method: string): boolean => {
         if(broker) {
-            var queueMBean = broker.parent?.find(node => { 
+            const queueMBean = broker.parent?.find(node => { 
                 return node.propertyList?.get('subcomponent') === 'queues' && node.name === queue 
             })
             return queueMBean?queueMBean.hasOperations(method): false;
