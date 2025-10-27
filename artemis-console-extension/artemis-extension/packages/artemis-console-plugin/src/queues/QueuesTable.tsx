@@ -112,7 +112,6 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   const routenavigate = useNavigate();
   const { brokerNode, findAndSelectNode } = useContext(ArtemisContext);
 
-  const canDeleteQueue = artemisService.canDeleteQueue(brokerNode);
   const [loadData, setLoadData] = useState(0);
 
   const closeDeleteDialog = () => {
