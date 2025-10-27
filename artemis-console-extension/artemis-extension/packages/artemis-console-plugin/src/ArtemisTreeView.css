@@ -38,14 +38,11 @@
 #artemis-tree-view .pf-v5-c-tree-view__node-text {
   padding-top: 2px;
   font-size: smaller;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #artemis-tree-view .pf-v5-c-tree-view__node-icon {
   flex-shrink: 0;
-}
-
-#artemis-tree-view .pf-v5-c-tree-view__node-text {
-  overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
