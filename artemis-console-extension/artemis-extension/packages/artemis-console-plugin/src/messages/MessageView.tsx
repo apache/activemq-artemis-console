@@ -237,13 +237,11 @@ function getProps(properties: any, type:string): React.ReactNode {
   if(properties) {
     return Object.keys(properties).map((key, index) => {
       return (
-        <>
-          <Tr id={key}>
-            <Td id={key + "key"}>{key}</Td>
-            <Td id={key + "val"}>{"" + properties[key]}</Td>
-            <Td id={key + "type"}>{type}</Td>
-          </Tr>
-        </>
+        <Tr id={key}>
+          <Td id={key + "key"}>{key}</Td>
+          <Td id={key + "val"}>{"" + properties[key]}</Td>
+          <Td id={key + "type"}>{type}</Td>
+        </Tr>
       );
     }
     )
