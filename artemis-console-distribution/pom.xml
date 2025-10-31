@@ -19,25 +19,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.activemq</groupId>
+        <groupId>org.apache.artemis</groupId>
         <artifactId>artemis-console-project</artifactId>
         <version>1.5.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.activemq</groupId>
+    <groupId>org.apache.artemis</groupId>
     <artifactId>apache-artemis-console</artifactId>
     <packaging>pom</packaging>
 
 
-    <name>Apache ActiveMQ Artemis Console Distribution</name>
+    <name>Apache Artemis Console Distribution</name>
 
     <properties>
-        <activemq.basedir>${project.basedir}/..</activemq.basedir>
+        <artemis.basedir>${project.basedir}/..</artemis.basedir>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.activemq</groupId>
+            <groupId>org.apache.artemis</groupId>
             <artifactId>artemis-console-war</artifactId>
             <version>${project.version}</version>
             <type>war</type>

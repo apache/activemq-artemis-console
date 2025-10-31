@@ -19,22 +19,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.activemq</groupId>
+        <groupId>org.apache.artemis</groupId>
         <artifactId>artemis-console-project</artifactId>
         <version>1.5.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.activemq</groupId>
+    <groupId>org.apache.artemis</groupId>
     <artifactId>artemis-console-war</artifactId>
     <packaging>war</packaging>
 
 
-    <name>ActiveMQ Artemis Console War</name>
+    <name>Apache Artemis Console War</name>
 
     <dependencies>
         <!-- we need to depend on this for the build output -->
         <dependency>
-            <groupId>org.apache.activemq</groupId>
+            <groupId>org.apache.artemis</groupId>
             <artifactId>artemis-console-extension</artifactId>
             <type>pom</type>
             <version>${project.version}</version>

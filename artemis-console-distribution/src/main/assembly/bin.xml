@@ -30,7 +30,7 @@
         <!-- Console Dependency -->
         <dependencySet>
             <includes>
-                <include>org.apache.activemq:artemis-console-war:war</include>
+                <include>org.apache.artemis:artemis-console-war:war</include>
             </includes>
             <outputDirectory>.</outputDirectory>
             <unpack>false</unpack>
@@ -44,7 +44,7 @@
     <fileSets>
         <!-- Include license and notice files -->
         <fileSet>
-            <directory>${activemq.basedir}/artemis-console-distribution/src/main/resources/licenses</directory>
+            <directory>${artemis.basedir}/artemis-console-distribution/src/main/resources/licenses</directory>
             <outputDirectory>${file.separator}</outputDirectory>
             <includes>
                 <include>LICENSE</include>
