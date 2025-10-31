@@ -19,17 +19,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.activemq</groupId>
+        <groupId>org.apache.artemis</groupId>
         <artifactId>artemis-console-project</artifactId>
         <version>1.5.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.activemq</groupId>
+    <groupId>org.apache.artemis</groupId>
     <artifactId>artemis-console-extension</artifactId>
     <packaging>pom</packaging>
 
 
-    <name>ActiveMQ Artemis Console Extension</name>
+    <name>Apache Artemis Console Extension</name>
 
     <properties>
         <!-- Path to the Hawtio TypeScript plugin -->

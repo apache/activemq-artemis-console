@@ -52,7 +52,7 @@ However the recommended way is to use the `yarn workspace <workspace> add <depen
 
 ## Project dependencies
 
-[activemq-artemis-console Github repository](https://github.com/apache/activemq-artemis-console/) is a Maven project which ultimately builds a WAR archive to be used in [activemq-artemis](https://github.com/apache/activemq-artemis/).
+[artemis-console Github repository](https://github.com/apache/artemis-console/) is a Maven project which ultimately builds a WAR archive to be used in [artemis](https://github.com/apache/artemis/).
 
 Focusing on JavaScript only, artemis-extension is a monorepo, which contains:
 * app: Application bundled by `webpack`
@@ -66,7 +66,7 @@ Adding Hawtio to the list, we have:
 * `packages/artemis-console-plugin`: NPM library package that uses `@hawtio/react`, React itself and Patternfly
 * `app`: Ultimate application that will be packaged into WAR. It is bundled using `webpack` and uses `@hawtio/react` + `packages/artemis-console-plugin` libraries
 
-The most important product of [activemq-artemis-console Github repository](https://github.com/apache/activemq-artemis-console/) is the WAR archive and JavaScript application bundled by `webpack`, but additionally `packages/artemis-console-plugin` package itself should eventually be published to NPM.
+The most important product of [artemis-console Github repository](https://github.com/apache/artemis-console/) is the WAR archive and JavaScript application bundled by `webpack`, but additionally `packages/artemis-console-plugin` package itself should eventually be published to NPM.
 
 There may be existing _applications_ that could use both `@hawtio/react` **and** `packages/artemis-console-plugin` to provide "Hawtio with Artemis support".
 
@@ -178,7 +178,7 @@ With `yarn set version 4.9.2 --yarn-path`:
 
 ----
 [1]: https://github.com/eirslett/frontend-maven-plugin
-[2]: https://activemq.apache.org/components/artemis
+[2]: https://artemis.apache.org/
 [3]: https://yarnpkg.com/features/workspaces
 [4]: https://webpack.js.org/
 [5]: https://www.npmjs.com/

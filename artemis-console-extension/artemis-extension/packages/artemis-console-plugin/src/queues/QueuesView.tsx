@@ -113,7 +113,7 @@ export const QueuesView: React.FunctionComponent<Navigate> = navigate => {
                 ]}>
           <TextContent>
             <Text component={TextVariants.h1}>Using Filter Expressions</Text>
-            <Text component={TextVariants.h2}>Apache ActiveMQ Artemis provides a powerful filter language based on a subset of the SQL 92 expression syntax.</Text>
+            <Text component={TextVariants.h2}>Apache Artemis provides a powerful filter language based on a subset of the SQL 92 expression syntax.</Text>
             <Text>It is similar to the syntax used for JMS Message selectors. 
               For documentation on JMS selector syntax please the JavaDoc for javax.jms.Message or <Link target='_BLANK' to={'https://jakarta.ee/specifications/messaging/3.1/apidocs/jakarta.messaging/jakarta/jms/message'}>jakarta.jms.Message</Link></Text>
               <Text>A Filter will search for messages that have a matching property.</Text>

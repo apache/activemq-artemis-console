@@ -25,7 +25,7 @@
         <relativePath>org.apache:apache</relativePath>
     </parent>
 
-    <groupId>org.apache.activemq</groupId>
+    <groupId>org.apache.artemis</groupId>
     <artifactId>artemis-console-project</artifactId>
     <packaging>pom</packaging>
     <version>1.5.0-SNAPSHOT</version>
@@ -37,8 +37,8 @@
         <module>artemis-console-distribution</module>
     </modules>
 
-    <name>ActiveMQ Artemis Console Project</name>
-    <url>https://activemq.apache.org/components/artemis/</url>
+    <name>Apache Artemis Console Project</name>
+    <url>https://artemis.apache.org</url>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -59,9 +59,9 @@
     </properties>
 
     <scm>
-      <connection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</connection>
-      <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</developerConnection>
-      <url>https://github.com/apache/activemq-artemis-console</url>
+      <connection>scm:git:https://gitbox.apache.org/repos/asf/artemis-console.git</connection>
+      <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/artemis-console.git</developerConnection>
+      <url>https://github.com/apache/artemis-console</url>
       <tag>HEAD</tag>
     </scm>
 
@@ -72,9 +72,9 @@
 
     <developers>
       <developer>
-         <name>The Apache ActiveMQ Team</name>
-         <email>dev@activemq.apache.org</email>
-         <url>http://activemq.apache.org</url>
+         <name>The Apache Artemis Team</name>
+         <email>dev@artemis.apache.org</email>
+         <url>https://artemis.apache.org</url>
          <organization>Apache Software Foundation</organization>
          <organizationUrl>http://apache.org/</organizationUrl>
       </developer>
@@ -82,15 +82,15 @@
    <mailingLists>
       <mailingList>
          <name>User List</name>
-         <subscribe>users-subscribe@activemq.apache.org</subscribe>
-         <unsubscribe>users-unsubscribe@activemq.apache.org</unsubscribe>
-         <post>users@activemq.apache.org</post>
+         <subscribe>users-subscribe@artemis.apache.org</subscribe>
+         <unsubscribe>users-unsubscribe@artemis.apache.org</unsubscribe>
+         <post>users@artemis.apache.org</post>
       </mailingList>
       <mailingList>
          <name>Development List</name>
-         <subscribe>dev-subscribe@activemq.apache.org</subscribe>
-         <unsubscribe>dev-unsubscribe@activemq.apache.org</unsubscribe>
-         <post>dev@activemq.apache.org</post>
+         <subscribe>dev-subscribe@artemis.apache.org</subscribe>
+         <unsubscribe>dev-unsubscribe@artemis.apache.org</unsubscribe>
+         <post>dev@artemis.apache.org</post>
       </mailingList>
    </mailingLists>
 

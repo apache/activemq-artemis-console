@@ -21,8 +21,8 @@ dependencies marked as unlicensed will need to be manually checked.
 Before starting make sure you clone a brand new git as follows as the release plugin will use the upstream for pushing the tags:
 
 ```sh
-git clone https://gitbox.apache.org/repos/asf/activemq-artemis-console.git
-cd activemq-artemis-console
+git clone https://gitbox.apache.org/repos/asf/artemis-console.git
+cd artemis-console
 ```
 
 If your git `user.email` and/or `user.name` are not set globally then you'll need to set these on the newly clone
@@ -53,9 +53,9 @@ When prompted make sure the new development version matches with the next expect
 
 ```
 [INFO] Checking dependencies and plugins for snapshots ...
-What is the release version for "ActiveMQ Artemis Console Project"? (artemis-console-project) 1.0.0: :
-What is the SCM release tag or label for "ActiveMQ Artemis Console Project"? (artemis-console-project) 1.0.0: :
-What is the new development version for "ActiveMQ Artemis Console Project"? (artemis-console-project)1.0.1-SNAPSHOT: : 1.1.0-SNAPSHOT
+What is the release version for "Apache Artemis Console Project"? (artemis-console-project) 1.5.0: :
+What is the SCM release tag or label for "Apache Artemis Console Project"? (artemis-console-project) 1.5.0: :
+What is the new development version for "Apache Artemis Console Project"? (artemis-console-project)1.5.1-SNAPSHOT: : 1.6.0-SNAPSHOT
 ```
 
 For more information look at the prepare plugin:
@@ -103,7 +103,7 @@ In case you want to upload a previously tagged release, add this file as follows
 
 - release.properties
 ```
-scm.url=scm:git:https://github.com/apache/activemq-artemis-console.git
+scm.url=scm:git:https://github.com/apache/artemis-console.git
 scm.tag=1.0.0
 ```
 
@@ -111,7 +111,7 @@ scm.tag=1.0.0
 
 Give the staging repository contents a quick inspection using the content navigation area, then proceed to close the
 staging repo using the "Close" button on Nexus website, locking it from further modification and exposing its contents
-at a staging URL to allow testing. Set a description such as "ActiveMQ Artemis Console <version> (RC1)" while closing.
+at a staging URL to allow testing. Set a description such as "Artemis Console <version> (RC1)" while closing.
 
 ## Stage the release to the dist dev area
 
@@ -120,9 +120,9 @@ with the official release artifacts for voting. Use the script already present
 in the repo to download the files and populate a new ${CURRENT-RELEASE} dir:
 
 ```sh
-svn co https://dist.apache.org/repos/dist/dev/activemq/activemq-artemis-console/
-cd activemq-artemis-console
-./prepare-release.sh https://repository.apache.org/content/repositories/orgapacheactivemq-${NEXUS-REPO-ID} ${CURRENT-RELEASE}
+svn co https://dist.apache.org/repos/dist/dev/artemis/artemis-console/
+cd artemis-console
+./prepare-release.sh https://repository.apache.org/content/repositories/orgapacheartemis-${NEXUS-REPO-ID} ${CURRENT-RELEASE}
 ```
 
 Give the files a check over and commit the new dir and start a vote if all looks well.
@@ -136,29 +136,29 @@ Old staged releases can be cleaned out periodically.
 
 ## Send Email
 
-Once all the artifacts are stage then send an email to `dev@activemq.apache.org`.  It should have a subject like `[VOTE]
-Apache ActiveMQ Artemis Console <version>`. 
+Once all the artifacts are stage then send an email to `dev@artemis.apache.org`.  It should have a subject like `[VOTE]
+Apache Artemis Console <version>`. 
 
 ## Voting process
 
 Rules for the Apache voting process are stipulated [here](https://www.apache.org/foundation/voting.html).
 
-Assuming the vote is successful send a email with a subject like `[RESULT] [VOTE] Apache ActiveMQ Artemis Console <version>`
+Assuming the vote is successful send a email with a subject like `[RESULT] [VOTE] Apache Artemis Console <version>`
 informing the list about the voting result.
 
 ## Web site update:
 
 Wait for the CDN to sync first after updating SVN, and additionally for Maven Central to sync, before proceeding.
 
-The CDN content can be viewed [here](https://dlcdn.apache.org/activemq/activemq-artemis-console/).
-The Maven Central content can be viewed [here](https://repo1.maven.org/maven2/org/apache/activemq/).
+The CDN content can be viewed [here](https://dlcdn.apache.org/artemis/artemis-console/).
+The Maven Central content can be viewed [here](https://repo1.maven.org/maven2/org/apache/artemis/).
 
 
-Clone the activemq-website repository:
+Clone the artemis-website repository:
 
 ```sh
-git clone https://gitbox.apache.org/repos/asf/activemq-website.git
-cd activemq-website
+git clone https://gitbox.apache.org/repos/asf/artemis-website.git
+cd artemis-website
 ```
 
 **NOTE**: Some of the release scripts use [Python](https://www.python.org/), ensure you have it installed before proceeding.

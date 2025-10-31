@@ -160,7 +160,7 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                 </FormGroup>
                 <FormGroup label="Filter"
                     labelIcon={
-                        <Tooltip content={<Text>Only messages that match the filter expression are routed to this queue: see <a href="https://activemq.apache.org/components/artemis/documentation/latest/filter-expressions.html" rel="noreferrer" target="_blank">Filter Expressions</a></Text>}><InfoCircleIcon /></Tooltip>}
+                        <Tooltip content={<Text>Only messages that match the filter expression are routed to this queue: see <a href="https://artemis.apache.org/components/artemis/documentation/latest/filter-expressions.html" rel="noreferrer" target="_blank">Filter Expressions</a></Text>}><InfoCircleIcon /></Tooltip>}
                 >
                     <TextInput
                         isRequired
