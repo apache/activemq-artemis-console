@@ -45,13 +45,13 @@ a.pf-v5-c-button.idp, button.pf-v5-c-button.idp {
   border: none;
 }
 
-/*Uses ActiveMQ colors in broker diagram*/
+/*Uses Artemis colors in broker diagram*/
 svg text {
   font-family: PatternFlyIcons-webfont;
 }
 
 svg.pf-v5-svg {
-  fill: #c12766;
+  fill: #714099;
 }
 
 .pf-topology__node.artemisBroker.pf-m-info .pf-topology__node__background {
@@ -288,17 +288,17 @@ background-color: var(--artemis-global--primary-color--300);
 }
 
 :root {
-  --artemis-global--primary-color--100: #B21054;
-  --artemis-global--primary-color--200: #B24E78; 
-  --artemis-global--primary-color--300: #c77e9c; 
-  --artemis-global--primary-color--400: #c77e9c; 
-  --artemis-global--primary-color-dark: #B21054;
+  --artemis-global--primary-color--100: #714099;
+  --artemis-global--primary-color--200: #885bad; 
+  --artemis-global--primary-color--300: #9378aa; 
+  --artemis-global--primary-color--400: #9989a7; 
+  --artemis-global--primary-color-dark: #714099;
   --artemis-global--primary-second-color-100: #2b326e;
-  --artemis-diag-broker-color: #c12766;
-  --artemis-diag-broker-border:#801944;
+  --artemis-diag-broker-color: #714099;
+  --artemis-diag-broker-border:#200734;
   --artemis-diag-broker-label-text:#fff;
-  --artemis-diag-backup-broker-color: #c77e9c;
-  --artemis-diag-backup-broker-border:#c12766;
+  --artemis-diag-backup-broker-color: #714099;
+  --artemis-diag-backup-broker-border:#200734;
   --artemis-diag-backup-broker-label-text:#fff;
   --artemis-diag-address-color: #3e489f;
   --artemis-diag-address-border:#2b326e;

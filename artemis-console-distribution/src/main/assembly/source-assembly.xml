@@ -31,7 +31,7 @@
    <fileSets>
       <!--  main project directory structure  -->
       <fileSet>
-         <directory>${activemq.basedir}</directory>
+         <directory>${artemis.basedir}</directory>
          <outputDirectory>${file.separator}</outputDirectory>
          <useDefaultExcludes>true</useDefaultExcludes>
          <directoryMode>0755</directoryMode>
@@ -134,7 +134,7 @@
          </excludes>
       </fileSet>
       <fileSet>
-         <directory>${activemq.basedir}</directory>
+         <directory>${artemis.basedir}</directory>
          <outputDirectory>${file.separator}</outputDirectory>
          <useDefaultExcludes>true</useDefaultExcludes>
          <directoryMode>0755</directoryMode>
