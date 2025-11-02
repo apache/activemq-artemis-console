@@ -55,57 +55,62 @@ export const Status: React.FunctionComponent = () => {
 
     const [showAttributesDialog, setShowAttributesDialog] = useState(false);
     const [showOperationsDialog, setShowOperationsDialog] = useState(false);
+
+    const getBrokerInfo = async () => {
+        artemisService.getBrokerInfo()
+            .then((brokerInfo) => {
+                setBrokerInfo(brokerInfo ?? undefined)
+            })
+            .catch((error: string) => {
+                eventService.notify({
+                    type: 'warning',
+                    message: error,
+                })
+            });
+    }
+
+    const getAcceptors = async () => {
+        artemisService.createAcceptors()
+            .then((acceptors) => {
+                setAcceptors(acceptors)
+            })
+            .catch((error: string) => {
+                eventService.notify({
+                    type: 'warning',
+                    message: error,
+                })
+            });
+    }
+
+    const getClusterConnections = async () => {
+        artemisService.createClusterConnections()
+            .then((clusterConnections) => {
+                setClusterConnections(clusterConnections)
+            })
+            .catch((error: string) => {
+                eventService.notify({
+                    type: 'warning',
+                    message: error,
+                })
+            });
+    }
+
     useEffect(() => {
-        const getBrokerInfo = async () => {
-            artemisService.getBrokerInfo()
-                .then((brokerInfo) => {
-                    setBrokerInfo(brokerInfo ?? undefined)
-                })
-                .catch((error: string) => {
-                    eventService.notify({
-                        type: 'warning',
-                        message: error,
-                    })
-                });
-        }
+        // run only once at the beginning
+        getBrokerInfo();
+ 
+        getAcceptors();
 
-        const getAcceptors = async () => {
-            artemisService.createAcceptors()
-                .then((acceptors) => {
-                    setAcceptors(acceptors)
-                })
-                .catch((error: string) => {
-                    eventService.notify({
-                        type: 'warning',
-                        message: error,
-                    })
-                });
-        }
-        if (!brokerInfo) {
-            getBrokerInfo();
-        }
-
-        if (!acceptors) {
-            getAcceptors();
-        }
-
-        if (!clusterConnections) {
-            artemisService.createClusterConnections()
-                .then((clusterConnections) => {
-                    setClusterConnections(clusterConnections)
-                })
-                .catch((error: string) => {
-                    eventService.notify({
-                        type: 'warning',
-                        message: error,
-                    })
-                });
-        }
+        getClusterConnections();
 
         const timer = setInterval(getBrokerInfo, 5000)
         return () => clearInterval(timer)
 
-    }, [brokerInfo, acceptors, clusterConnections])
+    }, [])
+
+    useEffect(() => {
+    // update frontend when brokerInfo, acceptors, or clusterConnections change
+    }, [brokerInfo, acceptors, clusterConnections]);
 
     const [isBrokerInfoOpen, setIsBrokerInfoOpen] = useState<boolean>(false);
 
