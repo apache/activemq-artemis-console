@@ -25,10 +25,9 @@ export const ArtemisHeader: React.FunctionComponent = () => {
     const [ brokerHeader, setBrokerHeader] = useState('')
 
      useEffect(() => {
-
-        artemisService.getBrokerInfo()
-        .then((brokerInfo) => {
-           setBrokerHeader(brokerInfo ? brokerInfo.name : '');
+        artemisService.getBrokerName()
+        .then((brokerName) => {
+           setBrokerHeader(brokerName ? brokerName : '');
         })
         .catch((error: string) => {
             eventService.notify({
@@ -36,7 +35,7 @@ export const ArtemisHeader: React.FunctionComponent = () => {
                 message: error,
             })
         });
-    })
+    },[])
 
     return (
         <><Text>{'Broker ('}</Text><Text style={{ color: 'var(--pf-v5-global--active-color--200)' }} >{brokerHeader}</Text><Text>{')'}</Text></>

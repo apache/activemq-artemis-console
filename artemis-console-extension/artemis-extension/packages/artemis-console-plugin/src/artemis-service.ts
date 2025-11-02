@@ -175,6 +175,15 @@ class ArtemisService {
         return search && search[0] ? search[0] : "";
     }
 
+    async getBrokerName(): Promise<string | null> {
+        const brokerObjectName = await this.brokerObjectName;
+        const response = await jolokiaService.readAttribute(brokerObjectName, "Name");
+        if (response) {
+            return response as string;
+        }
+        return null;
+    }
+
     async getBrokerInfo(): Promise<BrokerInfo | null> {
         return new Promise<BrokerInfo | null>(async (resolve, reject) => {
             const brokerObjectName = await this.brokerObjectName;
@@ -217,7 +226,6 @@ class ArtemisService {
             resolve(null)
         });
     }
-
 
     async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology> {
         return new Promise<BrokerTopology>(async (resolve, reject) => {
