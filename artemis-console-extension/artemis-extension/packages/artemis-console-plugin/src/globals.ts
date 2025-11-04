@@ -33,6 +33,11 @@ export const contextNodeType = 'context'
 
 export const endpointNodeType = 'endpointNode'
 
-const isProd = process.env.NODE_ENV === 'production'
-Logger.setLevel(isProd ? 'ERROR' : 'INFO')
+if (localStorage) {
+  if (!localStorage.getItem('core.logging.logLevel')) {
+    // set only if not configured by user in Hawtio
+    const isProd = process.env.NODE_ENV === 'production'
+    Logger.setLevel(isProd ? 'ERROR' : 'INFO')
+  }
+}
 export const log = Logger.get(artemisPluginName)
