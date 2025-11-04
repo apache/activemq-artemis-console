@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import '@hawtio/react/dist/init.css'
 import '@hawtio/react/dist/index.css'
 import '@patternfly/react-core/dist/styles/base.css'
 import '../../packages/artemis-console-plugin/dist/index.css';

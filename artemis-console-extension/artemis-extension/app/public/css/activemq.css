@@ -29,6 +29,9 @@
 .pf-v5-c-login__main {
   background-color: transparent;
 }
+a.pf-v5-c-button.idp, button.pf-v5-c-button.idp {
+  background-color: white;
+}
 
 .pf-v5-c-login__main-body label {
   color: white;
