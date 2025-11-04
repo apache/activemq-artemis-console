@@ -17,7 +17,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
-import { configManager, HawtioInitialization, TaskState } from '@hawtio/react/init'
+import { configManager, HawtioInitialization, Logger, TaskState } from '@hawtio/react/init'
 
 // Hawtio itself creates and tracks initialization tasks, but we can add our own. 'Loading UI' initialization
 // task nicely controls the initialization phase at _application_ level
@@ -28,7 +28,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 // Basic UI that shows initialization progress without depending on PatternFly.
 // It is imported and rendered in fully synchronous way.
-root.render(<HawtioInitialization verbose={true} />)
+root.render(<HawtioInitialization verbose={configManager.globalLogLevel() < Logger.INFO.value} />)
 
 // See package.json "replace-version" script for how to replace the version placeholder with a real version
 configManager.addProductInfo('Artemis Console', '__PACKAGE_VERSION_PLACEHOLDER__');
