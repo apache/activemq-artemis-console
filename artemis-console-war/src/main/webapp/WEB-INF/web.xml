@@ -84,7 +84,7 @@
 
   <servlet>
     <servlet-name>jolokia-agent</servlet-name>
-    <servlet-class>io.hawt.web.servlets.JolokiaConfiguredAgentServlet</servlet-class>
+    <servlet-class>org.jolokia.server.core.http.AgentServlet</servlet-class>
     <init-param>
       <param-name>mbeanQualifier</param-name>
       <param-value>qualifier=hawtio</param-value>
@@ -138,6 +138,7 @@
   <servlet>
     <servlet-name>auth-config</servlet-name>
     <servlet-class>io.hawt.web.auth.AuthConfigurationServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>auth-config</servlet-name>
