@@ -26,10 +26,13 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const { WebpackManifestPlugin } = require("webpack-manifest-plugin")
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
+const bodyParser = require('body-parser')
 
 const outputPath = path.resolve(__dirname, 'build')
 
 const InvestigationPlugin = require("../plugins/investigation-webpack-plugin/plugin")
+
+const port = 8080
 
 module.exports = (webpackEnv, args) => {
   const isEnvDevelopment = args.mode === 'development';
@@ -311,6 +314,7 @@ module.exports = (webpackEnv, args) => {
       runtimeChunk: 'single',
     } : {},
     devServer: {
+      port: port,
       hot: !process.env.DISABLE_WS,
       liveReload: !process.env.DISABLE_WS,
       // changing to "ws" adds 20+ more modules to webpack-generated bundle
@@ -336,6 +340,8 @@ module.exports = (webpackEnv, args) => {
         path.resolve(__dirname, '../packages/artemis-console-plugin/**/*'),
       ],
       setupMiddlewares: (middlewares, devServer) => {
+          // handle incoming JSON mime data, so handlers have access to JSONified req.body
+          devServer.app.use(bodyParser.json())
           // Enabling branding in dev mode
           devServer.app.use((req, _, next) => {
             if (req.url.startsWith('/artemis-extension')) {
@@ -347,36 +353,126 @@ module.exports = (webpackEnv, args) => {
           devServer.app.get('/', (_, res) => res.redirect('/console/'))
           devServer.app.get('/console$', (_, res) => res.redirect('/console/'))
 
-          const username = 'developer'
-          const proxyEnabled = true
-          const plugin = []
-          const hawtconfig = JSON.parse(
-            fs.readFileSync(path.resolve(__dirname, 'public/hawtconfig.json'), 'utf-8')
-          )
+          /* Hawtio userinfo / login / logout mock endpoints */
 
-          // Hawtio backend API mock
           let login = true
+          let username = 'developer'
           devServer.app.get('/console/user', (_, res) => {
-            login ? res.send(`"${username}"`) : res.sendStatus(403)
+            if (login) {
+              res.send(`"${username}"`)
+            } else {
+              res.sendStatus(403)
+            }
           })
-          devServer.app.post('/console/auth/login', (_, res) => {
+          devServer.app.post('/console/auth/login', (req, res) => {
+            const cred = req.body
             login = true
+            username = cred.username
             res.send(String(login))
           })
           devServer.app.get('/console/auth/logout', (_, res) => {
             login = false
+            username = null
             res.redirect('/console/login')
           })
+
+          /* Configuration endpoints - global and for plugins */
+
+          const proxyEnabled = true
+          devServer.app.get('/console/proxy/enabled', (_, res) => {
+            res.send(String(proxyEnabled))
+          })
+
           devServer.app.get('/console/auth/config/session-timeout', (_, res) => {
             res.type('application/json')
-            res.send('{}')
+            res.send('{ timeout: -1 }')
           })
-          devServer.app.get('/console/proxy/enabled', (_, res) => res.send(String(proxyEnabled)))
-          devServer.app.get('/console/plugin', (_, res) => res.send(JSON.stringify(plugin)))
+
+          /* Available plugins - for Module Federation plugins not handled by Webpack at build time */
+
+          const plugin = []
+          devServer.app.get('/console/plugin', (_, res) => {
+            res.send(JSON.stringify(plugin))
+          })
+
+          const hawtconfig = JSON.parse(
+            fs.readFileSync(path.resolve(__dirname, 'public/hawtconfig.json'), 'utf-8')
+          )
+
+          /* hawtconfig.json */
 
           devServer.app.get('/console/hawtconfig.json', (_, res) => {
-            res.type('application/json');
-            res.send(JSON.stringify(hawtconfig));
+            res.type('application/json')
+            res.send(JSON.stringify(hawtconfig))
+          })
+
+          /* OpenID Connect */
+
+          const oidcEnabled = true
+          //const entraIDOidcConfig = {
+          //  method: 'oidc',
+          //  provider: 'https://login.microsoftonline.com/11111111-2222-3333-4444-555555555555/v2.0',
+          //  client_id: '66666666-7777-8888-9999-000000000000',
+          //  response_mode: 'fragment',
+          //  scope: 'openid email profile api://hawtio-server/Jolokia.Access',
+          //  redirect_uri: `http://localhost:${port}/hawtio/`,
+          //  code_challenge_method: 'S256',
+          //  prompt: null
+          //  // prompt: 'login',
+          //}
+          const keycloakOidcConfig = {
+            // configuration suitable for Keycloak run from https://github.com/hawtio/hawtio
+            // repository using examples/keycloak-integration/run-keycloak.sh
+            method: 'oidc',
+            provider: 'http://127.0.0.1:18080/realms/hawtio-demo',
+            client_id: 'hawtio-client',
+            response_mode: 'fragment',
+            scope: 'openid email profile',
+            redirect_uri: `http://localhost:${port}/console/`,
+            code_challenge_method: 'S256',
+            prompt: null,
+            // Hawtio (oidc plugin) will fetch this configuration from .well-known/openid-configuration
+            // with Hawtio Java it may already be part of this response
+            'openid-configuration': null,
+          }
+          devServer.app.get(`/console/auth/config/oidc`, (_, res) => {
+            res.type('application/json')
+            if (oidcEnabled) {
+              res.send(JSON.stringify(keycloakOidcConfig))
+            } else {
+              res.send('{}')
+            }
+          })
+
+          /* Available authentication methods to configure <HawtioLogin> page */
+
+          const authLoginConfig = [
+            {
+              method: 'form',
+              name: 'Form/Session Authentication (application/json)',
+              url: `/console/auth/login`,
+              logoutUrl: `/console/auth/logout`,
+              type: 'json',
+              userField: 'username',
+              passwordField: 'password',
+            },
+          ]
+
+          if (oidcEnabled) {
+            authLoginConfig.push({
+              // Actual configuration of OIDC provider will be added from
+              // /auth/config/oidc endpoint
+              method: 'oidc',
+              name: 'OpenID Connect (Keycloak)',
+            })
+          }
+
+          devServer.app.get(`/console/auth/config/login`, (_, res) => {
+            if (!oidcEnabled) {
+              res.json([])
+            } else {
+              res.json(authLoginConfig)
+            }
           })
 
           middlewares.push({
