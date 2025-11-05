@@ -149,6 +149,17 @@ const MS_PER_HOUR = 60 * MS_PER_MIN;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
 const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", "embedded"];
 
+const jolokiaAttributes = [
+    "Name",
+    "NodeID",
+    "Version",
+    "Started",
+    "Uptime",
+    "GlobalMaxSize",
+    "AddressMemoryUsage",
+    "HAPolicy"
+];
+
 /**
  * Main Artemis service that manages Broker information and topology. Needs properly configured `jolokiaService`
  * from `@hawtio/react` which may require authenticated user.
@@ -191,7 +202,7 @@ class ArtemisService {
                 resolve(null)
                 return
             }
-            const response = await jolokiaService.readAttributes(brokerObjectName).catch(e => null);
+            const response = await jolokiaService.readSpecifiedAttributes(brokerObjectName, jolokiaAttributes).catch(e => null);
             if (response) {
                 const name = response.Name as string;
                 const nodeID = response.NodeID as string;
