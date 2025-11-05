@@ -28,7 +28,7 @@
     <groupId>org.apache.activemq</groupId>
     <artifactId>artemis-console-project</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.4.0</version>
 
 
     <modules>
@@ -55,14 +55,14 @@
         <node-version>v22.17.1</node-version>
         <yarn-version>v4.9.2</yarn-version>
         <frontend-maven-plugin-version>1.15.1</frontend-maven-plugin-version>
-        <project.build.outputTimestamp>2025-08-26T09:08:33Z</project.build.outputTimestamp>
+        <project.build.outputTimestamp>2025-11-05T08:04:56Z</project.build.outputTimestamp>
     </properties>
 
     <scm>
       <connection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</connection>
       <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/activemq-artemis-console.git</developerConnection>
       <url>https://github.com/apache/activemq-artemis-console</url>
-      <tag>HEAD</tag>
+      <tag>1.4.0</tag>
     </scm>
 
     <issueManagement>
