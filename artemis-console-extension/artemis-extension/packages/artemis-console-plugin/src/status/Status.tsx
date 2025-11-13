@@ -61,10 +61,10 @@ export const Status: React.FunctionComponent = () => {
             .then((brokerInfo) => {
                 setBrokerInfo(brokerInfo ?? undefined)
             })
-            .catch((error: string) => {
+            .catch((error: string | { [key: string]: any }) => {
                 eventService.notify({
                     type: 'warning',
-                    message: error,
+                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
                 })
             });
     }
@@ -74,10 +74,10 @@ export const Status: React.FunctionComponent = () => {
             .then((acceptors) => {
                 setAcceptors(acceptors)
             })
-            .catch((error: string) => {
+            .catch((error: string | { [key: string]: any }) => {
                 eventService.notify({
                     type: 'warning',
-                    message: error,
+                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
                 })
             });
     }
@@ -87,10 +87,10 @@ export const Status: React.FunctionComponent = () => {
             .then((clusterConnections) => {
                 setClusterConnections(clusterConnections)
             })
-            .catch((error: string) => {
+            .catch((error: string | { [key: string]: any }) => {
                 eventService.notify({
                     type: 'warning',
-                    message: error,
+                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
                 })
             });
     }
