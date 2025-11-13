@@ -269,7 +269,10 @@ class ArtemisService {
                     acceptors: []
                 };
                 for (const key in search) {
-                    const acceptor: Acceptor = await jolokiaService.readAttributes(search[key]) as Acceptor;
+                    const acceptor: Acceptor = await jolokiaService.readAttributes(search[key])
+                        .catch((e) => {
+                            reject(e)
+                        }) as Acceptor;
                     acceptors.acceptors.push(acceptor);
                 }
                 resolve(acceptors);
@@ -289,7 +292,10 @@ class ArtemisService {
                     clusterConnections: []
                 };
                 for (const key in search) {
-                    const clusterConnection: ClusterConnection = await jolokiaService.readAttributes(search[key]) as ClusterConnection;
+                    const clusterConnection: ClusterConnection = await jolokiaService.readAttributes(search[key])
+                        .catch((e) => {
+                            reject(e)
+                        }) as ClusterConnection;
                     clusterConnections.clusterConnections.push(clusterConnection);
                 }
                 resolve(clusterConnections);
