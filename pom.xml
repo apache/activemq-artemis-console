@@ -48,8 +48,8 @@
         <jakarta.servlet-api.version>5.0.0</jakarta.servlet-api.version>
         <slf4j.version>2.0.17</slf4j.version>
         <log4j.version>2.24.3</log4j.version>
-        <jolokia-integration-artemis.version>0.7.0</jolokia-integration-artemis.version>
-        <jolokia.version>2.4.1</jolokia.version>
+        <jolokia-integration-artemis.version>0.8.0</jolokia-integration-artemis.version>
+        <jolokia.version>2.4.2</jolokia.version>
         <jetty-version>11.0.24</jetty-version>
         <corepack-version>0.34.0</corepack-version>
         <node-version>v22.17.1</node-version>
