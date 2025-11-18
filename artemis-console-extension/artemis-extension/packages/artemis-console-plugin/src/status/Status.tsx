@@ -16,6 +16,7 @@
  */
 import { ChartDonutUtilization } from "@patternfly/react-charts"
 import {
+    Alert,
     Card,
     CardBody,
     CardTitle,
@@ -34,20 +35,25 @@ import {
     Modal,
     ModalVariant,
     DropdownList,
+    MenuToggle,
     MenuToggleElement,
-    MenuToggle
+    PageSection,
+    Spinner,
+    Tooltip
 } from "@patternfly/react-core"
 import { EllipsisVIcon } from '@patternfly/react-icons/dist/esm/icons/ellipsis-v-icon'
 import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon'
 import { OkIcon } from '@patternfly/react-icons/dist/esm/icons/ok-icon'
-import { Attributes, eventService, Operations } from '@hawtio/react';
-import React, { useContext, useEffect, useState } from "react";
-import { Acceptors, artemisService, BrokerInfo, ClusterConnections } from "../artemis-service";
+import { Attributes, eventService, jolokiaService, Operations } from '@hawtio/react';
+import React, { ReactNode, useContext, useEffect, useState } from "react";
+import { Acceptors, artemisService, BrokerInfo, BrokerState, ClusterConnections } from "../artemis-service";
 import { ArtemisContext } from "../context";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@patternfly/react-table";
+import { LockedIcon } from '@patternfly/react-icons'
 
 export const Status: React.FunctionComponent = () => {
 
+    const [brokerState, setBrokerState] = useState<BrokerState>({ loaded: false, accessible: false, message: "Loading..." })
     const [brokerInfo, setBrokerInfo] = useState<BrokerInfo>()
     const [acceptors, setAcceptors] = useState<Acceptors>();
     const [clusterConnections, setClusterConnections] = useState<ClusterConnections>()
@@ -59,13 +65,14 @@ export const Status: React.FunctionComponent = () => {
     const getBrokerInfo = async () => {
         artemisService.getBrokerInfo()
             .then((brokerInfo) => {
-                setBrokerInfo(brokerInfo ?? undefined)
+                if (brokerInfo.info) {
+                    setBrokerInfo(brokerInfo.info)
+                }
+                setBrokerState({ loaded: brokerInfo.loaded, accessible: brokerInfo.accessible, message: brokerInfo.message })
             })
-            .catch((error: string | { [key: string]: any }) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
-                })
+            .catch((error) => {
+                setBrokerState({ loaded: false, accessible: false, message: `Error loading broker: ${jolokiaService.errorMessage(error)}` })
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
             });
     }
 
@@ -74,11 +81,8 @@ export const Status: React.FunctionComponent = () => {
             .then((acceptors) => {
                 setAcceptors(acceptors)
             })
-            .catch((error: string | { [key: string]: any }) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
-                })
+            .catch((error) => {
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
             });
     }
 
@@ -87,11 +91,8 @@ export const Status: React.FunctionComponent = () => {
             .then((clusterConnections) => {
                 setClusterConnections(clusterConnections)
             })
-            .catch((error: string | { [key: string]: any }) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: typeof error === 'object' ? ('error' in error ? error.error : JSON.stringify(error)) : error,
-                })
+            .catch((error) => {
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
             });
     }
 
@@ -118,7 +119,7 @@ export const Status: React.FunctionComponent = () => {
         setIsBrokerInfoOpen(!isBrokerInfoOpen);
     };
 
-    const openAttrubutes = async () => {
+    const openAttributes = async () => {
         const brokerObjectName = await artemisService.getBrokerObjectName();
         findAndSelectNode(brokerObjectName, "");
         setShowAttributesDialog(true);
@@ -144,7 +145,7 @@ export const Status: React.FunctionComponent = () => {
             isOpen={isBrokerInfoOpen}
         >
             <DropdownList>
-                <DropdownItem key="attributes" component="button" onClick={() => openAttrubutes()}>
+                <DropdownItem key="attributes" component="button" onClick={() => openAttributes()}>
                     Attributes
                 </DropdownItem>
                 <DropdownItem key="operations" component="button" onClick={() => openOperations()}>
@@ -153,6 +154,31 @@ export const Status: React.FunctionComponent = () => {
             </DropdownList>
         </Dropdown>
     );
+
+    function actualValue(v: unknown): ReactNode {
+        if (typeof v === 'object' && v && (".error" in v) && v[".error"]) {
+            const msg = "error" in v ? v["error"] as string : "Not accessible"
+            return (
+                <Tooltip content={msg}>
+                    <LockedIcon />
+                </Tooltip>
+            )
+        } else {
+            return (v ? "" + v : "")
+        }
+    }
+
+    if (!brokerState.loaded) {
+        return <Spinner size='lg' />
+    }
+
+    if (!brokerState.accessible) {
+        return (
+            <PageSection id='broker-info' variant='light'>
+                <Alert variant="warning" title={brokerState.message} />
+            </PageSection>
+        )
+    }
 
     return (
         <>
@@ -166,10 +192,10 @@ export const Status: React.FunctionComponent = () => {
                             <Divider />
                             <TextContent>
                                 <TextList isPlain>
-                                    <TextListItem component={TextListItemVariants.dd}>Version: {brokerInfo?.version}</TextListItem>
-                                    <TextListItem component={TextListItemVariants.dd}>Uptime: {brokerInfo?.uptime}</TextListItem>
-                                    <TextListItem component={TextListItemVariants.dd}>Started: {""+brokerInfo?.started}</TextListItem>
-                                    <TextListItem component={TextListItemVariants.dd}>HA Policy: {brokerInfo?.haPolicy}</TextListItem>
+                                    <TextListItem component={TextListItemVariants.dd}>Version: {actualValue(brokerInfo?.version)}</TextListItem>
+                                    <TextListItem component={TextListItemVariants.dd}>Uptime: {actualValue(brokerInfo?.uptime)}</TextListItem>
+                                    <TextListItem component={TextListItemVariants.dd}>Started: {actualValue(brokerInfo?.started)}</TextListItem>
+                                    <TextListItem component={TextListItemVariants.dd}>HA Policy: {actualValue(brokerInfo?.haPolicy)}</TextListItem>
                                 </TextList>
                             </TextContent>
                         </CardBody>
@@ -205,38 +231,46 @@ export const Status: React.FunctionComponent = () => {
             <ExpandableSection toggleTextExpanded="Acceptors" toggleTextCollapsed="Acceptors">
                 <Grid hasGutter span={4}>
                     {
-                        acceptors?.acceptors.map((acceptor, index) => (
-                            <GridItem key={index}>
-                                <Card isFullHeight={true} isFlat={true}>
+                        acceptors?.acceptors.map((acceptor, index) => {
+                            if (!(typeof acceptor.Name === 'object' && ".error" in acceptor.Name)) {
+                                return (
+                                <GridItem key={index}>
+                                    <Card isFullHeight={true} isFlat={true}>
 
-                                    <CardTitle>{acceptor.Name} ({acceptor.FactoryClassName.indexOf("Netty") === -1?"VM":"TCP"}): {acceptor.Started && <OkIcon color="green" />}{!acceptor.Started && <ExclamationCircleIcon color="red"/>}</CardTitle>
-                                    <CardBody>
-                                        <Divider />
-                                        <Table variant="compact" aria-label="Column Management Table">
-                                        <Thead>
-                                            <Tr key={"acceptor-list-param-title"}>
-                                                <Th key={"acceptor-list-param-key" + index}>key</Th>
-                                                <Th key={"acceptor-list-param-value" + index}>value</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                        {
-                                            Object.keys(acceptor.Parameters).map((key, index) => {
-                                                return (
-                                                    <Tr key={"acceptor-list-param-val-" + index}>
-                                                        <Td key={"acceptor-params-key-" + key}>{key}</Td>
-                                                        <Td key={"acceptor-params-val-" + key}>{acceptor.Parameters[key]}</Td>
+                                        <CardTitle>{acceptor.Name} ({typeof acceptor?.FactoryClassName === 'string' ? (acceptor?.FactoryClassName?.indexOf("Netty") === -1 ? "VM" : "TCP") : "?"}): {acceptor.Started &&
+                                            <OkIcon color="green" />}{!acceptor.Started &&
+                                            <ExclamationCircleIcon color="red" />}</CardTitle>
+                                        <CardBody>
+                                            <Divider />
+                                            <Table variant="compact" aria-label="Column Management Table">
+                                                <Thead>
+                                                    <Tr key={"acceptor-list-param-title"}>
+                                                        <Th key={"acceptor-list-param-key" + index}>key</Th>
+                                                        <Th key={"acceptor-list-param-value" + index}>value</Th>
                                                     </Tr>
+                                                </Thead>
+                                                <Tbody>
+                                                    {
+                                                        Object.keys(acceptor.Parameters).map((key, index) => {
+                                                            return (
+                                                                <Tr key={"acceptor-list-param-val-" + index}>
+                                                                    <Td key={"acceptor-params-key-" + key}>{key}</Td>
+                                                                    <Td key={"acceptor-params-val-" + key}>{acceptor.Parameters[key]}</Td>
+                                                                </Tr>
 
-                                                )
-                                            })
-                                        }
-                                        </Tbody>
-                                        </Table>
-                                    </CardBody>
-                                </Card>
-                            </GridItem>
-                        ))
+                                                            )
+                                                        })
+                                                    }
+                                                </Tbody>
+                                            </Table>
+                                        </CardBody>
+                                    </Card>
+                                </GridItem>
+                            )} else {
+                                // return (<span>{acceptor.Name["message"]}</span>)
+                                return null
+                            }
+                        })
                     }
                 </Grid>
             </ExpandableSection>
@@ -282,7 +316,7 @@ export const Status: React.FunctionComponent = () => {
                 </Grid>
                 <Grid hasGutter>
                     {
-                        brokerInfo?.networkTopology.brokers.map((broker, index) => (
+                        brokerInfo?.networkTopology?.brokers?.map?.((broker, index) => (
                             <GridItem key={index} span={3}>
                                 <Card isFlat={true}>
                                     <CardTitle>{broker.nodeID}</CardTitle>

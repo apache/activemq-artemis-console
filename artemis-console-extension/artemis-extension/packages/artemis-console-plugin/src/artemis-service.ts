@@ -15,23 +15,40 @@
  * limitations under the License.
  */
 import { ActiveSort, Filter } from './table/ArtemisTable'
-import { jolokiaService, MBeanNode } from '@hawtio/react'
+import { eventService, jolokiaService, MBeanNode, workspace } from '@hawtio/react'
 import { createAddressObjectName, createQueueObjectName } from './util/jmx'
 import { log } from './globals'
 import { Message } from './messages/MessageView'
 import { configManager } from './config-manager'
 
+export type BrokerState = {
+    // loading attempted?
+    loaded: boolean
+    // permission granted?
+    accessible: boolean
+    // possible error message
+    message?: string
+    // if everything is configured correctly, this is fully populated broker information
+    info?: BrokerInfo
+}
+// Value returned by Jolokia, when RBAC prevents access
+// see: org.jolokia.server.core.service.serializer.ValueFaultHandler.IGNORING_VALUE_FAULT_HANDLER
+export type InaccessibleValue = {
+    ".error": boolean
+    error?: string
+    error_type?: string
+}
 export type BrokerInfo = {
     name: string
     nodeID: string
     objectName: string
-    version: string
-    started: string
-    uptime: string
+    version: string | InaccessibleValue
+    started: string | InaccessibleValue
+    uptime: string | InaccessibleValue
     globalMaxSizeMB: number
     addressMemoryUsage: number
     addressMemoryUsed: number
-    haPolicy: string
+    haPolicy: string | InaccessibleValue
     networkTopology: BrokerNetworkTopology
 }
 
@@ -179,28 +196,55 @@ class ArtemisService {
         const brokerObjectName = await this.brokerObjectName;
         const response = await jolokiaService.readAttribute(brokerObjectName, "Name");
         if (response) {
+            if (typeof response === "object" && ".error" in response) {
+                return ""
+            }
             return response as string;
         }
         return null;
     }
 
-    async getBrokerInfo(): Promise<BrokerInfo | null> {
-        return new Promise<BrokerInfo | null>(async (resolve, reject) => {
+    async getBrokerInfo(): Promise<BrokerState> {
+        return new Promise<BrokerState>(async (resolve, _reject) => {
             const brokerObjectName = await this.brokerObjectName;
             if ("" === brokerObjectName) {
-                resolve(null)
+                resolve({ loaded: true, accessible: false, message: "No Broker ObjectName available" })
                 return
             }
-            const response = await jolokiaService.readAttributes(brokerObjectName).catch(e => null);
+            const brokerMBean = await findMBeanInfo(brokerObjectName)
+            if (!brokerMBean) {
+                resolve({ loaded: true, accessible: false, message: `No Broker MBean available for name ${brokerObjectName}` })
+                return
+            }
+            // `canRead` flag is added by jolokia-integration 0.7.1+ and ideally it should be checked _before_
+            // getting an attribute (just as `canInvoke` should be checked before executing an operation), but
+            // RBAC data may not be complete, so it's still good to be prepared (and add relevant `.catch(error => {...})`
+            let permitted = false
+            const nameInfo = brokerMBean.mbean?.attr?.["Name"]
+            if (nameInfo && "canRead" in nameInfo) {
+                permitted = nameInfo["canRead"] as boolean
+            } else if ("canInvoke" in brokerMBean.mbean!) {
+                permitted = brokerMBean.mbean?.["canInvoke"] as boolean
+            }
+            if (!permitted) {
+                resolve({ loaded: true, accessible: false, message: `Access not granted to broker ${brokerMBean.objectName}` })
+                return
+            }
+
+            const response = await jolokiaService.readAttributes(brokerObjectName).catch(e => {
+                // this is the best (as of Nov 2025) way to handle problems when fetching attributes with RBAC enabled
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(e) })
+                return null
+            });
             if (response) {
                 const name = response.Name as string;
                 const nodeID = response.NodeID as string;
-                const version = response.Version as string;
-                const started = "" + response.Started as string;
+                const version = response.Version as string | InaccessibleValue;
+                const started = response.Started as string | InaccessibleValue;
                 const globalMaxSize = response.GlobalMaxSize as number;
                 const addressMemoryUsage = response.AddressMemoryUsage as number;
-                const uptime = response.Uptime as string;
-                const haPolicy = response.HAPolicy as string;
+                const uptime = response.Uptime as string | InaccessibleValue;
+                const haPolicy = response.HAPolicy as string | InaccessibleValue;
                 const globalMaxSizeMB = globalMaxSize / 1048576;
                 let used = 0;
                 let addressMemoryUsageMB = 0;
@@ -208,9 +252,13 @@ class ArtemisService {
                     addressMemoryUsageMB = addressMemoryUsage / 1048576;
                     used = addressMemoryUsageMB / globalMaxSizeMB * 100
                 }
-                const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
+                const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG).catch(e => {
+                    eventService.notify({type: 'warning', message: jolokiaService.errorMessage(e) })
+                    return "{}"
+                }) as string;
                 const brokerInfo: BrokerInfo = {
-                    name: name, objectName: brokerObjectName,
+                    name: name,
+                    objectName: brokerObjectName,
                     nodeID: nodeID,
                     version: version,
                     started: started,
@@ -221,18 +269,26 @@ class ArtemisService {
                     haPolicy: haPolicy,
                     networkTopology: new BrokerNetworkTopology(JSON.parse(topology))
                 };
-                resolve(brokerInfo);
+                resolve({ loaded: true, accessible: true, info: brokerInfo });
+                return
             }
-            resolve(null)
+            resolve({ loaded: true, accessible: false, message: `No information available for broker ${brokerMBean.objectName}` })
         });
     }
 
-    async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology> {
-        return new Promise<BrokerTopology>(async (resolve, reject) => {
+    async createBrokerTopology(maxAddresses: number, addressFilter: string): Promise<BrokerTopology | null> {
+        return new Promise<BrokerTopology | null>(async (resolve, reject) => {
             try {
-                const brokerInfo = await this.getBrokerInfo();
+                const state = await this.getBrokerInfo();
+                if (!state || !state.info) {
+                    resolve(null)
+                }
+                const brokerInfo = state.info
                 const brokerObjectName = await this.brokerObjectName;
-                const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG) as string;
+                const topology = await jolokiaService.execute(brokerObjectName, LIST_NETWORK_TOPOLOGY_SIG).catch(error => {
+                    eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+                    return "[]"
+                }) as string;
                 brokerInfo!.networkTopology =  new BrokerNetworkTopology(JSON.parse(topology));
                 const brokerTopology: BrokerTopology = {
                     broker: brokerInfo!,
@@ -242,7 +298,10 @@ class ArtemisService {
                 const max: number = maxAddresses < addresses.length ? maxAddresses: addresses.length;
                 addresses = addresses.slice(0, max);
                 for (const address of addresses) {
-                    const queuesJson: string = await this.getQueuesForAddress(address);
+                    const queuesJson: string = await this.getQueuesForAddress(address).catch(error => {
+                        eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+                        return JSON.stringify({ data: [], count: 0 })
+                    })
                     const queues: Queue[] = JSON.parse(queuesJson).data;
                     brokerTopology.addresses.push({
                         name: address,
@@ -273,7 +332,12 @@ class ArtemisService {
                         .catch((e) => {
                             reject(e)
                         }) as Acceptor;
-                    acceptors.acceptors.push(acceptor);
+                    const validation = isValid(acceptor)
+                    if (validation.valid) {
+                        acceptors.acceptors.push(acceptor);
+                    } else {
+                        eventService.notify({ type: "warning", message: `Access not granted to ${search[key]}` })
+                    }
                 }
                 resolve(acceptors);
             }
@@ -296,7 +360,12 @@ class ArtemisService {
                         .catch((e) => {
                             reject(e)
                         }) as ClusterConnection;
-                    clusterConnections.clusterConnections.push(clusterConnection);
+                    const validation = isValid(clusterConnection)
+                    if (validation.valid) {
+                        clusterConnections.clusterConnections.push(clusterConnection);
+                    } else {
+                        eventService.notify({ type: "warning", message: `Access not granted to ${search[key]}` })
+                    }
                 }
                 resolve(clusterConnections);
             }
@@ -689,6 +758,95 @@ class ArtemisService {
         }
         return false;
     }
+}
+
+export function parseMBeanName(name: string): { domain: string, properties: Record<string, string> } {
+    const colon = name.indexOf(":")
+    if (colon === -1) {
+        throw new Error("Illegal ObjectName")
+    }
+
+    const domain = name.substring(0, colon)
+    const propsString = name.substring(colon + 1)
+
+    let i = 0
+    const len = propsString.length
+    const props: Record<string, string> = {}
+
+    while (i < len) {
+        let key = ""
+        while (i < len && propsString[i] !== "=") {
+            key += propsString[i++]
+        }
+
+        // skip '='
+        i++
+
+        let value = ""
+        if (propsString[i] === '"') {
+            // quoted value - only double quote
+            i++
+            while (i < len) {
+                const ch = propsString[i++]
+                if (ch === '"') {
+                    break
+                }
+                value += ch
+            }
+        } else {
+            // unquoted value can be empty
+            while (i < len && propsString[i] !== ",") {
+                value += propsString[i++]
+            }
+        }
+
+        props[key.trim()] = value.trim()
+
+        if (propsString[i] === ",") {
+            i++
+        }
+    }
+
+    return { domain, properties: props };
+}
+
+export async function findMBeanInfo(brokerObjectName: string): Promise<MBeanNode | null> {
+    const tree = await workspace.getTree()
+    const parsed = parseMBeanName(brokerObjectName)
+
+    const matching = tree.findMBeans(parsed.domain, parsed.properties)
+    if (!matching) {
+        return null
+    }
+    if (matching.length == 1) {
+        return matching[0]
+    } else {
+        const more = matching.filter(node => node.objectName === brokerObjectName)
+        return more.length > 0 ? more[0] : null
+    }
+}
+
+/**
+ * Jolokia's `getAttributes()` may return an object, where each field is an error value (when RBAC is enabled
+ * for example). In this case, the value has special `.error` field. This function checks validity of an object
+ * or value.
+ * @param value
+ */
+export function isValid(value: any): { valid: boolean, message: string | null } {
+    if (typeof value === "object") {
+        if (".error" in value) {
+            // the value itself is an error value
+            return { valid: false, message: jolokiaService.errorMessage(value) }
+        }
+        for (const k in value) {
+            const v = value[k]
+            if (typeof v === "object" && ".error" in v) {
+                // fail fast with an error related to first field of the wrapping object
+                return { valid: false, message: jolokiaService.errorMessage(v) }
+            }
+        }
+    }
+    return { valid: true, message: null }
 }
 
 export const artemisService = new ArtemisService()
