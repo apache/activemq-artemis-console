@@ -716,14 +716,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hawtio/backend-middleware@npm:^1.0.7":
-  version: 1.0.7
-  resolution: "@hawtio/backend-middleware@npm:1.0.7"
+"@hawtio/backend-middleware@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "@hawtio/backend-middleware@npm:1.0.8"
   dependencies:
-    axios: "npm:^1.12.0"
+    axios: "npm:^1.13.2"
     express: "npm:^5.1.0"
     js-logger: "npm:^1.6.1"
-  checksum: 10c0/acd362476fc28c5202322f9198a3b1616073e1a441cddec7087e27e192058a01de9dff8d3e3bbebe51020d0a288861e3c685a81143283d57fef0f72b875e7879
+  checksum: 10c0/ed83f2bc5944bb0e7a335a6d62c9e481f831317454b4060cca71b0b353a720ddf5caca93fc396471839866fdbee6b3a6600c694a246ab45af8235f96a8db1d28
   languageName: node
   linkType: hard
 
@@ -3330,7 +3330,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "artemis-console-app@workspace:app"
   dependencies:
-    "@hawtio/backend-middleware": "npm:^1.0.7"
+    "@hawtio/backend-middleware": "npm:^1.0.8"
     "@hawtio/react": "npm:^1.11.4"
     "@monaco-editor/react": "npm:^4.6.0"
     "@patternfly/react-charts": "npm:^7.4.9"
@@ -3445,14 +3445,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.11.0":
-  version: 1.11.0
-  resolution: "axios@npm:1.11.0"
+"axios@npm:^1.13.2":
+  version: 1.13.2
+  resolution: "axios@npm:1.13.2"
   dependencies:
     follow-redirects: "npm:^1.15.6"
     form-data: "npm:^4.0.4"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/5de273d33d43058610e4d252f0963cc4f10714da0bfe872e8ef2cbc23c2c999acc300fd357b6bce0fc84a2ca9bd45740fa6bb28199ce2c1266c8b1a393f2b36e
+  checksum: 10c0/e8a42e37e5568ae9c7a28c348db0e8cf3e43d06fcbef73f0048669edfe4f71219664da7b6cc991b0c0f01c28a48f037c515263cb79be1f1ae8ff034cd813867b
   languageName: node
   linkType: hard
 

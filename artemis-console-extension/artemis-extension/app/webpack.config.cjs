@@ -475,7 +475,7 @@ module.exports = (webpackEnv, args) => {
             }
           })
 
-          middlewares.push({
+          middlewares.unshift({
             name: 'hawtio-backend',
             path: '/console/proxy',
             middleware: hawtioBackend({
