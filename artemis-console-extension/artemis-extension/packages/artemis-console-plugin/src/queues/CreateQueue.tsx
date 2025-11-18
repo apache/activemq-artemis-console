@@ -20,7 +20,7 @@ import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon'
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon'
 import { InfoCircleIcon } from '@patternfly/react-icons/dist/esm/icons/info-circle-icon'
 import { artemisService } from '../artemis-service';
-import { eventService, workspace } from '@hawtio/react';
+import { eventService, jolokiaService, workspace } from '@hawtio/react';
 
 type CreateQueueProps = {
     address: string
@@ -65,14 +65,11 @@ export const CreateQueue: React.FunctionComponent<CreateQueueProps> = (props: Cr
                 workspace.refreshTree();
                 eventService.notify({
                     type: 'success',
-                    message: "Queue Succcesfully Created",
+                    message: "Queue Successfully Created",
                 })
             })
-            .catch((error: string) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: error,
-                })
+            .catch((error) => {
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
             })
     };
 

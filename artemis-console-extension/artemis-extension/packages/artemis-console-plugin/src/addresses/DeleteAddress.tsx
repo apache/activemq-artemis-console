@@ -17,7 +17,7 @@
 import { ActionGroup, Text, Button, Form, Icon, Modal, ModalVariant, TextContent, Title, Popover } from '@patternfly/react-core';
 import React, { useState } from 'react'
 import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
-import { eventService, workspace } from '@hawtio/react';
+import { eventService, jolokiaService, workspace } from '@hawtio/react';
 import { artemisService } from '../artemis-service';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
@@ -33,17 +33,15 @@ export const DeleteAddress: React.FunctionComponent<DeleteAddressProps> = (props
       .then(() => {
         setShowDeleteModal(false);
 
-        workspace.refreshTree();        eventService.notify({
+        workspace.refreshTree();
+        eventService.notify({
           type: 'success',
           message: "Address Successfully Deleted",
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowDeleteModal(false);
-        eventService.notify({
-          type: 'warning',
-          message: error,
-        })
+        eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
       })
   };
 

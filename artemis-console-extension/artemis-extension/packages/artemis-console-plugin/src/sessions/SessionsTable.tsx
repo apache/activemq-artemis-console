@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { eventService } from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import { Modal, ModalVariant, Button } from '@patternfly/react-core';
 import { IAction } from '@patternfly/react-table';
 import React, { useState } from 'react'
@@ -68,7 +68,10 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
   const [sessionConnection, setSessionConnection] = useState("");
   const [loadData, setLoadData] = useState(0);
   const listSessions = async (page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<any> => {
-    const response = await artemisService.getSessions(page, perPage, activeSort, filter);
+    const response = await artemisService.getSessions(page, perPage, activeSort, filter).catch(error => {
+      eventService.notify({ type: 'warning', message: jolokiaService.errorMessage(error)})
+      return JSON.stringify({ data: [], count: 0 })
+    })
     const data = JSON.parse(response);
     return data;
   }
@@ -85,12 +88,9 @@ export const SessionsTable: React.FunctionComponent<Navigate> = navigate => {
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowSessionCloseDialog(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Session Not Closed: ' + error,
-        })
+        eventService.notify({type: 'danger', message: 'Session Not Closed: ' + jolokiaService.errorMessage(error) })
       });
   };
 

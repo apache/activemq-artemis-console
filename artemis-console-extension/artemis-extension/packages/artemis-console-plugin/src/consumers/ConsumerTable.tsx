@@ -18,7 +18,7 @@ import React, { useState } from 'react'
 import { Navigate } from '../views/ArtemisTabView.js';
 import { ActiveSort, ArtemisTable, Column, Filter } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
-import { eventService } from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import { Modal, ModalVariant, Button } from '@patternfly/react-core';
 import { IAction } from '@patternfly/react-table';
 import { columnStorage } from '../artemis-preferences-service';
@@ -75,7 +75,10 @@ export const ConsumerTable: React.FunctionComponent<Navigate> = navigate => {
       ];
 
       const listConsumers = async ( page: number, perPage: number, activeSort: ActiveSort, filter: Filter):Promise<any> => {
-        const response = await artemisService.getConsumers(page, perPage, activeSort, filter);
+        const response = await artemisService.getConsumers(page, perPage, activeSort, filter).catch(error => {
+          eventService.notify({ type: 'warning', message: jolokiaService.errorMessage(error)})
+          return JSON.stringify({data: [], count: 0})
+        })
         const data = JSON.parse(response);
         return data;
       }
@@ -96,12 +99,9 @@ export const ConsumerTable: React.FunctionComponent<Navigate> = navigate => {
               duration: 3000,
             })
           })
-          .catch((error: string) => {
+          .catch((error) => {
             setShowConsumerCloseDialog(false);
-            eventService.notify({
-              type: 'danger',
-              message: 'Consumer Not Closed: ' + error,
-            })
+            eventService.notify({type: 'danger', message: 'Consumer Not Closed: ' + jolokiaService.errorMessage(error) })
           });
       };
     

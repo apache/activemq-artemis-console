@@ -20,7 +20,7 @@ import { ActiveSort, ArtemisTable, Column, Filter } from '../table/ArtemisTable'
 import { artemisService } from '../artemis-service';
 import { Modal, ModalVariant, Button } from '@patternfly/react-core';
 import { IAction } from '@patternfly/react-table';
-import { eventService } from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import { columnStorage } from '../artemis-preferences-service';
 
 export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) => {
@@ -49,7 +49,10 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
   const [loadData, setLoadData] = useState(0);
 
   const listConnections = async (page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<any> => {
-    const response = await artemisService.getConnections(page, perPage, activeSort, filter);
+    const response = await artemisService.getConnections(page, perPage, activeSort, filter).catch(error => {
+      eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+      return JSON.stringify({ data: [], count: 0 })
+    })
     const data = JSON.parse(response);
     return data;
   }
@@ -66,12 +69,9 @@ export const ConnectionsTable: React.FunctionComponent<Navigate> = (navigate) =>
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowConnectionCloseDialog(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Connection Not Closed: ' + error,
-        })
+        eventService.notify({type: 'danger', message: 'Connection Not Closed: ' + jolokiaService.errorMessage(error) })
       });
   };
 

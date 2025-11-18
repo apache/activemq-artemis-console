@@ -19,6 +19,7 @@ import { Button, MenuToggle, MenuToggleElement, Select, SelectList, SelectOption
 import { artemisService } from '../artemis-service';
 import { ActiveSort, Filter, SortDirection } from '../table/ArtemisTable';
 import { TimesIcon } from '@patternfly/react-icons/dist/esm/icons/times-icon'
+import { eventService, jolokiaService } from '@hawtio/react'
 
 export type QueueSelectProps = {
   selectQueue: Function
@@ -43,7 +44,10 @@ export const QueueSelectInput: React.FunctionComponent<QueueSelectProps> = (queu
           id: 'name',
           order: SortDirection.ASCENDING
         }
-        const data: any = await artemisService.getQueues(1, 10, activeSort, filter);
+        const data: any = await artemisService.getQueues(1, 10, activeSort, filter).catch(error => {
+          eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+          return JSON.stringify({ data: [], count: 0 })
+        })
         const queues = JSON.parse(data).data
         if (queues.length > 0) {
           setQueues(queues);
