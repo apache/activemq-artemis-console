@@ -28,7 +28,7 @@ import {
 } from '@patternfly/react-core';
 import React, {useState} from 'react'
 import {artemisService} from '../artemis-service';
-import {eventService} from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import {OutlinedQuestionCircleIcon} from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
 interface CreateAddressProps {
@@ -55,14 +55,11 @@ export const CreateAddress: React.FunctionComponent<CreateAddressProps> = (creat
                 }
                 eventService.notify({
                     type: 'success',
-                    message: "Address Succcesfully Created",
+                    message: "Address Successfully Created",
                 })
             })
-            .catch((error: string) => {
-                eventService.notify({
-                    type: 'warning',
-                    message: error,
-                })
+            .catch((error) => {
+                eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
             })
     };
 

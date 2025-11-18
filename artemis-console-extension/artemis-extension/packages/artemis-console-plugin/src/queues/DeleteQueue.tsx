@@ -16,7 +16,7 @@
  */
 import { ActionGroup, Button, Form, Modal, ModalVariant, Popover, TextContent, Title, Text } from '@patternfly/react-core';
 import React, { useState } from 'react'
-import { eventService, workspace } from '@hawtio/react';
+import { eventService, jolokiaService, workspace } from '@hawtio/react';
 import { artemisService } from '../artemis-service';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/icons/outlined-question-circle-icon';
 
@@ -42,12 +42,9 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowDeleteModal(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Queue Not Deleted: ' + error,
-        })
+        eventService.notify({type: 'danger', message: 'Queue Not Deleted: ' + jolokiaService.errorMessage(error) })
       });
   };
 
@@ -61,12 +58,9 @@ export const DeleteQueue: React.FunctionComponent<DeleteQueueProps> = (props: De
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowPurgeModal(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Queue Not Purged: ' + error,
-        })
+        eventService.notify({type: 'warning', message: 'Queue Not Purged: ' + jolokiaService.errorMessage(error) })
       });
   };
 

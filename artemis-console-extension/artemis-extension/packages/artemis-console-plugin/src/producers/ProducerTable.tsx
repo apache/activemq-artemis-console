@@ -19,6 +19,7 @@ import { Navigate } from '../views/ArtemisTabView.js';
 import { ActiveSort, ArtemisTable, Column, Filter } from '../table/ArtemisTable';
 import { artemisService } from '../artemis-service';
 import { columnStorage } from '../artemis-preferences-service';
+import { eventService, jolokiaService } from '@hawtio/react'
 
 export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
   const getSessionFilter = (row: any) => {
@@ -56,7 +57,10 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
       ];
 
       const listProducers = async ( page: number, perPage: number, activeSort: ActiveSort, filter: Filter):Promise<any> => {
-        const response = await artemisService.getProducers(page, perPage, activeSort, filter);
+        const response = await artemisService.getProducers(page, perPage, activeSort, filter).catch(error => {
+          eventService.notify({ type: 'warning', message: jolokiaService.errorMessage(error)})
+          return JSON.stringify({data: [], count: 0})
+        })
         const data = JSON.parse(response);
         return data;
       }

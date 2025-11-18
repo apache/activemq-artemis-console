@@ -20,7 +20,7 @@ import { artemisService } from '../artemis-service';
 import { IAction } from '@patternfly/react-table';
 import { Button, Modal, ModalVariant } from '@patternfly/react-core';
 import { SendMessage } from '../messages/SendMessage';
-import { Attributes, eventService, Operations } from '@hawtio/react';
+import { Attributes, eventService, jolokiaService, Operations } from '@hawtio/react';
 import { QueueNavigate } from './QueuesView.js';
 import { ArtemisContext } from '../context';
 import { createQueueObjectName } from '../util/jmx';
@@ -94,7 +94,10 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
   ];
 
   const listQueues = async (page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<any> => {
-    const response = await artemisService.getQueues(page, perPage, activeSort, filter);
+    const response = await artemisService.getQueues(page, perPage, activeSort, filter).catch(error => {
+      eventService.notify({ type: 'warning', message: jolokiaService.errorMessage(error)})
+      return JSON.stringify({ data: [], count: 0 })
+    })
     const data = JSON.parse(response);
     return data;
   }
@@ -137,12 +140,9 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowDeleteDialog(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Queue Not Deleted: ' + error,
-        })
+        eventService.notify({type: 'danger', message: 'Queue Not Deleted: ' + jolokiaService.errorMessage(error) })
       });
   };
 
@@ -157,12 +157,9 @@ export const QueuesTable: React.FunctionComponent<QueueNavigate> = navigate => {
           duration: 3000,
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowPurgeDialog(false);
-        eventService.notify({
-          type: 'danger',
-          message: 'Queue Not Purged: ' + error,
-        })
+        eventService.notify({type: 'danger', message: 'Queue Not Purged: ' + jolokiaService.errorMessage(error) })
       });
   };
 

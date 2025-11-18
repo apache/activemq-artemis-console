@@ -22,7 +22,7 @@ import { Thead, Tr, Th, Tbody, Td, ActionsColumn, IAction, Table, InnerScrollCon
 import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { createQueueObjectName } from '../util/jmx';
 import { Link } from 'react-router-dom';
-import { eventService } from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import { QueueSelectInput } from './QueueSelect';
 import { SendMessage } from './SendMessage';
 import { Message } from './MessageView';
@@ -86,11 +86,8 @@ export const MessagesTable: React.FunctionComponent<MessageProps> = props => {
       listMessages().then((data) => {
         setRows(data.data);
         setresultsSize(data.count);
-      }).catch((error: string) => {
-        eventService.notify({
-          type: 'warning',
-          message: error,
-        })
+      }).catch((error) => {
+        eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
       })
     }
     const listMessages = async (): Promise<any> => {

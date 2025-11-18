@@ -425,7 +425,7 @@ class ArtemisService {
     }
 
     async createQueue(queueConfiguration: string) {
-        return await jolokiaService.execute(await this.getBrokerObjectName(), CREATE_QUEUE_SIG, [queueConfiguration, false]).then().catch() as string;
+        return await jolokiaService.execute(await this.getBrokerObjectName(), CREATE_QUEUE_SIG, [queueConfiguration, false]).then() as string;
     }
     
     async createAddress(address: string, routingType: string) {
@@ -435,11 +435,20 @@ class ArtemisService {
     async getMessages(mBean: string, page: number, perPage: number, filter: string) {
         let count: number;
         if (filter && filter.length > 0) {
-            count = await jolokiaService.execute(mBean, COUNT_MESSAGES_SIG2, [filter]) as number;
+            count = await jolokiaService.execute(mBean, COUNT_MESSAGES_SIG2, [filter]).catch(error => {
+                eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+                return 0
+            }) as number;
         } else {
-            count = await jolokiaService.execute(mBean, COUNT_MESSAGES_SIG) as number;
+            count = await jolokiaService.execute(mBean, COUNT_MESSAGES_SIG).catch(error => {
+                eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+                return 0
+            }) as number;
         }
-        const messages = await jolokiaService.execute(mBean, BROWSE_SIG, [page, perPage, filter]) as string;
+        const messages = await jolokiaService.execute(mBean, BROWSE_SIG, [page, perPage, filter]).catch(error => {
+            eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+            return []
+        }) as string;
         return {
             data: messages,
             count: count
@@ -503,7 +512,10 @@ class ArtemisService {
 
     async getAllAddresses(addressFilter: string): Promise<string[]> {     
         return new Promise<string[]>(async (resolve, reject) => {
-            const addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']) as string;
+            const addressesString =  await jolokiaService.execute(await this.getBrokerObjectName(), LIST_ALL_ADDRESSES_SIG,  [',']).catch(error => {
+                eventService.notify({ type: "warning", message: jolokiaService.errorMessage(error) })
+                return ""
+            }) as string;
             if (addressesString) {
                 const addressArray = addressesString.split(',')
                 if (addressFilter && addressFilter.length > 0) {

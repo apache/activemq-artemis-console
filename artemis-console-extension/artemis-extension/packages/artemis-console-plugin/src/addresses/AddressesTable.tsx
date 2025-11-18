@@ -22,7 +22,7 @@ import { IAction } from '@patternfly/react-table';
 import { ExclamationCircleIcon } from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { Button, Icon, Modal, ModalVariant, TextContent, Text } from '@patternfly/react-core';
 import { CreateQueue } from '../queues/CreateQueue';
-import { Attributes, eventService, Operations, workspace } from '@hawtio/react';
+import { Attributes, eventService, jolokiaService, Operations, workspace } from '@hawtio/react';
 import { ArtemisContext } from '../context';
 import { CreateAddress } from './CreateAddress';
 import { SendMessage } from '../messages/SendMessage';
@@ -65,7 +65,10 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
   ];
 
   const listAddresses = async (page: number, perPage: number, activeSort: ActiveSort, filter: Filter): Promise<any> => {
-    const response = await artemisService.getAddresses(page, perPage, activeSort, filter);
+    const response = await artemisService.getAddresses(page, perPage, activeSort, filter).catch(error => {
+      eventService.notify({ type: 'warning', message: jolokiaService.errorMessage(error)})
+      return JSON.stringify({ data: [], count: 0 })
+    })
     const data = JSON.parse(response);
     return data;
   }
@@ -179,12 +182,9 @@ export const AddressesTable: React.FunctionComponent<Navigate> = (navigate) => {
           message: "Address Successfully Deleted",
         })
       })
-      .catch((error: string) => {
+      .catch((error) => {
         setShowDeleteDialog(false);
-        eventService.notify({
-          type: 'warning',
-          message: error,
-        })
+        eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
       })
   };
 

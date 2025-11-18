@@ -41,7 +41,7 @@ import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons/dist/esm/ico
 import { InfoCircleIcon } from '@patternfly/react-icons/dist/esm/icons/info-circle-icon'
 import { TrashIcon } from '@patternfly/react-icons/dist/esm/icons/trash-icon'
 import { CodeEditor, Language } from '@patternfly/react-code-editor'
-import { eventService } from '@hawtio/react'
+import { eventService, jolokiaService } from '@hawtio/react'
 import { artemisService } from '../artemis-service'
 import { Message } from './MessageView'
 
@@ -260,28 +260,22 @@ export const SendMessage: React.FunctionComponent<SendMessageProps> = (props: Se
         .then(() => {
           eventService.notify({
             type: 'success',
-            message: "Message Succcesfully Sent",
+            message: "Message Successfully Sent",
           })
         })
-        .catch((error: string) => {
-          eventService.notify({
-            type: 'warning',
-            message: error,
-          })
+        .catch((error) => {
+          eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
         })
     } else {
       artemisService.doSendMessageToQueue(messageBody.current, messageHeaders.current, isDurableChecked, isCreateIDChecked, isUseLogonChecked, username, password, props.routingType.toLowerCase(), props.queue, props.address)
         .then(() => {
           eventService.notify({
             type: 'success',
-            message: "Message Succcesfully Sent",
+            message: "Message Successfully Sent",
           })
         })
-        .catch((error: string) => {
-          eventService.notify({
-            type: 'warning',
-            message: error,
-          })
+        .catch((error) => {
+          eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
         })
     }
   }

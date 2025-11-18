@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { eventService } from '@hawtio/react';
+import { eventService, jolokiaService } from '@hawtio/react';
 import {  Text } from '@patternfly/react-core';
 import { useEffect, useState } from 'react';
 import { artemisService } from './artemis-service';
@@ -29,11 +29,8 @@ export const ArtemisHeader: React.FunctionComponent = () => {
         .then((brokerName) => {
            setBrokerHeader(brokerName ? brokerName : '');
         })
-        .catch((error: string) => {
-            eventService.notify({
-                type: 'warning',
-                message: error,
-            })
+        .catch((error) => {
+            eventService.notify({type: 'warning', message: jolokiaService.errorMessage(error) })
         });
     },[])
 
