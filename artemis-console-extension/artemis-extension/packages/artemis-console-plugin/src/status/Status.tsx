@@ -104,7 +104,8 @@ export const Status: React.FunctionComponent = () => {
 
         getClusterConnections();
 
-        const timer = setInterval(getBrokerInfo, 5000)
+        const refreshRate = jolokiaService.loadUpdateRate()
+        const timer = setInterval(getBrokerInfo, refreshRate ?? 5000)
         return () => clearInterval(timer)
 
     }, [])
