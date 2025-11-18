@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 import { beforeAll, describe, expect, test } from "@jest/globals"
-import { artemisService } from "./artemis-service";
+import { artemisService, parseMBeanName } from "./artemis-service";
 import { SortDirection } from './table/ArtemisTable'
 import { userService } from '@hawtio/react'
 
@@ -39,6 +39,15 @@ describe("Artemis Service basic tests", () => {
         { column: "", operation: "", input: "" }
     )
     await expect(addresses).resolves.toContain("DLQ");
+  })
+
+  test("Splitting ObjectNames", () => {
+    const mbean = "org.apache.activemq.artemis:broker=\"0.0.0.0:61616\",component=acceptors,filter=\"x,y,z=a\",name=amqp"
+    const parsed = parseMBeanName(mbean)
+    expect(parsed.domain).toEqual("org.apache.activemq.artemis")
+    expect(parsed.properties["broker"]).toEqual("\"0.0.0.0:61616\"")
+    expect(parsed.properties["filter"]).toEqual("\"x,y,z=a\"")
+    expect(parsed.properties["name"]).toEqual("amqp")
   })
 
 })
