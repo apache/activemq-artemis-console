@@ -166,6 +166,17 @@ const MS_PER_HOUR = 60 * MS_PER_MIN;
 const MS_PER_DAY = 24 * MS_PER_HOUR;
 const typeLabels = ["DEFAULT", "1", "object", "text", "bytes", "map", "stream", "embedded"];
 
+const jolokiaAttributes = [
+    "Name",
+    "NodeID",
+    "Version",
+    "Started",
+    "Uptime",
+    "GlobalMaxSize",
+    "AddressMemoryUsage",
+    "HAPolicy"
+];
+
 /**
  * Main Artemis service that manages Broker information and topology. Needs properly configured `jolokiaService`
  * from `@hawtio/react` which may require authenticated user.
@@ -231,7 +242,7 @@ class ArtemisService {
                 return
             }
 
-            const response = await jolokiaService.readAttributes(brokerObjectName).catch(e => {
+            const response = await jolokiaService.readSpecifiedAttributes(brokerObjectName, jolokiaAttributes).catch(e => {
                 // this is the best (as of Nov 2025) way to handle problems when fetching attributes with RBAC enabled
                 eventService.notify({type: 'warning', message: jolokiaService.errorMessage(e) })
                 return null
