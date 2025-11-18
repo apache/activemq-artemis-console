@@ -50,7 +50,7 @@
         <log4j.version>2.24.3</log4j.version>
         <jolokia-integration-artemis.version>0.8.0</jolokia-integration-artemis.version>
         <jolokia.version>2.4.2</jolokia.version>
-        <jetty-version>11.0.24</jetty-version>
+        <jetty-version>12.1.4</jetty-version>
         <corepack-version>0.34.0</corepack-version>
         <node-version>v22.17.1</node-version>
         <yarn-version>v4.9.2</yarn-version>

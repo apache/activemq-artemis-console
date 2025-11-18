@@ -31,7 +31,7 @@ Jetty server and deploys the plugin WAR application. From the 'artemis-console-w
 
 ```console
 cd artemis-console-war
-mvn jetty:run -Dskip.yarn
+mvn jetty:run-war -Dskip.yarn
 ```
 
 You can access the Artemis console with the sample plugin at: <http://localhost:8080/console/>. To connect to a running 
