@@ -53,6 +53,7 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
         {id: 'msgSent', name: 'Messages Sent', visible: false, sortable: true, filterable: false},
         {id: 'msgSizeSent', name: 'Messages Sent Size', visible: false, sortable: true, filterable: false},
         {id: 'lastProducedMessageID', name: 'Last Produced Message ID', visible: false, sortable: true, filterable: false},
+        {id: 'creationTime', name: 'Creation Time', visible: true, sortable: true, filterable: false},
       ];
 
       const listProducers = async ( page: number, perPage: number, activeSort: ActiveSort, filter: Filter):Promise<any> => {
@@ -60,6 +61,6 @@ export const ProducerTable: React.FunctionComponent<Navigate> = navigate => {
         const data = JSON.parse(response);
         return data;
       }
-      
+
     return <ArtemisTable allColumns={allColumns} getData={listProducers} storageColumnLocation={columnStorage.producers} navigate={navigate.search} filter={navigate.filter}/>
 }
