@@ -31,7 +31,7 @@
     "@hawtio/backend-middleware": "^1.0.8",
     "@swc/core": "^1.14.0",
     "@types/react": "^18.3.23",
-    "body-parser": "^2.2.0",
+    "body-parser": "^2.2.1",
     "copy-webpack-plugin": "^13.0.1",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.2",
