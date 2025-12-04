@@ -33,7 +33,8 @@
     "tough-cookie": "5.1.2",
     "webpack": "5.102.1",
     "word-wrap": "1.2.5",
-    "ws": "8.18.3"
+    "ws": "8.18.3",
+    "js-yaml": "3.14.2"
   },
   "eslintConfig": {
     "extends": [
