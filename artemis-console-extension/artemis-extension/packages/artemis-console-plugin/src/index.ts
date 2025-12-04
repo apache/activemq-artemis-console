@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { type HawtioPlugin, hawtio, configManager as hawtioConfigMgr, helpRegistry, workspace, preferencesRegistry, type Plugin } from '@hawtio/react'
+import { type HawtioPlugin, hawtio, configManager as hawtioConfigMgr, helpRegistry, treeProcessorRegistry, workspace, preferencesRegistry, type Plugin } from '@hawtio/react'
 import { log, artemisPluginName, artemisPluginTitle, artemisPluginPath, artemisJMXPluginName, artemisJMXPluginPath, artemisJMXPluginTitle, artemisHeaderPluginName } from './globals'
 import help from './help.md'
 import { artemisService } from './artemis-service'
 import { configManager } from './config-manager'
+import { artemisTreeProcessor } from './artemis-tree-processor'
 
 /**
  * Main entry point to Artemis Console Extension called during application bootstrap (`bootstrap.tsx`) before
@@ -50,6 +51,8 @@ export const artemis: HawtioPlugin = () => {
   hawtio.addDeferredPlugin('artemis-plugins', async () => {
     return import('./plugin-ui').then(m => {
       preferencesRegistry.add(artemisPluginName, artemisPluginTitle, m.ArtemisPreferences, 1)
+
+      treeProcessorRegistry.add('artemis', artemisTreeProcessor)
 
       const plugins: Plugin[] = []
       plugins.push({

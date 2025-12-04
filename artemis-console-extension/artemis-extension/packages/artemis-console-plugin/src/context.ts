@@ -42,10 +42,6 @@ export function useArtemisTree() {
                 rootNode.children[0].addMetadata("type", "brokerType");
                 setBrokerNode(rootNode.children[0]);
             }
-            if (rootNode.children[1].objectName) {
-                rootNode.children[1].addMetadata("type", "brokerType");
-                setBrokerNode(rootNode.children[1]);
-            }
             // Expand the nodes to redisplay the path
             if (selectedNode) {
                 rootNode.forEach(selectedNode?.path(), (node: MBeanNode) => {

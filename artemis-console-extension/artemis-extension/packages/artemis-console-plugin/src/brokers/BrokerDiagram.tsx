@@ -381,7 +381,7 @@ export const BrokerDiagram: React.FunctionComponent = () => {
     if (!topologyLoaded) {
       artemisService.createBrokerTopology(maxAddresses, addressFilter).then(brokerTopology => {
         setTopologyLoaded(true);
-        setBrokerTopology(brokerTopology);
+        setBrokerTopology(brokerTopology!);
       });
       return
     }
