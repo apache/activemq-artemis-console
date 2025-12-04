@@ -25,7 +25,7 @@
     "xml-formatter": "^3.6.7"
   },
   "devDependencies": {
-    "@hawtio/react": "^1.11.4",
+    "@hawtio/react": "^1.12.0",
     "@monaco-editor/react": "^4.6.0",
     "@patternfly/react-charts": "^7.4.9",
     "@patternfly/react-code-editor": "^5.4.18",
@@ -38,8 +38,8 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.10.0",
-    "@types/react": "^18.3.23",
+    "@types/node": "^24.10.1",
+    "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "@types/react-router-dom": "^5.3.3",
     "jest": "^30.2.0",
@@ -48,13 +48,13 @@
     "monaco-editor": "^0.52.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.30.1",
+    "react-router-dom": "^6.30.2",
     "replace": "^1.2.2",
-    "ts-jest": "^29.4.5",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
-    "tsup": "^8.5.0",
+    "tsup": "^8.5.1",
     "typescript": "^5.8.3",
-    "webpack": "^5.102.1"
+    "webpack": "^5.103.0"
   },
   "peerDependencies": {
     "@hawtio/react": "^1.11",
