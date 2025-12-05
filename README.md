@@ -1,11 +1,11 @@
-# Apache ActiveMQ Artemis Console
+# Apache Artemis Console
 
 
-The [Apache ActiveMQ Artemis](https://activemq.apache.org/components/artemis/) Console Plugin is written using [Hawtio v4](https://github.com/hawtio/hawtio).
+The [Apache Artemis](https://artemis.apache.org/) Console Plugin is written using [Hawtio v4](https://github.com/hawtio/hawtio).
 The plugin is written in TypeScript. Since a Hawtio plugin is based on React and [Webpack Module Federation](https://module-federation.github.io/),
 this project uses Yarn v4 and [Webpack](https://webpack.js.org/) as the build tools.
 
-The WAR file created by this project is consumed by ActiveMQ Artemis but can be developed and run standalone.
+The WAR file created by this project is consumed by Apache Artemis but can be developed and run standalone.
 
 
 ### Build
@@ -53,7 +53,7 @@ is being translated to your local ipv6 address rather than the ipv4 address. If 
 
 ## Faster plugin development
 
-You could run `mvn install` or `mvn jetty:run` every time to incrementally develop the `activemq-artemis-extension` 
+You could run `mvn install` or `mvn jetty:run` every time to incrementally develop the `artemis-extension` 
 frontend project while checking its behaviour in the browser. But this is not suitable for running the fast development feedback cycle.
 
 As shown below, a faster development cycle can be achieved by directly running the `artemis-console-extension` 
