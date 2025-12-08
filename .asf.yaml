@@ -15,12 +15,11 @@
 # limitations under the License.
 #
 github:
-  description: "Apache ActiveMQ Artemis Console"
-  homepage: https://activemq.apache.org/components/artemis
+  description: "Apache Artemis Console"
+  homepage: https://artemis.apache.org
   labels:
     - apache
-    - activemq
-    - activemq-artemis
+    - artemis
     - messaging
     - broker
 
@@ -39,7 +38,7 @@ github:
   dependabot_alerts:  true
   dependabot_updates: true
 notifications:
-  commits:      commits@activemq.apache.org
-  issues:       gitbox@activemq.apache.org
-  pullrequests: gitbox@activemq.apache.org
+  commits:      commits@artemis.apache.org
+  issues:       issues@artemis.apache.org
+  pullrequests: issues@artemis.apache.org
   jira_options: link label worklog
