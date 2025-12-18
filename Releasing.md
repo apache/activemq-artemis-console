@@ -85,11 +85,20 @@ mvn release:perform -Prelease
 ```
 
 Note: this can take quite a while depending on the speed for your Internet connection.
+
+Finally, upload the relocations to ASF Nexus:
+
+[,console]
+----
+cd target/checkout/relocations/
+mvn deploy -Papache-release,deploy-relocations
+----
+
 If the upload fails or is interrupted, remove the incomplete repository
 using the "Drop" button on [Nexus website](https://repository.apache.org/#stagingRepositories).
 Before starting the upload again, check the release.properties at the root of the project.
 
-**_Keep the checkout used to run the release process for later, the website update scripts will reference it for documentation output._**
+**_Keep the checkout used to run the release process for later reference._**
 
 
 ### Resuming release upload
@@ -107,11 +116,12 @@ scm.url=scm:git:https://github.com/apache/artemis-console.git
 scm.tag=1.0.0
 ```
 
-## Closing the staging repository
+## Closing the staging repositories
 
-Give the staging repository contents a quick inspection using the content navigation area, then proceed to close the
-staging repo using the "Close" button on Nexus website, locking it from further modification and exposing its contents
-at a staging URL to allow testing. Set a description such as "Artemis Console <version> (RC1)" while closing.
+A staging repository will be created for the main release, and another created for the relcations deployed separately.
+Give the staging repositories contents a quick inspection using the content navigation area, then proceed to close the
+staging repos using the "Close" button on Nexus website, locking them from further modification and exposing their contents
+at staging URLs to allow testing. Set a description such as "Artemis Console <version> (RC1)" while closing.
 
 ## Stage the release to the dist dev area
 
