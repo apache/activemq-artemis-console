@@ -88,11 +88,10 @@ Note: this can take quite a while depending on the speed for your Internet conne
 
 Finally, upload the relocations to ASF Nexus:
 
-[,console]
-----
+```sh
 cd target/checkout/relocations/
 mvn deploy -Papache-release,deploy-relocations
-----
+```
 
 If the upload fails or is interrupted, remove the incomplete repository
 using the "Drop" button on [Nexus website](https://repository.apache.org/#stagingRepositories).
@@ -179,20 +178,22 @@ Once the CDN and Maven Central are up-to-date then update the site as follows:
 
 1. Run the release addition script to generate/perform most of the updates by running command of form:
 ```
-./scripts/release/add-artemis-console-release.sh <new-version>
+./scripts/release/add-artemis-console-release.sh <path.to>/artemis-console <previous-version> <new-version>
 ```
 
 This does the following:
 - Creates the new release collection file at `src/_artemis_console_releases/artemis-console-<padded-version-string>.md`.
 - Creates the new release notes file at `src/components/artemis-console/download/release-notes-<new-version>.md`.
+- Creates `src/components/artemis-console/documentation/version/<previous-version>` and copies the previous version's documentation from `src/components/artemis-console/documentation/latest` into it.
+- Copies new documentation from the build directory into `src/components/artemis-console/documentation/latest`.
+- Updates `.htaccess` file in `src/components/artemis-console/documentation` to properly load the "latest" docs when accessing `src/components/artemis-console/documentation/version/<new-version>`.
 
-Example from the 1.0.0 release:
+Example from the 1.6.0 release:
 ```
-./scripts/release/add-artemis-console-release.sh 1.0.0
+./scripts/release/add-artemis-console-release.sh ../artemis-console 1.5.0 1.6.0
 ```
-2. Open the release collection file at `src/_artemis_console_releases/artemis-<padded-version-string>.md` and update _shortDescription_ as appropriate to the release content.
+2. Open the release collection file at `src/_artemis_console_releases/artemis-console-<padded-version-string>.md` and update _shortDescription_ as appropriate to the release content.
 3. Update the *artemis_console* list within the `src/_data/current_releases.yml` file if needed to set the new version stream as current.
 
 Check over `git status` etc. Run `git add` for all the added directories & files and then `git commit -m "updates for artemis-console <version> release"`.
 Once pushed, the changes should be published automatically by the `jekyll_websites` builder of the [apache buildbot](https://ci2.apache.org/#/builders).
-

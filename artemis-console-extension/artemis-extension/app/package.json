@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production && yarn replace-version",
-    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\""
+    "build": "webpack --mode production && yarn replace-version && yarn replace-doc-version",
+    "replace-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/static/js -r --include=\"*.js\"",
+    "replace-doc-version": "replace __PACKAGE_VERSION_PLACEHOLDER__ $npm_package_version ./build/hawtconfig.json"
   },
   "dependencies": {
     "@hawtio/react": "^1.12.0",
