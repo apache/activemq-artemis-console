@@ -9,7 +9,7 @@
   "login": {
     "description": "Login page for Artemis Console.",
     "links": [
-      { "url": "https://artemis.apache.org/components/artemis-console/documentation/", "text": "Documentation" },
+      { "url": "https://artemis.apache.org/components/artemis-console/documentation/version/__PACKAGE_VERSION_PLACEHOLDER__", "text": "Documentation" },
       { "url": "https://artemis.apache.org/", "text": "Website" }
     ]
   },

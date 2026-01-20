@@ -99,6 +99,7 @@
             <id>release</id>
             <modules>
                 <module>relocations</module>
+                <module>artemis-console-website</module>
             </modules>
             <build>
                 <plugins>
@@ -224,6 +225,9 @@
                             <exclude>artemis-console-extension/artemis-extension/app/public/hawtconfig.json</exclude>
                             <exclude>artemis-console-extension/artemis-extension/app/public/artemisconfig.json</exclude>
                             <exclude>.github/**</exclude>
+                            <exclude>**/*.adoc</exclude>
+                            <exclude>docs/user-manual/css/*</exclude>
+                            <exclude>docs/user-manual/fonts/*</exclude>
 
                             <!-- Licenses -->
                             <exclude>**/src/main/resources/licenses/licenses/**</exclude>

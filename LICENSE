@@ -208,3 +208,13 @@
 
 The extension is built using Yarn CJS, which is available under an "MIT" license.
 For more information see:  artemis-console-extension/artemis-extension/.yarn/releases/LICENSE-yarn.txt
+
+==========================================
+= For Font Awesome:  docs/user-manual    =
+==========================================
+
+Font files use the SIL Open Font License 1.1. For more information see:
+docs/user-manual/fonts/LICENSE-font-awesome-fonts.txt
+
+CSS file uses the MIT Licence. For more information see:
+docs/user-manual/css/LICENSE-font-awesome-css.txt
